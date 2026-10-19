@@ -183,8 +183,8 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 |---|---|
 | Bore | 5.5mm square, from the sole into the collar |
 | Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
-| Foot | six layers of four 7mm strips lying flat round the strips' bottom: 25.5mm square and 18mm tall, the reference's foot 25.4mm round and 19mm |
-| Band | four 10mm strips glued round the strips' top, under the collar |
+| Foot | six layers of four strips lying flat round the strips' bottom, each cut to a 25.4mm circle: 6.95mm wide mid-face, shorter to the corners; 18mm tall, the reference's foot 25.4mm round and 19mm |
+| Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back |
 | Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
 | Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
 | Sheet | one 595 × 124mm sheet, 79 parts |
@@ -217,15 +217,17 @@ much smaller question, and it plays at whatever pitch the reference plays. The
 reference's maker had not yet printed it, so that pitch is the real chanter's they
 measured, not one anyone has checked on the print.
 
-**High A has room.** The band starts 10.5mm above the thumb's hole, so the thumb seals
-it below the band's 3mm step.
+**High A has room.** The thumb reaches up past its hole, so the band leaves the back
+bare. Nothing stands proud of the back strip until the collar, 22.1mm above the hole's
+centre. On the reference chanter, its collar is 20.6mm above.
 
 Building it is as for the strip chanter, then:
 
 1. Glue the foot round the strips' bottom, layer by layer, flush with the sole. Each
-   piece runs from one outer corner to the inner corner beyond. Each layer turns the
-   other way from the one below, so no seam runs through.
-2. Glue the band round the strips' top 10mm, one piece over each corner in turn.
+   piece runs round one corner of the circle to the inner corner beyond. Each layer
+   turns the other way from the one below, so no seam runs through.
+2. Glue the band round the strips' top 10mm: the wide piece across the front, the two
+   narrow ones on the sides, flush with the back.
 3. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
    collar's round plates above it.
 4. Press the collar's round plates and the tenon together on two 2mm pins. Cut the

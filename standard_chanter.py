@@ -25,12 +25,13 @@ From the sole up:
 
   * the STRIPS, front, back and two sides, from the sole into the collar,
     finger-jointed (--joint=finger, the default) or butt-jointed, glued;
-  * the FOOT, N_FOOT layers of FOOT_W strips lying flat round the strips'
-    bottom, four to a layer, each layer turned the other way to the one
-    below so no seam runs through: the reference's foot, as wide and nearly
-    as tall;
-  * the BAND, four 10mm strips glued round the strips' top, under the
-    collar, which thicken them where they meet it;
+  * the FOOT, N_FOOT layers of strips lying flat round the strips' bottom,
+    four to a layer, each layer turned the other way to the one below so no
+    seam runs through; each strip's outer edge an arc of the reference's
+    round foot, so it is FOOT_W wide only mid-face and shorter to the corners;
+  * the BAND, three 10mm strips glued round the strips' front and sides,
+    under the collar, which thicken them where they meet it; none on the
+    back, where the thumb reaches up past its hole;
   * the COLLAR: a plate with a square hole the strips' top stands in, glued
     to the strips and the band; then N_COLLAR plates with the reference's
     round bore, as wide as the cap, which rests on them;
@@ -65,10 +66,10 @@ SIDE = 5.5                         # the square bore: the holes the reference's 
 N_COLLAR = 2                       # round-bore plates over the socket plate
 N_SEAT = 9                         # the tenon: 27mm of seat, the reference's 25.5
 BAND = 10.0                        # the band's length
-FOOT_W = 7.0                       # the foot's strips, lying flat round the strips'
-                                   # bottom: 11.5 + 2 x 7 = 25.5mm, the reference's 25.4
-N_FOOT = 6                         # layers: 18mm, the reference's foot 19mm tall
 REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
+FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, and cut to
+                                   # the reference's 25.4mm round foot, 6.95mm mid-face
+N_FOOT = 6                         # layers: 18mm, the reference's foot 19mm tall
 TENON = 16.0                       # the tenon's square, mm: the seat and two pins
 JOINT = 'finger'
 
@@ -207,21 +208,29 @@ def build():
         cuts = [('circle', x, t + s / 2, d / 2) for st, x, d in strip_holes if st == name]
         p = part(f'{name} strip', o, cuts, x0, 'strip', f'the {name} strip')
         p.strip = name
-    # the band, a pinwheel round the strips: each piece covers one corner
+    # the band, front and sides: the front piece across both front corners,
+    # the sides flush with the back, which stays clear for the thumb
     a = s / 2 + t
     band_x = x0 + t
-    for name in ('front', 'right', 'back', 'left'):
-        p = part(f'{name} band', [(0, 0), (BAND, 0), (BAND, 2 * a + t), (0, 2 * a + t)], [],
+    for name, w in (('front', 2 * (a + t)), ('right', 2 * a), ('left', 2 * a)):
+        p = part(f'{name} band', [(0, 0), (BAND, 0), (BAND, w), (0, w)], [],
                  band_x, 'band', f'the {name} band piece')
         p.strip = name
-    # the foot: a pinwheel of flat strips each layer, the other hand each time
+    # the foot: a pinwheel of flat strips each layer, the other hand each
+    # time, each cut to the round foot
+    R = REF_FOOT_D / 2
     b = a + FOOT_W
+    e = math.sqrt(R * R - a * a)                   # where the circle meets an inner edge
+    t0, t1 = math.atan2(-a, -e), math.atan2(-e, a)
+    arc = [(R * math.cos(t0 + (t1 - t0) * i / 60), R * math.sin(t0 + (t1 - t0) * i / 60))
+           for i in range(61)]
     for k in range(N_FOOT):
         sg = 1 if k % 2 == 0 else -1
         for i in range(4):
-            # one piece along the front, from one outer corner to the inner
-            # corner beyond, turned a quarter round for each next side
-            pts = [(-b * sg, -b), (a * sg, -b), (a * sg, -a), (-b * sg, -a)]
+            # one piece along the front, from the circle round past one
+            # front corner to the inner corner beyond, turned a quarter
+            # round for each next side
+            pts = [(a * sg, -a), (-e * sg, -a)] + [(x * sg, y) for x, y in arc[1:-1]] + [(a * sg, -e)]
             c, sn = [(1, 0), (0, 1), (-1, 0), (0, -1)][i]
             pts = [(c * x - sn * y, sn * x + c * y) for x, y in pts]
             if sg < 0:
@@ -244,7 +253,7 @@ def build():
     part('collar socket', collar, [('poly', tube)], x0, 'sock')
     info = dict(ref=ref, got=got, L=L, holes=holes, s=s, t=t, Ls=Ls, x0=x0, own=own,
                 strip_holes=strip_holes, seat_bottom=seat_bottom, tenon=tenon, pins=pins,
-                collar=collar, a=a, b=b, band_x=band_x, cap_pins=cap_pins)
+                collar=collar, a=a, b=b, R=R, band_x=band_x, cap_pins=cap_pins)
     return parts, info
 
 
@@ -267,31 +276,39 @@ def checks(parts, info, sheets):
          ', '.join(f'{h} {info["holes"][h][2]:.2f}' for h in M.HOLES)
          + f'mm, against the reference\'s {min(v[1] for v in REF_HOLES.values()):.2f} to '
          f'{max(v[1] for v in REF_HOLES.values()):.2f}; the face {s:g}mm')
-    # the band clears the thumb's hole by the cookies' THUMB_ROOM
+    # the thumb: nothing on the back between its hole and the collar, which
+    # is at least as far above it as the reference's collar is
     hz, hd = next((x, d) for st, x, d in info['strip_holes'] if st == 'back')
-    band_lo = info['band_x'] + BAND - info['x0']      # the band's bottom, down the strips
-    room = hz - hd / 2 - band_lo
-    note(room >= SC.THUMB_ROOM - 1e-9, 'the band clears the thumb\'s hole',
-         f'{room:.1f}mm from the hole\'s edge to the band, against {SC.THUMB_ROOM:g}')
+    room = hz - t                                     # to the collar's bottom face
+    ref_room = REF_COLLAR - REF_HOLES['hA'][0]
+    backs = [p for p in parts if p.kind == 'band' and p.strip == 'back']
+    note(not backs and room >= ref_room - 1e-9, 'the thumb has the reference\'s room above its hole',
+         f'no band on the back; {room:.1f}mm from the hole\'s centre to the collar, the '
+         f'reference {ref_room:.1f}mm')
     # the foot: each layer fills the frame round the strips once, and
     # stops short of the low A hole
-    a, b = info['a'], info['b']
+    a, R = info['a'], info['R']
     feet = [p for p in parts if p.kind == 'foot']
     bad = 0
     for k in range(N_FOOT):
         layer = [p for p in feet if abs(p.x - (info['x0'] + Ls - (k + 1) * t)) < 1e-9]
-        for i in range(40):
-            for j in range(40):
-                q = (-b + (i + 0.5) * 2 * b / 40, -b + (j + 0.5) * 2 * b / 40)
-                want = 0 if max(abs(q[0]), abs(q[1])) < a else 1
+        for i in range(50):
+            for j in range(50):
+                q = (-R + (i + 0.5) * 2 * R / 50, -R + (j + 0.5) * 2 * R / 50)
+                r = math.hypot(*q)
+                if abs(r - R) < 0.05:
+                    continue                          # on the arc, between it and its chords
+                want = 0 if max(abs(q[0]), abs(q[1])) < a or r > R else 1
                 bad += sum(P.inside(q, p.outline) for p in layer) != want
+    widest = max(math.hypot(*v) for p in feet for v in p.outline)
+    mid = R - a
     lowest = max(x + d / 2 for st, x, d in info['strip_holes'])
     clear = (Ls - N_FOOT * t) - lowest
     note(bad == 0 and len(feet) == 4 * N_FOOT and clear >= P.MIN_WEB,
          'the foot is the reference\'s, and clear of the low A hole',
-         f'{2 * b:.1f}mm square and {N_FOOT * t:g}mm tall, against the reference\'s '
-         f'{REF_FOOT_D:g}mm round and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips '
-         f'{FOOT_W:g}mm wide; {clear:.1f}mm under the low A hole')
+         f'{2 * widest:.1f}mm round and {N_FOOT * t:g}mm tall, against the reference\'s '
+         f'{REF_FOOT_D:g}mm and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips, {mid:.2f}mm wide '
+         f'mid-face; {clear:.1f}mm under the low A hole')
     # ply round each hole, and every corner one strip's
     ok = True
     for st, x, d in info['strip_holes']:
@@ -373,7 +390,7 @@ def svg_sheet(k, nsh, sh):
 
 def placed(p, info):
     """Where a part sits: strips as strip_chanter places them; the band's
-    pieces round them, each covering one corner."""
+    pieces round the front and sides."""
     s, t, a = info['s'], info['t'], info['a']
     if p.kind == 'strip':
         return SC.placed(p, dict(s=s, t=t, x0=info['x0']))
@@ -382,7 +399,6 @@ def placed(p, info):
     b, X = a + t, p.x
     return {'front': [[1, 0, 0, X], [0, 0, 1, -b], [0, -1, 0, b], [0, 0, 0, 1]],
             'right': [[1, 0, 0, X], [0, -1, 0, a], [0, 0, -1, -a], [0, 0, 0, 1]],
-            'back': [[1, 0, 0, X], [0, 0, -1, b], [0, 1, 0, -b], [0, 0, 0, 1]],
             'left': [[1, 0, 0, X], [0, 1, 0, -a], [0, 0, 1, a], [0, 0, 0, 1]]}[p.strip]
 
 
@@ -449,8 +465,8 @@ def main():
               f'({z:5.1f}mm under the seat, as the reference\'s), {d:.2f}mm round '
               f'(the reference {d_ref:.2f})')
     print(f'  top down: {N_SEAT} tenon, {N_COLLAR} collar, 1 collar socket over the strips; '
-          f'the band, {BAND:g}mm, under it; at the sole the foot, {N_FOOT} layers of 4 strips '
-          f'{FOOT_W:g}mm wide')
+          f'the band, {BAND:g}mm, front and sides, under it; at the sole the round foot, '
+          f'{N_FOOT} layers of 4 strips')
     bad = 0
     for ok, what, detail in res:
         print(f'  {"pass" if ok else "FAIL"}  {what:52} {detail}')
