@@ -74,7 +74,7 @@ BAND = 10.0                        # the band's length
 REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
 FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, and cut to
                                    # the reference's 25.4mm round foot, 6.95mm mid-face
-N_FOOT = 6                         # layers: 18mm, the reference's foot 19mm tall
+N_FOOT = 2                         # layers: 6mm tall, as asked; the reference's is 19mm
 JIG = 35.0                         # the foot jig's square: a base plate, then N_FOOT
 JIG_CLEAR = 0.3                    # rings with the foot's circle this much over
 TENON = 16.0                       # the tenon's square, mm: the seat and two pins
@@ -322,7 +322,7 @@ def checks(parts, info, sheets):
     lowest = max(x + d / 2 for st, x, d in info['strip_holes'])
     clear = (Ls - N_FOOT * t) - lowest
     note(bad == 0 and len(feet) == 4 * N_FOOT and clear >= P.MIN_WEB,
-         'the foot is the reference\'s, and clear of the low A hole',
+         'the foot is the reference\'s width, and clear of the low A hole',
          f'{2 * widest:.1f}mm round and {N_FOOT * t:g}mm tall, against the reference\'s '
          f'{REF_FOOT_D:g}mm and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips, {mid:.2f}mm wide '
          f'mid-face; {clear:.1f}mm under the low A hole')

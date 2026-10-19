@@ -183,12 +183,12 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 |---|---|
 | Bore | 5.5mm square, from the sole into the collar |
 | Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
-| Foot | six layers of four strips lying flat round the strips' bottom, each cut to a 25.4mm circle: 6.95mm wide mid-face, shorter to the corners; 18mm tall, the reference's foot 25.4mm round and 19mm |
+| Foot | two layers of four strips lying flat round the strips' bottom, each cut to a 25.4mm circle: 6.95mm wide mid-face, shorter to the corners; 6mm tall, where the reference's foot is 25.4mm round and 19mm |
 | Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back |
 | Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
 | Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
-| Jig | a base and six rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
-| Sheet | one 598 × 141mm sheet, 85 parts with the jig |
+| Jig | a base and two rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
+| Sheet | one 583 × 130mm sheet, 65 parts with the jig |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
@@ -233,7 +233,7 @@ centre. On the reference chanter, its collar is 20.6mm above.
 
 Building it is as for the strip chanter, then:
 
-1. Press the jig's base and six rings together on two 2mm pins, and line the cup with
+1. Press the jig's base and two rings together on two 2mm pins, and line the cup with
    packing tape or wax so the glue cannot stick to it. Stand the chanter in it on its
    sole. Glue the foot's layers in round the strips one at a time, the circle centring
    each. Each piece runs round one corner of the circle to the inner corner beyond.
