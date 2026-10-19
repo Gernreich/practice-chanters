@@ -103,7 +103,7 @@ class Bore:
     wall, the chimney of a hole through a face (mm). n=0 is a round bore.
     A bore may have a round top: its first top mm, under the reed, round."""
 
-    def __init__(self, n, top=0.0):
+    def __init__(self, n, top=0.0, strip=None):
         self.n = n
         self.A = BORE_AREA / 1e6
         self.a = math.sqrt(self.A / math.pi)
@@ -111,6 +111,19 @@ class Bore:
         self.wall = (inradius(OUTER_AREA, n) - inradius(BORE_AREA, n)) if n else None
         self.top = top
         self.round = Bore(0) if top else self
+        # a bore of strips: round holes laser-cut through a wall strip mm thick,
+        # anywhere along it, instead of slots across a plate
+        self.strip = strip
+        if strip:
+            self.wall = strip
+        self.grid = GRID if strip else PLATE
+        self.w_lo = D_MIN if strip else D_MIN ** 2 * math.pi / 4 / PLATE
+        self.w_max = D_MAX if strip else W_MAX
+        self.w_anchor = D_ANCHOR if strip else W_ANCHOR
+
+    def hole_r(self, w):
+        """The hole's radius (m): a round hole w across, or a slot's area."""
+        return (w / 2 if self.strip else math.sqrt(w * PLATE / math.pi)) / 1000
 
     def k(self, f):
         return 2 * math.pi * f / C - 1j * 3.0e-5 * math.sqrt(f) / self.rh
@@ -134,7 +147,7 @@ def hole(b, f, w, t, is_open):
     """Keefe's tone hole, for a slot w wide and PLATE long: series half,
     shunt, series half."""
     k = 2 * math.pi * f / C
-    r, a = math.sqrt(w * PLATE / math.pi) / 1000, b.a
+    r, a = b.hole_r(w), b.a
     t = t / 1000
     dl = r / a
     zh = RHO * C / (math.pi * r * r)
@@ -219,8 +232,11 @@ def bisect(fn, goal, lo, hi, rising=False, n=40):
     return (lo + hi) / 2
 
 
-def snap(x):
-    """The centre of the plate x falls in, plates counted from the bore's top."""
+def snap(x, b=None):
+    """The centre of the plate x falls in, plates counted from the bore's top;
+    on a bore of strips, the nearest GRID."""
+    if b is not None and b.strip:
+        return GRID * round(x / GRID)
     return (math.floor(x / PLATE) + 0.5) * PLATE
 
 
@@ -236,6 +252,11 @@ G_GAP = 21.0
 # wider than W_MAX is held there and moved up the bore instead.
 W_SLOT = 1.0
 D_MIN = 1.0                        # the smallest drill the model will ask for
+# a bore of strips: its holes round, cut in the strip, and no wider than the
+# bore's face leaves ply beside them; placed to GRID
+D_MAX = 3.2
+D_ANCHOR = 2.5
+GRID = 0.5
 
 
 def drill(w):
@@ -243,7 +264,7 @@ def drill(w):
     return math.sqrt(4 * w * PLATE / math.pi)
 
 
-def design(n, spacing=None, anchors=ANCHORS, top=0.0):
+def design(n, spacing=None, anchors=ANCHORS, top=0.0, strip=None):
     """Laid out for the hands, then fitted to the plates.
 
     In each hand one hole, the anchor, is W_ANCHOR wide while its plate is
@@ -255,7 +276,8 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0):
     when a note cannot be reached. top is mm of round bore under the reed,
     above every hole."""
     spacing = spacing or SPACING
-    b = Bore(n, top)
+    b = Bore(n, top, strip)
+    gap = 2 * b.w_max if strip else PLATE
     lower, upper = ['A', 'B', 'C', 'D'], ['E', 'F', 'G']
     widths = {h: 3.0 for h in HOLES}
     note_of = dict(zip(HOLES, SETS))
@@ -273,7 +295,7 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0):
             p = dict(pos)
             p[h] = x
             return sounding(b, L, p, widths, nt, span=2.2)
-        return snap(bisect(f_pos, target(nt), lo, hi))
+        return snap(bisect(f_pos, target(nt), lo, hi), b)
 
     def size(h):
         nt = note_of[h]
@@ -284,25 +306,25 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0):
             return sounding(b, L, pos, ws, nt)
         # past either end, say which way: 0 for a note sharp even at the
         # smallest hole, inf for one flat even at the largest
-        lo = D_MIN ** 2 * math.pi / 4 / PLATE
+        lo = b.w_lo
         if f_w(lo) > target(nt):
             raise ValueError(f'{n} sides: {nt} is sharp even with its hole the '
                              f'smallest drill, {D_MIN:g}mm, {pos[h]:.1f}mm down the bore')
-        if f_w(W_MAX) < target(nt):
+        if f_w(b.w_max) < target(nt):
             return math.inf
-        return bisect(f_w, target(nt), lo, W_MAX, rising=True)
+        return bisect(f_w, target(nt), lo, b.w_max, rising=True)
 
     for it in range(8):
         L = bisect(lambda x: sounding(b, x, pos, widths, 'low G', span=1.8),
                    target('low G'), 250, 600)
         # a whole number of plates, the nearest: low G comes out a few cents
         # out, half a plate's worth at most
-        L = PLATE * round(L / PLATE)
+        L = b.grid * round(L / b.grid)
         if it < 3:
             # the anchors' plates, at W_ANCHOR, only while the layout settles
             for hand, a in ((lower, anchors[0]), (upper, anchors[1])):
-                widths[a] = W_ANCHOR
-                pos[a] = place(a, 0.7 * est(a), min(L - PLATE, 1.3 * est(a)))
+                widths[a] = b.w_anchor
+                pos[a] = place(a, 0.7 * est(a), min(L - gap, 1.3 * est(a)))
                 for h in hand:
                     if h not in moved:
                         pos[h] = pos[a] + (hand.index(a) - hand.index(h)) * spacing
@@ -315,13 +337,13 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0):
             below = pos[HOLES[i - 1]] if i else L
             above = pos[HOLES[i + 1]] if i + 1 < len(HOLES) else 0.0
             w = size(h)
-            if w <= W_MAX:
+            if w <= b.w_max:
                 widths[h] = w
                 continue
             moved.add(h)
-            widths[h] = W_MAX
-            pos[h] = place(h, max(above + PLATE, 0.6 * est(h)), below - PLATE)
-            widths[h] = min(size(h), W_MAX)
+            widths[h] = b.w_max
+            pos[h] = place(h, max(above + gap, 0.6 * est(h)), below - gap)
+            widths[h] = min(size(h), b.w_max)
     return b, L, pos, widths
 
 

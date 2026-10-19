@@ -7,14 +7,15 @@
 # offset from four-hole-ocarinas, ribbon_bore.py from swept-curve and turn3d.py
 # from lasermade-tools, so all four are expected side by side.
 
-# --- the cut files, one sheet a shape, and the square with a round top ---
+# --- the cut files, one sheet a shape ---
 cut-files/practice-chanter-3-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=3 --out=$(dirname $OUT)
 cut-files/practice-chanter-4-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=4 --out=$(dirname $OUT)
 cut-files/practice-chanter-5-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=5 --out=$(dirname $OUT)
 cut-files/practice-chanter-6-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=6 --out=$(dirname $OUT)
 cut-files/practice-chanter-7-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=7 --out=$(dirname $OUT)
 cut-files/practice-chanter-8-sided-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=8 --out=$(dirname $OUT)
-cut-files/practice-chanter-4-sided-round-top-sheet1-cut-files.svg :: python3 practice_chanters.py --sides=4 --round-top --out=$(dirname $OUT)
+cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg :: python3 strip_chanter.py --out=$(dirname $OUT)
+cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg :: python3 strip_chanter.py --joint=butt --out=$(dirname $OUT)
 
 # --- the previews, from the cut files ---
 previews/practice-chanter-3-sided-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-3-sided-sheet1-cut-files.svg $OUT
@@ -23,7 +24,8 @@ previews/practice-chanter-5-sided-sheet1-cut-files.svg :: python3 ../lasermade-t
 previews/practice-chanter-6-sided-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-6-sided-sheet1-cut-files.svg $OUT
 previews/practice-chanter-7-sided-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-7-sided-sheet1-cut-files.svg $OUT
 previews/practice-chanter-8-sided-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-8-sided-sheet1-cut-files.svg $OUT
-previews/practice-chanter-4-sided-round-top-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-4-sided-round-top-sheet1-cut-files.svg $OUT
+previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg $OUT
+previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg $OUT
 
 # --- the pages ---
 turn.html :: python3 practice_chanters.py --page-to=$OUT
