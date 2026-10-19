@@ -8,8 +8,10 @@
 
 Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
 bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
-A seventh is built differently, below: [the strip chanter](#the-strip-chanter), a square bore of four
-long strips with the plates only above the high A hole.
+Two more are built differently, from four long strips round a square bore:
+[the strip chanter](#the-strip-chanter), whose holes come from the model, and
+[the standard strip chanter](#the-standard-strip-chanter), whose holes are a real
+practice chanter's.
 Each is a stack of thin cross-section plates with the bore cut through every one, clamped
 on two threaded rods, under a stacked cap and mouthpiece. The only part you buy is a
 plastic practice-chanter reed.
@@ -170,6 +172,61 @@ Building it:
 5. Seal the bore with shellac on a pipe cleaner, and fit the cap and reed as on the
    plate chanters.
 
+## The standard strip chanter
+
+This one takes its holes from a real practice chanter: [aero1016's model of the
+practice chanter they own](https://www.thingiverse.com/thing:6658761), measured from
+its 3D file. That chanter has a 4.87mm round bore, 238.5mm from the sole to the reed's
+seat, its front holes 25mm apart, and a collar 10mm under the seat that the top rests on.
+
+| | |
+|---|---|
+| Bore | 5.5mm square, from the sole into the collar |
+| Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
+| Band | four 10mm strips glued round the strips' top, under the collar |
+| Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
+| Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
+| Sheet | one 595 × 123mm sheet, 55 parts |
+
+| Hole | Under the seat | This chanter | The reference |
+|---|---|---|---|
+| low A | 195.5mm | 3.33mm | 4.15mm |
+| B | 163.5mm | 3.43mm | 3.95mm |
+| C | 138.5mm | 3.64mm | 3.95mm |
+| D | 113.5mm | 3.83mm | 3.95mm |
+| E | 88.5mm | 4.06mm | 3.95mm |
+| F | 63.5mm | 3.54mm | 3.35mm |
+| high G | 43.1mm | 3.30mm | 3.05mm |
+| high A, the thumb's | 31.1mm | 3.22mm | 2.95mm |
+
+**Every hole is where the reference's is,** measured from the reed's seat, which is
+what the notes depend on. The sizes differ because a hole here goes through a 3mm strip,
+where the reference's walls are 5 to 7mm. A hole through a thinner wall sounds sharper,
+so it has to be smaller for the same note. A 4.5mm bore, the smallest that takes the
+reference's 4.15mm hole, would need holes of 2.5 to 3.2mm. The 5.5mm bore is the size
+at which they come back to the reference's, 3.2 to 4.1mm. Each is solved so its note
+sounds where the reference's does, in the model, and the bore is 3.8mm longer at the sole
+to bring low G there too.
+
+**The model is used only for the difference,** not the pitch. It cannot reproduce the
+reference's own scale: at the reed allowance that fits best, 130mm, it is still about
+40 cents out across the scale, low A at about 255Hz. So it is asked only how far the
+square bore and the thin wall move each note from where the reference's is. That is a
+much smaller question, and it plays at whatever pitch the reference plays. The
+reference's maker had not yet printed it, so that pitch is the real chanter's they
+measured, not one anyone has checked on the print.
+
+**High A has room.** The band starts 10.5mm above the thumb's hole, so the thumb seals
+it below the band's 3mm step.
+
+Building it is as for the strip chanter, then:
+
+1. Glue the band round the strips' top 10mm, one piece over each corner in turn.
+2. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
+   collar's round plates above it.
+3. Press the collar's round plates and the tenon together on two 2mm pins.
+4. Wrap the tenon with hemp or tape until the cap slides on snugly and rests on the collar.
+
 ## How it is built
 
 From the top down:
@@ -198,9 +255,9 @@ plates of the body and rests on the two top nuts.
 <!-- readme-only -->
 The chanters turn in 3D on the [published page](https://gernreich.github.io/practice-chanters/#turn-them-in-3d),
 which GitHub does not run: drag to turn them, pull them apart along their length,
-and switch between the six bores and the strip chanter.
+and switch between the six bores and the two strip chanters.
 
-<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the strip chanter" style="width:100%;height:560px;border:0"></iframe> -->
+<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the two strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
 
 ## Before you cut
 
@@ -216,10 +273,16 @@ plays sharper, and one pulled out plays flatter. That is how every practice chan
 pitched, and it shifts the whole scale together, but it cannot fix one note against
 another. `--reed=` sets the figure if you measure your own.
 
-**The model has not met a real chanter.** It is a transfer-matrix model with textbook
-tone-hole and end corrections. Its holes are smaller than a turned chanter's, which
-are drilled about 2.4 to 4mm. Expect individual notes to be out by tens of cents
-until [Tuning](#tuning) has been done.
+**The model does not match a real chanter.** It is a transfer-matrix model with textbook
+tone-hole and end corrections. Given the measured chanter that the
+[standard strip chanter](#the-standard-strip-chanter) copies, it cannot reproduce that
+chanter's scale at any reed allowance. The closest, at 130mm, is still about 40 cents
+out, and at the 20mm the six plate chanters and the strip chanter were designed with,
+the reference's scale comes out stretched by hundreds of cents. So the model's own
+designs may play well out of tune, with the upper notes sharpest, until a real chanter
+has been played and the model fitted to it. The standard strip chanter avoids most of
+this by copying a real chanter and using the model only for the difference. For the
+others, expect to do the [Tuning](#tuning) in earnest.
 
 **The slots are cut exactly to width,** so a kerf other than the default 0.13mm
 changes every hole. Pass yours with `--kerf=`.
@@ -274,7 +337,9 @@ python3 practice_chanters.py --sides=5 --low-a=233 --no-write   # a different pi
 python3 practice_chanters.py --sides=5 --kerf=0.18 --out=mine   # for a laser with a 0.18mm kerf
 python3 strip_chanter.py --out=cut-files                   # the strip chanter, finger-jointed
 python3 strip_chanter.py --joint=butt --out=cut-files      # the strip chanter, butt-jointed
-python3 practice_chanters.py --page-to=turn.html           # the 3D view, all seven
+python3 standard_chanter.py --out=cut-files                # the standard strip chanter
+python3 standard_chanter.py --joint=butt --out=cut-files   # the same, butt-jointed
+python3 practice_chanters.py --page-to=turn.html           # the 3D view, every design
 python3 chanter_model.py --sides=5                         # the acoustic model alone
 ```
 
@@ -318,12 +383,16 @@ Every chanter is one sheet of 3mm ply.
 | `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the octagonal chanter, every plate |
 | `cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` | the strip chanter, finger-jointed: strips, cookies, cap |
 | `cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | the strip chanter, butt-jointed |
-| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
-| `turn.html` | the 3D view, all six bores and the strip chanter, on a page of its own |
+| `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, band, collar, tenon, cap |
+| `cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | the standard strip chanter, butt-jointed |
+| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
+| `turn.html` | the 3D view, every design, on a page of its own |
 | `practice_chanters.py` | the generator, its checks, the cut files and the 3D view |
 | `strip_chanter.py` | the strip chanter's generator and its checks |
+| `standard_chanter.py` | the standard strip chanter's generator: the measured chanter, the hole sizes, its checks |
 | `chanter_model.py` | the acoustic model: where each hole goes and how wide |
 | `README.md` · `index.html` | this writeup and its published page; the markdown is the source |
 | `.repro` | the command that draws each generated file |
+| `.doc-audit-links` | the one link the link check may find refusing scripts: Thingiverse answers them all 403 |
 
 Released under [CC0 1.0](LICENSE).

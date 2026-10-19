@@ -317,7 +317,7 @@ def pins_for(n, outer, bore):
     return [p, q]
 
 
-def cap(part, outer, n, front):
+def cap(part, outer, n, front, n_socket=None):
     """The cap's and mouthpiece's plates, through part(), for a body whose
     top plates are outer: socket, chamber, top, stem; its own pins in its wall."""
     sock = offset(outer, CAP_CLEAR)
@@ -329,9 +329,10 @@ def cap(part, outer, n, front):
     cap_pin_cut = [('circle', x, y, (PIN - PIN_INTERF) / 2) for x, y in cap_pins]
     stem_pins = [polar(front + 90, STEM_PIN_R), polar(front - 90, STEM_PIN_R)]
     stem_pin_cut = [('circle', x, y, (PIN - PIN_INTERF) / 2) for x, y in stem_pins]
-    for k in range(N_SOCKET):
+    n_socket = n_socket or N_SOCKET
+    for k in range(n_socket):
         part('cap socket', cap_o, [('poly', sock)] + cap_pin_cut,
-             (N_SOCKET - 1 - k) * M.PLATE, 'socket')
+             (n_socket - 1 - k) * M.PLATE, 'socket')
     for k in range(N_CHAMBER):
         part('cap chamber', cap_o, [('circle', 0.0, 0.0, CHAMBER_D / 2)] + cap_pin_cut,
              -(k + 1) * M.PLATE, 'chamber')
@@ -652,14 +653,17 @@ def page(path_out):
             out.append(t.placed(prt, m, ex, wood))
         designs[f'{n} sides'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
     import strip_chanter
+    import standard_chanter
     designs['strips'] = strip_chanter.design3d()
+    designs['standard'] = standard_chanter.design3d()
     t.write(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn, scroll or pinch to zoom; draw Explode to spread the plates along '
             'the chanter. Every plate is the cut files\u2019 own outline. The finger-hole plates '
             'are darker: a slot through the face, or a V where a hole too small to cut is '
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
-            'buttons switch between the bores, three sides to eight, and the square bore of four '
-            'finger-jointed strips under a stack of plates, its strips darker.',
+            'buttons switch between the bores, three sides to eight, and the two strip chanters, '
+            'square bores of four finger-jointed strips, darker, under stacked plates: strips '
+            'with holes to the model\u2019s hand layout, and standard with a measured chanter\u2019s.',
             'practice_chanters.py')
 
 
