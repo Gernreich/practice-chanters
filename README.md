@@ -187,7 +187,8 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 | Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back |
 | Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
 | Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
-| Sheet | one 595 × 124mm sheet, 79 parts |
+| Jig | a base and six rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
+| Sheet | one 598 × 141mm sheet, 85 parts with the jig |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
@@ -217,15 +218,26 @@ much smaller question, and it plays at whatever pitch the reference plays. The
 reference's maker had not yet printed it, so that pitch is the real chanter's they
 measured, not one anyone has checked on the print.
 
+**Shellac barely moves the pitch.** Dipping the chanter four times in 3 to 5 lb cut
+leaves perhaps 50 to 100µm of shellac on each surface. That is an estimate, not a
+measurement: the first coat soaks into the ply, and the film depends on the cut and
+how it drains. It narrows the bore from 5.5mm to between 5.4 and 5.3mm, and every hole
+by the same 0.1 to 0.2mm. In the model that flattens the notes by 1 to 3 cents, the
+high notes most. Watch for shellac pooling in the bore's corners and bridging the
+finger holes: blow through the chanter after each dip, and clear each hole with a
+toothpick. The seat narrows the same way, to about 5.4mm, still over the largest staple.
+
 **High A has room.** The thumb reaches up past its hole, so the band leaves the back
 bare. Nothing stands proud of the back strip until the collar, 22.1mm above the hole's
 centre. On the reference chanter, its collar is 20.6mm above.
 
 Building it is as for the strip chanter, then:
 
-1. Glue the foot round the strips' bottom, layer by layer, flush with the sole. Each
-   piece runs round one corner of the circle to the inner corner beyond. Each layer
-   turns the other way from the one below, so no seam runs through.
+1. Press the jig's base and six rings together on two 2mm pins, and line the cup with
+   packing tape or wax so the glue cannot stick to it. Stand the chanter in it on its
+   sole. Glue the foot's layers in round the strips one at a time, the circle centring
+   each. Each piece runs round one corner of the circle to the inner corner beyond.
+   Each layer turns the other way from the one below, so no seam runs through.
 2. Glue the band round the strips' top 10mm: the wide piece across the front, the two
    narrow ones on the sides, flush with the back.
 3. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
@@ -391,7 +403,7 @@ Every chanter is one sheet of 3mm ply.
 | `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the octagonal chanter, every plate |
 | `cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` | the strip chanter, finger-jointed: strips, cookies, cap |
 | `cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | the strip chanter, butt-jointed |
-| `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, foot, band, collar, tenon, cap |
+| `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, foot, band, collar, tenon, cap, and the foot jig |
 | `cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | the standard strip chanter, butt-jointed |
 | `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
 | `turn.html` | the 3D view, every design, on a page of its own |

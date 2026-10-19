@@ -38,6 +38,11 @@ From the sole up:
   * the TENON: N_SEAT plates with the reed's seat through them, which the
     cap's socket slides over. The collar's round plates and the tenon press
     together on two pins.
+
+And a JIG, not part of the chanter: a base plate and N_FOOT rings with the
+foot's circle cut through them, pinned into a cup. The chanter stands in it on
+its sole while the foot's layers are glued round it, one at a time; the
+circle centres each and the base keeps the foot flush with the sole.
 """
 import math
 import os
@@ -70,6 +75,8 @@ REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
 FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, and cut to
                                    # the reference's 25.4mm round foot, 6.95mm mid-face
 N_FOOT = 6                         # layers: 18mm, the reference's foot 19mm tall
+JIG = 35.0                         # the foot jig's square: a base plate, then N_FOOT
+JIG_CLEAR = 0.3                    # rings with the foot's circle this much over
 TENON = 16.0                       # the tenon's square, mm: the seat and two pins
 JOINT = 'finger'
 
@@ -236,6 +243,16 @@ def build():
             if sg < 0:
                 pts = pts[::-1]
             part('foot', pts, [], x0 + Ls - (k + 1) * t, 'foot', f'foot layer {k + 1}')
+    # the jig: a cup the foot is glued up in
+    jo = P.ngon(4, JIG / 2)
+    pin_d = P.PIN - P.PIN_INTERF
+    jr = (R + JIG_CLEAR / 2 + pin_d / 2 + P.MIN_WEB
+          + (JIG / 2 - pin_d / 2 - P.MIN_WEB) * math.sqrt(2)) / 2
+    jig_pins = [('circle', x, y, pin_d / 2) for x, y in (P.polar(45, jr), P.polar(225, jr))]
+    part('jig base', jo, list(jig_pins), 0.0, 'jig', 'the foot jig\'s base')
+    for k in range(N_FOOT):
+        part('jig ring', jo, [('circle', 0.0, 0.0, R + JIG_CLEAR / 2)] + jig_pins, 0.0, 'jig',
+             f'the foot jig, ring {k + 1}')
     # the tenon and the collar
     tenon = P.ngon(4, TENON / 2)
     r_pin = (P.SEAT_D / 2 + (P.PIN - P.PIN_INTERF) / 2 + P.MIN_WEB
@@ -309,6 +326,13 @@ def checks(parts, info, sheets):
          f'{2 * widest:.1f}mm round and {N_FOOT * t:g}mm tall, against the reference\'s '
          f'{REF_FOOT_D:g}mm and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips, {mid:.2f}mm wide '
          f'mid-face; {clear:.1f}mm under the low A hole')
+    jig = [p for p in parts if p.kind == 'jig']
+    rings = [c[3] for p in jig for c in p.cuts if c[0] == 'circle' and c[3] > 5]
+    note(len(jig) == N_FOOT + 1 and len(rings) == N_FOOT
+         and all(abs(r - (R + JIG_CLEAR / 2)) < 1e-9 for r in rings),
+         'the foot jig holds every layer on the foot\'s circle',
+         f'a base and {N_FOOT} rings, {N_FOOT * t:g}mm deep, the circle {2 * R + JIG_CLEAR:.1f}mm '
+         f'for the foot\'s {2 * R:g}mm')
     # ply round each hole, and every corner one strip's
     ok = True
     for st, x, d in info['strip_holes']:
@@ -334,7 +358,7 @@ def checks(parts, info, sheets):
          f'{info["L"] - REF_TOP:+.1f}mm on the reference\'s, at the sole, for low G')
     web = math.inf
     for p in parts:
-        if p.kind not in ('seat', 'collar', 'sock', 'socket', 'chamber', 'top', 'stem'):
+        if p.kind not in ('seat', 'collar', 'sock', 'socket', 'chamber', 'top', 'stem', 'jig'):
             continue
         edges = [('circle', 0.0, 0.0, p.round) if p.round else ('poly', p.outline)] + p.cuts
         for c in p.cuts:
@@ -413,6 +437,8 @@ def design3d():
     mid = (min(xs) + max(xs)) / 2
     out = []
     for p in parts:
+        if p.kind == 'jig':
+            continue                                  # a tool, not the chanter
         holes = [c[1] if c[0] == 'poly' else circle(c[1], c[2], c[3], 20) for c in p.cuts]
         cap = p.kind in ('socket', 'chamber', 'top', 'stem')
         if p.kind in ('strip', 'band'):
