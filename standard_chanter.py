@@ -31,7 +31,8 @@ From the sole up:
     round foot, so it is FOOT_W wide only mid-face and shorter to the corners;
   * the BAND, three 10mm strips glued round the strips' front and sides,
     under the collar, which thicken them where they meet it; none on the
-    back, where the thumb reaches up past its hole;
+    back, where the thumb reaches up past its hole, and the side pieces cut
+    away there along a quarter circle up to the collar;
   * the COLLAR: a plate with a square hole the strips' top stands in, glued
     to the strips and the band; then N_COLLAR plates with the reference's
     round bore, as wide as the cap, which rests on them;
@@ -70,7 +71,8 @@ REF_REED = 130.0                   # the reed allowance that fits the reference'
 SIDE = 5.5                         # the square bore: the holes the reference's size
 N_COLLAR = 2                       # round-bore plates over the socket plate
 N_SEAT = 9                         # the tenon: 27mm of seat, the reference's 25.5
-BAND = 10.0                        # the band's length
+BAND = 10.0                        # the band's length, and the side pieces' quarter
+                                   # circle above the thumb
 REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
 FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, and cut to
                                    # the reference's 25.4mm round foot, 6.95mm mid-face
@@ -219,9 +221,17 @@ def build():
     # the sides flush with the back, which stays clear for the thumb
     a = s / 2 + t
     band_x = x0 + t
-    for name, w in (('front', 2 * (a + t)), ('right', 2 * a), ('left', 2 * a)):
-        p = part(f'{name} band', [(0, 0), (BAND, 0), (BAND, w), (0, w)], [],
-                 band_x, 'band', f'the {name} band piece')
+    # each side piece loses its lower back corner along a quarter circle,
+    # BAND across, from its bottom edge up to its top at the back, so the
+    # band slopes away above the thumb instead of ending square; u runs
+    # front to back on the left piece and back to front on the right
+    w = 2 * a
+    arc = [(BAND * math.sin(math.pi / 2 * i / 30), w - BAND + BAND * math.cos(math.pi / 2 * i / 30))
+           for i in range(31)]
+    side = [(0, 0), (0, w)] + arc[1:] + [(BAND, 0)]
+    for name, o in (('front', [(0, 0), (BAND, 0), (BAND, 2 * (a + t)), (0, 2 * (a + t))]),
+                    ('right', [(x, w - u) for x, u in side][::-1]), ('left', side)):
+        p = part(f'{name} band', o, [], band_x, 'band', f'the {name} band piece')
         p.strip = name
     # the foot: a pinwheel of flat strips each layer, the other hand each
     # time, each cut to the round foot
