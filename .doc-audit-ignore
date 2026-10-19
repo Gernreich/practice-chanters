@@ -1,0 +1,7 @@
+# Names doc-audit reads as filenames that are not files here.
+#
+# square_flute.py is in square-flute and four_hole_ocarinas.py in
+# four-hole-ocarinas. The generator imports them, and the README links each
+# repository.
+square_flute.py
+four_hole_ocarinas.py
