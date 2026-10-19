@@ -183,10 +183,11 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 |---|---|
 | Bore | 5.5mm square, from the sole into the collar |
 | Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
+| Foot | six layers of four 7mm strips lying flat round the strips' bottom: 25.5mm square and 18mm tall, the reference's foot 25.4mm round and 19mm |
 | Band | four 10mm strips glued round the strips' top, under the collar |
 | Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
 | Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
-| Sheet | one 595 × 123mm sheet, 55 parts |
+| Sheet | one 595 × 124mm sheet, 79 parts |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
@@ -221,11 +222,16 @@ it below the band's 3mm step.
 
 Building it is as for the strip chanter, then:
 
-1. Glue the band round the strips' top 10mm, one piece over each corner in turn.
-2. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
+1. Glue the foot round the strips' bottom, layer by layer, flush with the sole. Each
+   piece runs from one outer corner to the inner corner beyond. Each layer turns the
+   other way from the one below, so no seam runs through.
+2. Glue the band round the strips' top 10mm, one piece over each corner in turn.
+3. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
    collar's round plates above it.
-3. Press the collar's round plates and the tenon together on two 2mm pins.
-4. Wrap the tenon with hemp or tape until the cap slides on snugly and rests on the collar.
+4. Press the collar's round plates and the tenon together on two 2mm pins. Cut the
+   pins flush with the collar's bottom face. Their ends land on the strips' top
+   corners, inside the socket plate.
+5. Wrap the tenon with hemp or tape until the cap slides on snugly and rests on the collar.
 
 ## How it is built
 
@@ -383,7 +389,7 @@ Every chanter is one sheet of 3mm ply.
 | `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the octagonal chanter, every plate |
 | `cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` | the strip chanter, finger-jointed: strips, cookies, cap |
 | `cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | the strip chanter, butt-jointed |
-| `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, band, collar, tenon, cap |
+| `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, foot, band, collar, tenon, cap |
 | `cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | the standard strip chanter, butt-jointed |
 | `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
 | `turn.html` | the 3D view, every design, on a page of its own |

@@ -25,6 +25,10 @@ From the sole up:
 
   * the STRIPS, front, back and two sides, from the sole into the collar,
     finger-jointed (--joint=finger, the default) or butt-jointed, glued;
+  * the FOOT, N_FOOT layers of FOOT_W strips lying flat round the strips'
+    bottom, four to a layer, each layer turned the other way to the one
+    below so no seam runs through: the reference's foot, as wide and nearly
+    as tall;
   * the BAND, four 10mm strips glued round the strips' top, under the
     collar, which thicken them where they meet it;
   * the COLLAR: a plate with a square hole the strips' top stands in, glued
@@ -61,6 +65,10 @@ SIDE = 5.5                         # the square bore: the holes the reference's 
 N_COLLAR = 2                       # round-bore plates over the socket plate
 N_SEAT = 9                         # the tenon: 27mm of seat, the reference's 25.5
 BAND = 10.0                        # the band's length
+FOOT_W = 7.0                       # the foot's strips, lying flat round the strips'
+                                   # bottom: 11.5 + 2 x 7 = 25.5mm, the reference's 25.4
+N_FOOT = 6                         # layers: 18mm, the reference's foot 19mm tall
+REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
 TENON = 16.0                       # the tenon's square, mm: the seat and two pins
 JOINT = 'finger'
 
@@ -206,6 +214,19 @@ def build():
         p = part(f'{name} band', [(0, 0), (BAND, 0), (BAND, 2 * a + t), (0, 2 * a + t)], [],
                  band_x, 'band', f'the {name} band piece')
         p.strip = name
+    # the foot: a pinwheel of flat strips each layer, the other hand each time
+    b = a + FOOT_W
+    for k in range(N_FOOT):
+        sg = 1 if k % 2 == 0 else -1
+        for i in range(4):
+            # one piece along the front, from one outer corner to the inner
+            # corner beyond, turned a quarter round for each next side
+            pts = [(-b * sg, -b), (a * sg, -b), (a * sg, -a), (-b * sg, -a)]
+            c, sn = [(1, 0), (0, 1), (-1, 0), (0, -1)][i]
+            pts = [(c * x - sn * y, sn * x + c * y) for x, y in pts]
+            if sg < 0:
+                pts = pts[::-1]
+            part('foot', pts, [], x0 + Ls - (k + 1) * t, 'foot', f'foot layer {k + 1}')
     # the tenon and the collar
     tenon = P.ngon(4, TENON / 2)
     r_pin = (P.SEAT_D / 2 + (P.PIN - P.PIN_INTERF) / 2 + P.MIN_WEB
@@ -223,7 +244,7 @@ def build():
     part('collar socket', collar, [('poly', tube)], x0, 'sock')
     info = dict(ref=ref, got=got, L=L, holes=holes, s=s, t=t, Ls=Ls, x0=x0, own=own,
                 strip_holes=strip_holes, seat_bottom=seat_bottom, tenon=tenon, pins=pins,
-                collar=collar, a=a, band_x=band_x, cap_pins=cap_pins)
+                collar=collar, a=a, b=b, band_x=band_x, cap_pins=cap_pins)
     return parts, info
 
 
@@ -252,6 +273,25 @@ def checks(parts, info, sheets):
     room = hz - hd / 2 - band_lo
     note(room >= SC.THUMB_ROOM - 1e-9, 'the band clears the thumb\'s hole',
          f'{room:.1f}mm from the hole\'s edge to the band, against {SC.THUMB_ROOM:g}')
+    # the foot: each layer fills the frame round the strips once, and
+    # stops short of the low A hole
+    a, b = info['a'], info['b']
+    feet = [p for p in parts if p.kind == 'foot']
+    bad = 0
+    for k in range(N_FOOT):
+        layer = [p for p in feet if abs(p.x - (info['x0'] + Ls - (k + 1) * t)) < 1e-9]
+        for i in range(40):
+            for j in range(40):
+                q = (-b + (i + 0.5) * 2 * b / 40, -b + (j + 0.5) * 2 * b / 40)
+                want = 0 if max(abs(q[0]), abs(q[1])) < a else 1
+                bad += sum(P.inside(q, p.outline) for p in layer) != want
+    lowest = max(x + d / 2 for st, x, d in info['strip_holes'])
+    clear = (Ls - N_FOOT * t) - lowest
+    note(bad == 0 and len(feet) == 4 * N_FOOT and clear >= P.MIN_WEB,
+         'the foot is the reference\'s, and clear of the low A hole',
+         f'{2 * b:.1f}mm square and {N_FOOT * t:g}mm tall, against the reference\'s '
+         f'{REF_FOOT_D:g}mm round and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips '
+         f'{FOOT_W:g}mm wide; {clear:.1f}mm under the low A hole')
     # ply round each hole, and every corner one strip's
     ok = True
     for st, x, d in info['strip_holes']:
@@ -366,6 +406,8 @@ def design3d():
         else:
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
         wood = 'dark' if p.kind == 'strip' else 'pale' if cap else 'ply'
+        if p.kind == 'foot':
+            ex = ((p.x - mid) / 60, 0, 0)
         out.append(t3.placed({'o': p.outline, 'h': holes, 'e': []}, placed(p, info), ex, wood))
     return {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
 
@@ -407,7 +449,8 @@ def main():
               f'({z:5.1f}mm under the seat, as the reference\'s), {d:.2f}mm round '
               f'(the reference {d_ref:.2f})')
     print(f'  top down: {N_SEAT} tenon, {N_COLLAR} collar, 1 collar socket over the strips; '
-          f'the band, {BAND:g}mm, under it')
+          f'the band, {BAND:g}mm, under it; at the sole the foot, {N_FOOT} layers of 4 strips '
+          f'{FOOT_W:g}mm wide')
     bad = 0
     for ok, what, detail in res:
         print(f'  {"pass" if ok else "FAIL"}  {what:52} {detail}')
