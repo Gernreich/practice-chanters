@@ -21,7 +21,8 @@ solves every note with its own fingering.
 THE BORE is a regular polygon of BORE_AREA, the area of a 4mm round bore, the
 size makers bore practice chanters. Its wall loss is taken on the hydraulic
 radius 2A/P, which for a regular polygon is its inradius: the fewer the
-sides, the more wall for the area, and the more loss.
+sides, the more wall for the area, and the more loss. design(top=) makes
+the first top mm under the reed round, the same area, above every hole.
 
 THE CHANTER is a stack of PLATE-thick cross-section plates, each with the
 polygon cut through it. A finger hole is a slot cut in one plate from the
@@ -99,14 +100,17 @@ def inradius(area, n):
 
 class Bore:
     """The n-gon: its area, equivalent radius and loss radius (m), and its
-    wall, the chimney of a hole through a face (mm)."""
+    wall, the chimney of a hole through a face (mm). n=0 is a round bore.
+    A bore may have a round top: its first top mm, under the reed, round."""
 
-    def __init__(self, n):
+    def __init__(self, n, top=0.0):
         self.n = n
         self.A = BORE_AREA / 1e6
         self.a = math.sqrt(self.A / math.pi)
-        self.rh = inradius(BORE_AREA, n) / 1000
-        self.wall = inradius(OUTER_AREA, n) - inradius(BORE_AREA, n)
+        self.rh = (inradius(BORE_AREA, n) if n else math.sqrt(BORE_AREA / math.pi)) / 1000
+        self.wall = (inradius(OUTER_AREA, n) - inradius(BORE_AREA, n)) if n else None
+        self.top = top
+        self.round = Bore(0) if top else self
 
     def k(self, f):
         return 2 * math.pi * f / C - 1j * 3.0e-5 * math.sqrt(f) / self.rh
@@ -154,8 +158,9 @@ def admittance(b, f, L, pos, widths, opened):
     z = b.z0()
     ka = 2 * math.pi * f / C * b.a
     zr = z * (0.5 * ka ** 2 + 1j * 0.8216 * ka)
-    m = tube(b, f, REED / 1000)
-    x = 0.0
+    # the reed's closed bore and the round top, if any, are one tube
+    m = tube(b.round, f, (REED + b.top) / 1000)
+    x = b.top
     for h in sorted(HOLES, key=lambda h: pos[h]):
         m = mul(m, tube(b, f, (pos[h] - x) / 1000))
         m = mul(m, hole(b, f, widths[h], b.wall, h in opened))
@@ -238,7 +243,7 @@ def drill(w):
     return math.sqrt(4 * w * PLATE / math.pi)
 
 
-def design(n, spacing=None, anchors=ANCHORS):
+def design(n, spacing=None, anchors=ANCHORS, top=0.0):
     """Laid out for the hands, then fitted to the plates.
 
     In each hand one hole, the anchor, is W_ANCHOR wide while its plate is
@@ -247,9 +252,10 @@ def design(n, spacing=None, anchors=ANCHORS):
     stands, the anchors' too, so the snap to a plate costs nothing. A hole
     that would be wider than W_MAX is held at W_MAX and moved up instead.
     Repeated until the closed holes' effect on each other settles. Raises
-    when a note cannot be reached."""
+    when a note cannot be reached. top is mm of round bore under the reed,
+    above every hole."""
     spacing = spacing or SPACING
-    b = Bore(n)
+    b = Bore(n, top)
     lower, upper = ['A', 'B', 'C', 'D'], ['E', 'F', 'G']
     widths = {h: 3.0 for h in HOLES}
     note_of = dict(zip(HOLES, SETS))

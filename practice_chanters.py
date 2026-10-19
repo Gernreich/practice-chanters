@@ -7,6 +7,7 @@ plates clamped on two threaded rods, with a stacked cap and mouthpiece.
     python3 practice_chanters.py --sides=5 --out=DIR       # the sheets
     python3 practice_chanters.py --sides=5 --plate=2.9 ... # for ply as measured
     python3 practice_chanters.py --kerf=0.18 ...           # for that kerf
+    python3 practice_chanters.py --sides=4 --round-top ... # round from 4/5 up
     python3 practice_chanters.py --page-to=turn.html       # the 3D view, every shape
 
 The acoustics are chanter_model.py's: where each hole goes and how wide it is
@@ -20,6 +21,12 @@ cut. This file turns them into plates, from the top down:
     the open sole. A finger hole is a slot cut in its plate from the bore out
     through the face, which leaves the plate C-shaped; one too small to cut
     is drilled after assembly instead, at a V cut in its plate's edge.
+
+--round-top=F makes the bore round from F of the way up the body, sole to
+top (0.8 when no F is given), to the seat: plates of the same outline with a
+4mm round hole, the polygon's area, so no note moves. The switch is at the
+whole plate nearest F, and must be above every finger hole. A round bore of
+the smallest staple's size stops it only by the hemp, not by its end.
 
 Every body plate carries the same two rod holes, placed so that no turn or
 flip of the polygon brings them back into line: a plate goes on only one
@@ -61,6 +68,7 @@ ORANGE, BLACK = SF.ORANGE, SF.BLACK
 # figures; pipers wrap it in hemp to fit the seat, so the seat is cut over the
 # largest, and the bore's narrowness stops the smallest.
 STAPLE_MIN, STAPLE_MAX = 4.0, 4.8
+ROUND_TOP = None                   # --round-top: the round bore's start, up the body
 SEAT_D = 5.5
 N_SEAT = 6                         # 18mm of seat: a staple is 22 to 24mm long
 # --- the rods and pins --------------------------------------------------------
@@ -320,6 +328,21 @@ def pins_for(n, outer, bore):
 def build(n):
     """The parts, and what the checks need, for an n-sided chanter."""
     b, L, pos, widths = M.design(n)
+    n_round = 0
+    if ROUND_TOP is not None:
+        # the plates from the top down that are round, the seat's among them;
+        # then solved again with the round top in place
+        body = N_SEAT + int(round(L / M.PLATE))
+        n_round = int(round((1 - ROUND_TOP) * body)) - N_SEAT
+        top_hole = min(int(pos[h] // M.PLATE) for h in M.HOLES)
+        if not 0 < n_round <= top_hole:
+            raise SystemExit(f'error: --round-top={ROUND_TOP:g} puts the switch '
+                             f'{n_round} bore plates down; it must be 1 to {top_hole}, '
+                             f'above the thumb\'s hole.')
+        L0 = L
+        b, L, pos, widths = M.design(n, top=n_round * M.PLATE)
+        assert L == L0, 'the round top moved the bore\'s length'
+    round_d = 2 * math.sqrt(M.BORE_AREA / math.pi)
     bore = ngon(n, M.inradius(M.BORE_AREA, n))
     outer = ngon(n, M.inradius(M.OUTER_AREA, n))
     front, thumb = faces(n)
@@ -341,6 +364,9 @@ def build(n):
     for k in range(n_bore):
         x = (N_SEAT + k) * M.PLATE
         h = at.get(k)
+        if k < n_round:
+            part('round bore', outer, [('circle', 0.0, 0.0, round_d / 2)] + pin_cut, x, 'round')
+            continue
         if h is None:
             part('bore', outer, [('poly', bore)] + pin_cut, x, 'bore')
             continue
@@ -379,7 +405,7 @@ def build(n):
         part('mouthpiece', stem_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + stem_pin_cut,
              -(N_CHAMBER + N_TOP + k + 1) * M.PLATE, 'stem', rnd=STEM_D / 2)
     info = dict(b=b, L=L, pos=pos, widths=widths, bore=bore, outer=outer, pins=pins,
-                n_bore=n_bore, cap_o=cap_o, cap_pins=cap_pins, stem_pins=stem_pins,
+                n_bore=n_bore, n_round=n_round, round_d=round_d, cap_o=cap_o, cap_pins=cap_pins, stem_pins=stem_pins,
                 sock=sock, front=front, thumb=thumb)
     return parts, info
 
@@ -468,11 +494,11 @@ def poly_area(pts):
 def stack_order(parts):
     """The body from the top down, as the builder threads it: runs of plain
     plates between the hole plates, which are the only ones that differ."""
-    body = sorted((p for p in parts if p.kind in ('seat', 'bore', 'slot', 'drill')),
+    body = sorted((p for p in parts if p.kind in ('seat', 'round', 'bore', 'slot', 'drill')),
                   key=lambda p: p.x)
     out, run, kind = [], 0, None
     for p in body:
-        k = p.kind if p.kind in ('seat', 'bore') else None
+        k = p.kind if p.kind in ('seat', 'round', 'bore') else None
         if k and k == kind:
             run += 1
             continue
@@ -507,8 +533,9 @@ def checks(n, parts, info, sheets):
     area = poly_area(info['bore'])
     note(abs(area - M.BORE_AREA) < 1e-6, 'the bore is a 4mm round bore\'s area',
          f'{area:.2f}mm^2, a {n}-gon {2 * M.inradius(M.BORE_AREA, n):.2f}mm across its '
-         f'inscribed circle')
-    bores = [p for p in parts if p.kind in ('bore', 'slot', 'drill')]
+         f'inscribed circle' + (f'; round {info["round_d"]:.2f}mm in the top '
+                                f'{info["n_round"]} plates' if info['n_round'] else ''))
+    bores = [p for p in parts if p.kind in ('round', 'bore', 'slot', 'drill')]
     note(len(bores) * M.PLATE == L, 'the bore is whole plates, down to the sole',
          f'{len(bores)} plates of {M.PLATE:g}mm, {L:g}mm')
     holes = [p for p in parts if hasattr(p, 'finger')]
@@ -564,9 +591,21 @@ def checks(n, parts, info, sheets):
     note(fixed == 1, 'every body plate goes on only one way',
          f'of the {2 * n} turns and flips of a {n}-gon, only leaving it be keeps both rods in place')
     inscribed = 2 * M.inradius(M.BORE_AREA, n)
-    note(inscribed < STAPLE_MIN and SEAT_D >= STAPLE_MAX, 'the seat holds a staple, the bore stops it',
-         f'seat {SEAT_D:g}mm over the largest staple, {STAPLE_MAX:g}; bore {inscribed:.2f}mm '
-         f'inside, under the smallest, {STAPLE_MIN:g}')
+    if info['n_round']:
+        # a round bore of the smallest staple's size cannot stop it: the
+        # hemp sets how deep a reed goes, and the check says so
+        d = info['round_d']
+        under = sum(1 for p in parts if p.kind == 'round')
+        note(SEAT_D >= STAPLE_MAX and under == info['n_round'] and d <= STAPLE_MIN + 1e-9,
+             'the seat holds a staple, the round bore under it',
+             f'seat {SEAT_D:g}mm over the largest staple, {STAPLE_MAX:g}; then {under} plates '
+             f'of {d:.2f}mm round bore, which stop staples over {d:.2f}mm only: a '
+             f'{STAPLE_MIN:g}mm staple is set by its hemp')
+    else:
+        note(inscribed < STAPLE_MIN and SEAT_D >= STAPLE_MAX,
+             'the seat holds a staple, the bore stops it',
+             f'seat {SEAT_D:g}mm over the largest staple, {STAPLE_MAX:g}; bore {inscribed:.2f}mm '
+             f'inside, under the smallest, {STAPLE_MIN:g}')
     r_in = M.inradius(M.OUTER_AREA, n)
     under = min(math.hypot(*q) for q in info['pins']) + NUT_AF / 2 - CHAMBER_D / 2
     note(CHAMBER_D < 2 * r_in and under >= 1.0, 'the cap slides over the body and stops on its nuts',
@@ -592,6 +631,10 @@ def checks(n, parts, info, sheets):
     return out
 
 
+def label(n):
+    return f'{n}-sided' + ('-round-top' if ROUND_TOP is not None else '')
+
+
 def svg_sheet(k, nsh, s, n):
     orange, black = [], []
     for p, sx, sy in s['parts']:
@@ -608,7 +651,8 @@ def svg_sheet(k, nsh, s, n):
                 _, cx, cy, r = c
                 orange.append(f'<circle cx="{cx + dx:.3f}" cy="{cy + dy:.3f}" '
                               f'r="{r - KERF / 2:.3f}"/>')
-    desc = (f'1 user unit = 1mm. Practice chanter, {n}-sided bore, sheet {k} of {nsh}. '
+    top = (f', round from {ROUND_TOP:g} of the way up' if ROUND_TOP is not None else '')
+    desc = (f'1 user unit = 1mm. Practice chanter, {n}-sided bore{top}, sheet {k} of {nsh}. '
             f'{M.PLATE:g}mm ply, drawn for a {KERF:g}mm kerf. Orange {ORANGE} cuts the bores, '
             f'seats and pin holes first; then black {BLACK} frees the plates.')
     g = lambda col, items: (
@@ -617,7 +661,7 @@ def svg_sheet(k, nsh, s, n):
     return (f'<?xml version="1.0" encoding="utf-8"?>\n'
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{s["w"]:.2f}mm" '
             f'height="{s["h"]:.2f}mm" viewBox="0 0 {s["w"]:.2f} {s["h"]:.2f}">\n'
-            f'<title>Practice chanter, {n}-sided bore, sheet {k} of {nsh}</title>\n'
+            f'<title>Practice chanter, {n}-sided bore{top}, sheet {k} of {nsh}</title>\n'
             f'<desc>{desc}</desc>\n' + g(ORANGE, orange) + g(BLACK, black) + '</svg>\n')
 
 
@@ -629,8 +673,10 @@ def page(path_out):
     to the front and the cap on the left; Explode spreads the plates along
     the chanter, the cap a little further."""
     import turn3d as t
+    global ROUND_TOP
     designs = {}
-    for n in M.SIDES:
+    for n, top in [(n, None) for n in M.SIDES] + [(4, 0.8)]:
+        ROUND_TOP = top
         parts, info = build(n)
         mid = (min(p.x for p in parts) + max(p.x for p in parts)) / 2
         out = []
@@ -644,18 +690,21 @@ def page(path_out):
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
             wood = 'dark' if p.kind in ('slot', 'drill') else 'pale' if cap else 'ply'
             out.append(t.placed(prt, m, ex, wood))
-        designs[f'{n} sides'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
+        name = f'{n} sides' + (', round top' if top else '')
+        designs[name] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
+    ROUND_TOP = None
     t.write(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn, scroll or pinch to zoom; draw Explode to spread the plates along '
             'the chanter. Every plate is the cut files\u2019 own outline. The finger-hole plates '
             'are darker: a slot through the face, or a V where a hole too small to cut is '
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
-            'buttons switch between the bores, three sides to eight.',
+            'buttons switch between the bores, three sides to eight, and the square whose '
+            'top fifth is round.',
             'practice_chanters.py')
 
 
 def main():
-    global KERF
+    global KERF, ROUND_TOP
     out, write, sides, page_to = None, True, None, None
     for x in sys.argv[1:]:
         if x == '--no-write':
@@ -674,12 +723,16 @@ def main():
             M.LOW_A = float(x.split('=', 1)[1])
         elif x.startswith('--kerf='):
             KERF = SF.set_kerf(x)
+        elif x == '--round-top':
+            ROUND_TOP = 0.8
+        elif x.startswith('--round-top='):
+            ROUND_TOP = float(x.split('=', 1)[1])
         elif x.startswith('--page-to='):
             page_to = x.split('=', 1)[1]
         else:
             raise SystemExit(f'error: {x} is not a flag this generator reads. It takes --sides=, '
-                             f'--out=, --plate=, --reed=, --low-a=, --kerf=, --page-to= and '
-                             f'--no-write.')
+                             f'--out=, --plate=, --reed=, --low-a=, --kerf=, --round-top=, '
+                             f'--page-to= and --no-write.')
     if page_to:
         page(page_to)
         print(f'  wrote {os.path.basename(page_to)}')
@@ -692,7 +745,9 @@ def main():
     sheets = pack(parts)
     res = checks(sides, parts, info, sheets)
     body = N_SEAT + info['n_bore']
-    print(f'practice chanter, {sides} sides ({NAMES[sides]}), low A {M.LOW_A:g}Hz: '
+    top = (f', round from {ROUND_TOP:g} of the way up ({info["n_round"]} bore plates under '
+           f'the seat)' if ROUND_TOP is not None else '')
+    print(f'practice chanter, {sides} sides ({NAMES[sides]}){top}, low A {M.LOW_A:g}Hz: '
           f'{body} body plates of {M.PLATE:g}mm ({body * M.PLATE:g}mm), '
           f'{N_SOCKET + N_CHAMBER + N_TOP + N_STEM} cap plates; two M{ROD:g} rods cut '
           f'{body * M.PLATE + 2 * (0.5 + NUT_T) + ROD_SPARE:.0f}mm long; {PIN:g}mm pins '
@@ -714,7 +769,7 @@ def main():
     if write:
         os.makedirs(out, exist_ok=True)
         for k, s in enumerate(sheets, 1):
-            f = os.path.join(out, f'practice-chanter-{sides}-sided-sheet{k}-cut-files.svg')
+            f = os.path.join(out, f'practice-chanter-{label(sides)}-sheet{k}-cut-files.svg')
             open(f, 'w').write(svg_sheet(k, len(sheets), s, sides))
             print(f'  wrote {os.path.basename(f)}  {s["w"]:.0f} x {s["h"]:.0f}mm, '
                   f'{len(s["parts"])} parts')

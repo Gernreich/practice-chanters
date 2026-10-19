@@ -8,6 +8,8 @@
 
 Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
 bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
+A seventh is the square with its top fifth bored round: see
+[The square with a round top](#the-square-with-a-round-top).
 Each is a stack of thin cross-section plates with the bore cut through every one, clamped
 on two threaded rods, under a stacked cap and mouthpiece. The only part you buy is a
 plastic practice-chanter reed.
@@ -108,6 +110,31 @@ held at 5mm and moved up the chanter until 5mm is right, to the nearest plate, w
 is why those four are a few cents out. A slot wider than the bore runs in to the
 bore's middle and ends square there.
 
+## The square with a round top
+
+The second design is the square chanter with the top of its bore round. The bore is square
+from the sole to 4/5 of the way up the body, 318mm of 396mm. Above that, the 20 bore
+plates under the seat have a 4mm round hole instead of the square. The seat's 6 plates
+were round already, so the top 26 plates all have round holes.
+
+- **Nothing moves.** The round hole has the square's area, 12.57mm², and every finger
+  hole is below the switch: the thumb's is 31 plates under it. The model re-solves
+  the holes with the round top in place, and they come out the same to a hundredth of
+  a millimetre; no note moves by even 0.0001 cents. The bore's shape changes only a
+  hole's chimney and the wall's friction, and there are no holes up there.
+- **Same outline, same sheet.** The round plates are the square body's outline with
+  the same rod holes, so the cap fits as before and the sheet is the same, 599 ×
+  183mm. A round plate is told from a square one by its hole.
+- **The staple stops on its hemp, not the bore.** On the square, the bore is 3.54mm
+  across under the seat, narrower than the smallest staple, 4mm, so the bore stops
+  the staple. The round bore is 4mm, so a 4mm staple could slide on into it, and only
+  its hemp sets its depth. A staple over 4mm still stops on the bore.
+- **Where the two meet,** each corner of the square stands 0.5mm outside the circle,
+  and the circle stands 0.23mm outside each flat. The areas are equal, so the model
+  sees no step there.
+
+`--round-top=0.75` moves the switch, to the nearest whole plate; it must stay above the thumb's hole.
+
 ## How it is built
 
 From the top down:
@@ -136,9 +163,9 @@ plates of the body and rests on the two top nuts.
 <!-- readme-only -->
 The chanters turn in 3D on the [published page](https://gernreich.github.io/practice-chanters/#turn-them-in-3d),
 which GitHub does not run: drag to turn them, pull them apart along their length,
-and switch between the six bores.
+and switch between the six bores and the square with a round top.
 
-<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores" style="width:100%;height:560px;border:0"></iframe> -->
+<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the square with a round top" style="width:100%;height:560px;border:0"></iframe> -->
 
 ## Before you cut
 
@@ -170,7 +197,8 @@ of 2mm brass rod for the pins, high-cut shellac, and a plastic practice-chanter 
 1. Cut the sheet. The generator prints the stacking order for its shape. For the
    square it is: 6 seat, 51 bore, hA, 2 bore, G, 6 bore, F, 8 bore, E, 5 bore, D,
    8 bore, C, 8 bore, B, 8 bore, A, 22 bore. Here "seat" and "bore" are runs of the
-   plain plates, and the letters are the hole plates.
+   plain plates, and the letters are the hole plates. The square with a round top
+   starts 6 seat, 20 round, 31 bore and goes on the same.
 2. Cut the rods to the length the generator prints: 403mm, or 406mm for the
    triangle. Put a nut and washer on one end of each.
 3. Thread the plates on from the sole up, in the reverse of that order. Brush thin
@@ -210,7 +238,8 @@ python3 practice_chanters.py --sides=5 --plate=2.9 --no-write   # for ply as mea
 python3 practice_chanters.py --sides=5 --reed=24 --no-write     # a different reed allowance
 python3 practice_chanters.py --sides=5 --low-a=233 --no-write   # a different pitch
 python3 practice_chanters.py --sides=5 --kerf=0.18 --out=mine   # for a laser with a 0.18mm kerf
-python3 practice_chanters.py --page-to=turn.html           # the 3D view, all six
+python3 practice_chanters.py --sides=4 --round-top --out=cut-files   # the square with a round top
+python3 practice_chanters.py --page-to=turn.html           # the 3D view, all seven
 python3 chanter_model.py --sides=5                         # the acoustic model alone
 ```
 
@@ -225,7 +254,7 @@ python3 chanter_model.py --sides=5                         # the acoustic model 
 - every rod and pin keeps ply between it and every cut;
 - the nuts sit on the end plates, inside the body;
 - every body plate goes on only one way;
-- the seat holds a staple, and the bore stops it;
+- the seat holds a staple, and the bore stops it (with a round top, the bore stops staples over 4mm only, and the check says so);
 - the cap slides over the body and stops on its nuts;
 - every sheet fits the bed;
 - no two parts on a sheet come closer than the gap;
@@ -252,7 +281,8 @@ Every chanter is one sheet of 3mm ply.
 | `cut-files/practice-chanter-6-sided-sheet1-cut-files.svg` | the hexagonal chanter, every plate |
 | `cut-files/practice-chanter-7-sided-sheet1-cut-files.svg` | the heptagonal chanter, every plate |
 | `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the octagonal chanter, every plate |
-| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
+| `cut-files/practice-chanter-4-sided-round-top-sheet1-cut-files.svg` | the square chanter with a round top, every plate |
+| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-round-top-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
 | `turn.html` | the 3D view, all six bores, on a page of its own |
 | `practice_chanters.py` | the generator, its checks, the cut files and the 3D view |
 | `chanter_model.py` | the acoustic model: where each hole goes and how wide |
