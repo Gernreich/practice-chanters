@@ -137,10 +137,15 @@ The fingers also line the strips up as they go together, which butt joints leave
 With `--joint=butt` the front and back are 9.54mm wide and the sides 3.54mm, glued
 between them.
 
-**Why the holes are small.** A finger hole's wall here is 3mm, against about 8mm in the
-plate chanters. A shorter hole speaks more freely, so it needs less area for the same
-note. The G hole had to come closer to F, 16mm instead of 21mm, or high G would be
-sharp even at a 1mm hole. That is a little closer than a relaxed hand spreads.
+**Why the holes are small.** The holes are spaced for the hands, 27mm apart in each hand,
+but the scale's steps are not equal, so each hole is whatever size puts its note in tune
+where it stands. A hole for a small step, such as D or G, comes out small. The largest is
+limited by the bore: a hole wider than the bore's 3.54mm face would cut into the side
+strips, so 3.2mm is the most. The hand's layout is set by C and E, which are solved at
+2.5mm and pull every other hole along with them. The wall's thickness matters little:
+with an 8mm wall the holes are within 0.4mm of these. It does matter for G. F to high G
+is the scale's smallest step, so G must sit 16mm above F instead of 21mm. Any further
+and high G would be sharp even at a 1mm hole.
 
 **The thumb has room.** The cookies stand 5mm proud of the strips. The high A hole's
 centre is 10.5mm below that shoulder, so the thumb can seal it. Pass `--switch=0.8` to
