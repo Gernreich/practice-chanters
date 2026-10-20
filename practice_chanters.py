@@ -12,8 +12,9 @@ plates clamped on two threaded rods, with a stacked cap and mouthpiece.
 The acoustics are chanter_model.py's: where each hole goes and how wide it is
 cut. This file turns them into plates, from the top down:
 
-  * the CAP: a mouthpiece stem, two top plates, a chamber round the reed's
-    blades, and a socket that slides over the body's top plates;
+  * the CAP: a mouthpiece tapered as a real practice chanter's is, two top
+    plates, a chamber round the reed's blades, and a socket that slides
+    over the body's top plates;
   * the SEAT: N_SEAT plates with a round hole for the reed's staple, which
     stops on the bore below, since the bore is narrower than any staple;
   * the BORE: one plate per PLATE of bore, the polygon through each, down to
@@ -27,9 +28,10 @@ way, so no slot can face the wrong way. The rods are M2 threaded rod with a
 nut and washer at each end, which clamp the stack: a press-fit pin cannot be
 driven through 130 plates, and nothing is glued. Shellac seals the seams.
 The cap comes off to set the reed, so it is not on the rods: it slides over
-the body's top plates and rests on the two top nuts. The cap and the
-mouthpiece, 19 and 14 plates, are short enough to press together on their
-own pins.
+the body's top plates and rests on the two top nuts. The cap, 19 plates,
+is short enough to press together on its own pins. The mouthpiece's plates
+are too narrow for pins: they are glued, lined up on a rod through the
+blowing hole.
 
 A PLATE IS NOT ALWAYS 3MM. A stack multiplies the stock's error by every
 plate in it: 2.9mm ply makes the bore 13mm short and every note 50 to 57
@@ -78,11 +80,14 @@ CAP_WEB = 2.0                      # ply each side of the cap's pins
 N_SOCKET = 5                       # plates of socket over the body's top
 CHAMBER_D = 14.0                   # round the reed's blades
 N_CHAMBER = 12                     # 36mm: the reed stands about 30mm proud
-MOUTH_D = 6.0                      # the blowing hole
+MOUTH_D = 4.5                      # the blowing hole, the reference chanter's
 N_TOP = 2
-STEM_D = 17.0                      # the mouthpiece stem
-N_STEM = 12
-STEM_PIN_R = 5.75                  # the stem's pins, from its centre
+# the mouthpiece's outside, up from the cap's top: the measured practice
+# chanter's top piece (standard_chanter.py's reference), its diameter at
+# each height, straight between: a 45 degree shoulder, two steps, then a
+# long taper to a rounded lip; each plate takes it at its mid-height
+MOUTHPIECE = [(0.0, 22.2), (3.0, 16.5), (8.5, 16.5), (10.25, 14.3), (17.5, 14.3),
+              (19.75, 12.43), (70.0, 11.04), (71.5, 9.6)]
 # --- marks -------------------------------------------------------------------
 V_W, V_D = 1.2, 0.6                # a drill mark: a V this wide and deep in the edge
 STEP = 0.5                         # degrees, the boundary's sampling
@@ -327,8 +332,6 @@ def cap(part, outer, n, front, n_socket=None):
     cap_pins = [ring[0], ring[n // 2]]
     cap_o = offset(sock, 2 * CAP_WEB + PIN)
     cap_pin_cut = [('circle', x, y, (PIN - PIN_INTERF) / 2) for x, y in cap_pins]
-    stem_pins = [polar(front + 90, STEM_PIN_R), polar(front - 90, STEM_PIN_R)]
-    stem_pin_cut = [('circle', x, y, (PIN - PIN_INTERF) / 2) for x, y in stem_pins]
     n_socket = n_socket or N_SOCKET
     for k in range(n_socket):
         part('cap socket', cap_o, [('poly', sock)] + cap_pin_cut,
@@ -337,13 +340,40 @@ def cap(part, outer, n, front, n_socket=None):
         part('cap chamber', cap_o, [('circle', 0.0, 0.0, CHAMBER_D / 2)] + cap_pin_cut,
              -(k + 1) * M.PLATE, 'chamber')
     for k in range(N_TOP):
-        part('cap top', cap_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + cap_pin_cut + stem_pin_cut,
+        part('cap top', cap_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + cap_pin_cut,
              -(N_CHAMBER + k + 1) * M.PLATE, 'top')
-    stem_o = circle(0, 0, STEM_D / 2, 72)
-    for k in range(N_STEM):
-        part('mouthpiece', stem_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + stem_pin_cut,
-             -(N_CHAMBER + N_TOP + k + 1) * M.PLATE, 'stem', rnd=STEM_D / 2)
-    return cap_o, cap_pins, stem_pins, sock
+    for k in range(n_stem()):
+        d = stem_d((k + 0.5) * M.PLATE)
+        part('mouthpiece', circle(0, 0, d / 2, 72), [('circle', 0.0, 0.0, MOUTH_D / 2)],
+             -(N_CHAMBER + N_TOP + k + 1) * M.PLATE, 'stem',
+             f'mouthpiece plate {k + 1}, {d:.2f}mm', rnd=d / 2)
+    return cap_o, cap_pins, sock
+
+
+def mouthpiece_check(parts):
+    """(ok, detail): the mouthpiece's plates step down the reference's
+    profile, each within a plate's change of it, and keep ply round the
+    blowing hole."""
+    st = sorted((p for p in parts if p.kind == 'stem'), key=lambda p: -p.x)
+    wall = min(p.round for p in st) - MOUTH_D / 2
+    ok = (len(st) == n_stem() and wall >= MIN_WEB
+          and all(abs(2 * p.round - stem_d((k + 0.5) * M.PLATE)) < 1e-9 for k, p in enumerate(st)))
+    return ok, (f'{len(st)} plates, {2 * st[0].round:.1f} to {2 * st[-1].round:.1f}mm, '
+                f'{len(st) * M.PLATE:g}mm long (the reference\'s {MOUTHPIECE[-1][0]:g}), each '
+                f'plate its profile at mid-height; {wall:.1f}mm of wall at the lip')
+
+
+def n_stem():
+    """The mouthpiece's plates: as many as make the reference's length."""
+    return int(round(MOUTHPIECE[-1][0] / M.PLATE))
+
+
+def stem_d(z):
+    """The mouthpiece's diameter z up from the cap's top, the reference's."""
+    for (z0, d0), (z1, d1) in zip(MOUTHPIECE, MOUTHPIECE[1:]):
+        if z <= z1:
+            return d0 + (d1 - d0) * (max(z, z0) - z0) / (z1 - z0)
+    return MOUTHPIECE[-1][1]
 
 
 def build(n):
@@ -384,9 +414,9 @@ def build(n):
                      f'the {h} hole: drill {d:.2f}mm through at the V, after assembly')
             p.drill = d
         p.finger, p.width, p.theta = h, w, th
-    cap_o, cap_pins, stem_pins, sock = cap(part, outer, n, front)
+    cap_o, cap_pins, sock = cap(part, outer, n, front)
     info = dict(b=b, L=L, pos=pos, widths=widths, bore=bore, outer=outer, pins=pins,
-                n_bore=n_bore, cap_o=cap_o, cap_pins=cap_pins, stem_pins=stem_pins,
+                n_bore=n_bore, cap_o=cap_o, cap_pins=cap_pins,
                 sock=sock, front=front, thumb=thumb)
     return parts, info
 
@@ -580,6 +610,8 @@ def checks(n, parts, info, sheets):
          f'socket {CAP_CLEAR:g}mm clear all round; each top nut {under:.1f}mm under the '
          f'chamber\'s bottom plate at the least, the chamber {CHAMBER_D:g}mm')
     longest = max(max(p.w, p.h) for p in parts)
+    note(*mouthpiece_check(parts)[:1], 'the mouthpiece tapers as a real practice chanter\'s does',
+         mouthpiece_check(parts)[1])
     note(all(s['w'] <= BED[0] and s['h'] <= BED[1] for s in sheets), 'every sheet fits the bed',
          f'{len(sheets)} sheet(s), largest {max(s["w"] for s in sheets):.0f} x '
          f'{max(s["h"] for s in sheets):.0f}mm, the largest plate {longest + KERF:.1f}mm')
@@ -707,10 +739,9 @@ def main():
     body = N_SEAT + info['n_bore']
     print(f'practice chanter, {sides} sides ({NAMES[sides]}), low A {M.LOW_A:g}Hz: '
           f'{body} body plates of {M.PLATE:g}mm ({body * M.PLATE:g}mm), '
-          f'{N_SOCKET + N_CHAMBER + N_TOP + N_STEM} cap plates; two M{ROD:g} rods cut '
-          f'{body * M.PLATE + 2 * (0.5 + NUT_T) + ROD_SPARE:.0f}mm long; {PIN:g}mm pins '
-          f'{(N_SOCKET + N_CHAMBER + N_TOP) * M.PLATE:g}mm through the cap, '
-          f'{(N_TOP + N_STEM) * M.PLATE:g}mm through the mouthpiece')
+          f'{N_SOCKET + N_CHAMBER + N_TOP} cap and {n_stem()} mouthpiece plates; two M{ROD:g} '
+          f'rods cut {body * M.PLATE + 2 * (0.5 + NUT_T) + ROD_SPARE:.0f}mm long; {PIN:g}mm pins '
+          f'{(N_SOCKET + N_CHAMBER + N_TOP) * M.PLATE:g}mm through the cap')
     for h in M.HOLES:
         w = info['widths'][h]
         k = int(info['pos'][h] // M.PLATE) + 1

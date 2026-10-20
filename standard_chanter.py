@@ -271,7 +271,7 @@ def build():
     pin_cut = [('circle', x, y, (P.PIN - P.PIN_INTERF) / 2) for x, y in pins]
     for k in range(N_SEAT):
         part('tenon', tenon, [('circle', 0.0, 0.0, REF_SEAT_D / 2)] + pin_cut, k * t, 'seat')
-    cap_o, cap_pins, stem_pins, sock = P.cap(part, tenon, 4, 0.0, n_socket=N_SEAT)
+    cap_o, cap_pins, sock = P.cap(part, tenon, 4, 0.0, n_socket=N_SEAT)
     collar = cap_o
     for k in range(N_COLLAR):
         part('collar', collar, [('circle', 0.0, 0.0, REF_BORE / 2)] + pin_cut,
@@ -390,6 +390,8 @@ def checks(parts, info, sheets):
     note(ledge >= 3.0, 'the cap slides over the tenon and rests on the collar',
          f'socket {P.CAP_CLEAR:g}mm clear all round, {N_SEAT * t:g}mm deep; the collar the cap\'s '
          f'own outline, {ledge:.1f}mm proud of the tenon')
+    note(*P.mouthpiece_check(parts)[:1], 'the mouthpiece tapers as a real practice chanter\'s does',
+         P.mouthpiece_check(parts)[1])
     note(all(sh['w'] <= P.BED[0] and sh['h'] <= P.BED[1] for sh in sheets), 'every sheet fits the bed',
          f'{len(sheets)} sheet(s), largest {max(sh["w"] for sh in sheets):.0f} x '
          f'{max(sh["h"] for sh in sheets):.0f}mm')

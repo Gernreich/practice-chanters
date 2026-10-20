@@ -81,18 +81,18 @@ then it is no longer a practice chanter. That is why these are stacks.
 | Fingering | the [standard Highland fingering](https://bagpipejourney.com/articles/finger_positions.shtml): seven finger holes on the front, the high A thumb hole on the back |
 | Bore | the area of a 4mm circle, 378mm long (381mm on the triangle), open at the sole |
 | Body | the area of a 20mm circle on the outside, 396mm long (399mm on the triangle): 132 or 133 plates |
-| Cap | 31 plates: a socket over the body, a chamber round the reed, and a mouthpiece |
-| Joints | clamped on two M2 threaded rods; the cap and mouthpiece press-fit on 2mm pins; nothing glued, the seams sealed with shellac |
+| Cap | 19 plates: a socket over the body and a chamber round the reed; then a 24-plate mouthpiece tapered as a real practice chanter's is |
+| Joints | clamped on two M2 threaded rods; the cap press-fit on 2mm pins; the mouthpiece glued; the seams sealed with shellac |
 | Sheets | one 600 × 305mm sheet of 3mm ply each |
 
 | Sides | Bore, across its flats | Model's worst note | Sheet |
 |---|---|---|---|
-| 3, triangle | 3.11mm | in tune | 584 × 190mm |
-| 4, square | 3.54mm | in tune | 599 × 183mm |
-| 5, pentagon | 3.72mm | 1.6 cents | 598 × 230mm |
-| 6, hexagon | 3.81mm | 2.5 cents | 598 × 217mm |
-| 7, heptagon | 3.86mm | 3.6 cents | 599 × 225mm |
-| 8, octagon | 3.89mm | 4.0 cents | 596 × 196mm |
+| 3, triangle | 3.11mm | in tune | 585 × 190mm |
+| 4, square | 3.54mm | in tune | 596 × 184mm |
+| 5, pentagon | 3.72mm | 1.6 cents | 598 × 225mm |
+| 6, hexagon | 3.81mm | 2.5 cents | 597 × 217mm |
+| 7, heptagon | 3.86mm | 3.6 cents | 594 × 220mm |
+| 8, octagon | 3.89mm | 4.0 cents | 596 × 212mm |
 
 Low G is left out of the worst note: it sounds from the whole bore, and the bore is
 a whole number of plates, so it lands up to a few cents out. The generator prints
@@ -126,7 +126,7 @@ hole. Above that the chanter is stacked plates, the cookies, up to the reed's se
 | Where it changes | 244mm up the 406mm body, 0.60 of the way; high A's centre 10.5mm under the cookies |
 | Holes | round, laser-cut in the strips, 1.02 to 3.20mm across; the thumb's in the back strip |
 | Model | every note within 1.2 cents, low G too, since the strips can be any length |
-| Sheet | one 599 × 155mm sheet, 89 parts |
+| Sheet | one 599 × 157mm sheet, 101 parts |
 
 **Finger joints do work.** The strips are 3mm thick round a 3.54mm bore. At each corner
 one strip has a finger 3mm deep and its neighbour a notch. Each strip has fingers along
@@ -188,7 +188,7 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 | Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
 | Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
 | Jig | a base and two rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
-| Sheet | one 583 × 130mm sheet, 65 parts with the jig |
+| Sheet | one 600 × 140mm sheet, 77 parts with the jig |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
@@ -254,8 +254,13 @@ Building it is as for the strip chanter, then:
 
 From the top down:
 
-- **The mouthpiece**, 12 round plates 17mm across with a 6mm blowing hole, pressed
-  together on two 2mm pins.
+- **The mouthpiece**, 24 round plates with a 4.5mm blowing hole, shaped as the
+  measured practice chanter's top piece is: a 45° shoulder off the cap, a step to
+  16.5mm, a step to 14.3mm, then a long taper from 12.4 to 11.0mm and a rounded lip.
+  It is 72mm long, the reference's 71.5mm. Each plate is cut to the reference's
+  diameter at its own mid-height, so the long taper goes down in steps of under 0.1mm. The
+  plates are too narrow for pins, so they are glued, lined up on a rod through the
+  blowing hole.
 - **The cap**: two top plates, twelve plates round a 14mm chamber for the reed's
   blades, and five plates whose hole is the body's own polygon, 0.3mm larger, to
   slide over the top of the body. It is the body's shape grown 6.3mm outward, pressed
@@ -330,8 +335,10 @@ of 2mm brass rod for the pins, high-cut shellac, and a plastic practice-chanter 
 5. Drill the small holes at their V marks, starting a size under the printed figure.
    Then seal the bore: draw a pipe cleaner wet with shellac through it a few
    times, and let it dry. Brush the inside of the cap the same way.
-6. Press the cap's plates together on two pins through its corners. Press the mouthpiece's plates on two
-   pins, which go on into the cap's top plates.
+6. Press the cap's plates together on two pins through its corners. Stack the
+   mouthpiece's plates, widest first, on a 4.5mm drill shank pushed down through the
+   cap's top, gluing each one, and pull the shank out before the glue sets. Sand the
+   steps of the long taper smooth if you like.
 7. Push the reed's staple into the seat. Wrap it with hemp if it is loose. Put the cap
    on.
 

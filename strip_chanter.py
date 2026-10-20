@@ -216,7 +216,7 @@ def build():
     sock = P.ngon(4, (s + 2 * t) / 2)
     for k in range(N_SOCK):
         part('strip socket', outer, [('poly', sock)] + pin_cut, x0 + k * t, 'sock')
-    cap_o, cap_pins, stem_pins, csock = P.cap(part, outer, 4, 0.0)
+    cap_o, cap_pins, csock = P.cap(part, outer, 4, 0.0)
     info = dict(b=b, L=L, pos=pos, widths=widths, n_round=n_round, s=s, t=t, Ls=Ls, x0=x0,
                 holes=holes, own=own, outer=outer, pins=pins, round_d=round_d, sock=sock,
                 cap_o=cap_o)
@@ -333,6 +333,8 @@ def checks(parts, info, sheets):
     note(P.CHAMBER_D < COOKIE and under >= 1.0, 'the cap slides over the cookies and stops on its nuts',
          f'socket {P.CAP_CLEAR:g}mm clear all round; each top nut {under:.1f}mm under the '
          f'chamber\'s bottom plate, the chamber {P.CHAMBER_D:g}mm')
+    note(*P.mouthpiece_check(parts)[:1], 'the mouthpiece tapers as a real practice chanter\'s does',
+         P.mouthpiece_check(parts)[1])
     note(all(sh['w'] <= P.BED[0] and sh['h'] <= P.BED[1] for sh in sheets), 'every sheet fits the bed',
          f'{len(sheets)} sheet(s), largest {max(sh["w"] for sh in sheets):.0f} x '
          f'{max(sh["h"] for sh in sheets):.0f}mm; the strips {Ls + KERF:.1f} x {widest + KERF:.1f}mm')
@@ -446,8 +448,8 @@ def main():
     print(f'practice chanter, square bore of four {JOINT}-jointed strips, low A {M.LOW_A:g}Hz: '
           f'strips {info["Ls"]:.1f}mm long, {info["s"]:.2f}mm bore, {info["s"] + 2 * t:.2f}mm '
           f'outside; {block} cookies ({block * t:g}mm, {COOKIE:g}mm square), body '
-          f'{P.N_SEAT * t + info["L"]:.1f}mm; {P.N_SOCKET + P.N_CHAMBER + P.N_TOP + P.N_STEM} '
-          f'cap plates; two M{P.ROD:g} rods cut {block * t + 2 * (0.5 + P.NUT_T) + P.ROD_SPARE:.0f}mm '
+          f'{P.N_SEAT * t + info["L"]:.1f}mm; {P.N_SOCKET + P.N_CHAMBER + P.N_TOP} cap and '
+          f'{P.n_stem()} mouthpiece plates; two M{P.ROD:g} rods cut {block * t + 2 * (0.5 + P.NUT_T) + P.ROD_SPARE:.0f}mm '
           f'long through the cookies')
     for st, x, d in info['holes']:
         h = next(h for h in M.HOLES if abs(info['pos'][h] - info['n_round'] * t - x) < 1e-9)
