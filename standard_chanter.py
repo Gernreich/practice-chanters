@@ -33,12 +33,16 @@ From the sole up:
     under the collar, which thicken them where they meet it; none on the
     back, where the thumb reaches up past its hole, and the side pieces cut
     away there along a quarter circle up to the collar;
-  * the COLLAR: a plate with a square hole the strips' top stands in, glued
-    to the strips and the band; then N_COLLAR plates with the reference's
-    round bore, as wide as the cap, which rests on them;
-  * the TENON: N_SEAT plates with the reed's seat through them, which the
-    cap's socket slides over. The collar's round plates and the tenon press
-    together on two pins.
+  * the COLLAR: a COLLAR_D plate with a square hole the strips' top stands
+    in, glued to the strips and the band; then N_COLLAR plates with the
+    reference's round bore, as wide as the cap, which rests on them;
+  * the TENON: N_SEAT round plates with the reed's seat through them, which
+    the cap slides over. The collar's round plates and the tenon press
+    together on two pins;
+  * the CAP, the reference's: a plain round tube, REF_CAP_D outside and
+    REF_CAP_BORE inside, REF_CAP_LEN long, its top plate closed but for the
+    blowing hole; glued, no pins. Then the mouthpiece, tapered as the
+    reference's is (practice_chanters.mouthpiece).
 
 And a JIG, not part of the chanter: a base plate and N_FOOT rings with the
 foot's circle cut through them, pinned into a cup. The chanter stands in it on
@@ -79,7 +83,12 @@ FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, a
 N_FOOT = 2                         # layers: 6mm tall, as asked; the reference's is 19mm
 JIG = 35.0                         # the foot jig's square: a base plate, then N_FOOT
 JIG_CLEAR = 0.3                    # rings with the foot's circle this much over
-TENON = 16.0                       # the tenon's square, mm: the seat and two pins
+# the cap, the reference's: a plain round tube over a round tenon, glued, no
+# pins; its top plate closes it, and the mouthpiece goes on above that
+REF_CAP_D, REF_CAP_BORE, REF_CAP_LEN = 22.2, 17.6, 122.0
+TENON_D = REF_CAP_BORE - 2 * P.CAP_CLEAR   # 17.0: the cap slides over it
+COLLAR_D = 25.4                    # the collar's socket plate, over the band's corners;
+                                   # its round plates are the cap's own 22.2mm
 JOINT = 'finger'
 
 
@@ -263,24 +272,35 @@ def build():
     for k in range(N_FOOT):
         part('jig ring', jo, [('circle', 0.0, 0.0, R + JIG_CLEAR / 2)] + jig_pins, 0.0, 'jig',
              f'the foot jig, ring {k + 1}')
-    # the tenon and the collar
-    tenon = P.ngon(4, TENON / 2)
-    r_pin = (P.SEAT_D / 2 + (P.PIN - P.PIN_INTERF) / 2 + P.MIN_WEB
-             + (TENON / 2 - (P.PIN - P.PIN_INTERF) / 2 - P.MIN_WEB) * math.sqrt(2)) / 2
+    # the tenon and the collar, round, pinned together midway between the
+    # seat and the tenon's edge
+    tenon = P.circle(0, 0, TENON_D / 2, 72)
+    r_pin = (REF_SEAT_D / 2 + TENON_D / 2) / 2
     pins = [P.polar(45, r_pin), P.polar(225, r_pin)]
     pin_cut = [('circle', x, y, (P.PIN - P.PIN_INTERF) / 2) for x, y in pins]
     for k in range(N_SEAT):
-        part('tenon', tenon, [('circle', 0.0, 0.0, REF_SEAT_D / 2)] + pin_cut, k * t, 'seat')
-    cap_o, cap_pins, sock = P.cap(part, tenon, 4, 0.0, n_socket=N_SEAT)
-    collar = cap_o
+        part('tenon', tenon, [('circle', 0.0, 0.0, REF_SEAT_D / 2)] + pin_cut, k * t, 'seat',
+             rnd=TENON_D / 2)
+    collar = P.circle(0, 0, REF_CAP_D / 2, 72)
     for k in range(N_COLLAR):
         part('collar', collar, [('circle', 0.0, 0.0, REF_BORE / 2)] + pin_cut,
-             x_collar + k * t, 'collar')
+             x_collar + k * t, 'collar', rnd=REF_CAP_D / 2)
     tube = P.ngon(4, s / 2 + t)
-    part('collar socket', collar, [('poly', tube)], x0, 'sock')
+    part('collar socket', P.circle(0, 0, COLLAR_D / 2, 72), [('poly', tube)], x0, 'sock',
+         rnd=COLLAR_D / 2)
+    # the cap: rings from the collar up, the last one closed but for the
+    # blowing hole, then the mouthpiece
+    n_cap = int(round(REF_CAP_LEN / t))
+    ring = P.circle(0, 0, REF_CAP_D / 2, 72)
+    for k in range(n_cap - 1):
+        part('cap', ring, [('circle', 0.0, 0.0, REF_CAP_BORE / 2)], x_collar - (k + 1) * t,
+             'socket' if k < N_SEAT else 'chamber', rnd=REF_CAP_D / 2)
+    x_top = x_collar - n_cap * t
+    part('cap top', ring, [('circle', 0.0, 0.0, P.MOUTH_D / 2)], x_top, 'top', rnd=REF_CAP_D / 2)
+    P.mouthpiece(part, x_top)
     info = dict(ref=ref, got=got, L=L, holes=holes, s=s, t=t, Ls=Ls, x0=x0, own=own,
                 strip_holes=strip_holes, seat_bottom=seat_bottom, tenon=tenon, pins=pins,
-                collar=collar, a=a, b=b, R=R, band_x=band_x, cap_pins=cap_pins)
+                collar=collar, a=a, b=b, R=R, band_x=band_x, n_cap=n_cap)
     return parts, info
 
 
@@ -386,10 +406,19 @@ def checks(parts, info, sheets):
          'the seat is the reference\'s, and so is the bore under it',
          f'seat {REF_SEAT_D:g}mm, {N_SEAT * t:g}mm deep (the reference\'s {REF_SEAT_DEEP:g}); '
          f'the collar\'s bore {REF_BORE:g}mm stops a staple over that, as the reference\'s does')
-    ledge = P.poly_dist((0.0, 0.0), info['collar']) - P.poly_dist((0.0, 0.0), info['tenon'])
-    note(ledge >= 3.0, 'the cap slides over the tenon and rests on the collar',
-         f'socket {P.CAP_CLEAR:g}mm clear all round, {N_SEAT * t:g}mm deep; the collar the cap\'s '
-         f'own outline, {ledge:.1f}mm proud of the tenon')
+    caps = [p for p in parts if p.kind in ('socket', 'chamber', 'top')]
+    rings = [p for p in caps if p.kind != 'top']
+    band_r = math.hypot(info['a'] + t, info['a'] + t)
+    ok = (len(caps) == info['n_cap'] and all(abs(p.round - REF_CAP_D / 2) < 1e-9 for p in caps)
+          and all(c[3] == REF_CAP_BORE / 2 for p in rings for c in p.cuts)
+          and not any(len(p.cuts) > 1 for p in caps)
+          and abs(max(p.x for p in rings) - (info['x0'] - (N_COLLAR + 1) * t)) < 1e-9
+          and COLLAR_D / 2 > band_r)
+    note(ok, 'the cap is the reference\'s, and slides over the tenon onto the collar',
+         f'{len(caps)} plates, {len(caps) * t:g}mm long (the reference\'s {REF_CAP_LEN:g}), '
+         f'{REF_CAP_D:g}mm round, {REF_CAP_BORE:g}mm bore, no pins; over a {TENON_D:g}mm tenon, '
+         f'{P.CAP_CLEAR:g}mm clear all round; rests on the collar, as wide as it; the collar\'s '
+         f'socket plate {COLLAR_D:g}mm, over the band\'s corners at {2 * band_r:.1f}mm')
     note(*P.mouthpiece_check(parts)[:1], 'the mouthpiece tapers as a real practice chanter\'s does',
          P.mouthpiece_check(parts)[1])
     note(all(sh['w'] <= P.BED[0] and sh['h'] <= P.BED[1] for sh in sheets), 'every sheet fits the bed',

@@ -185,10 +185,11 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 | Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
 | Foot | two layers of four strips lying flat round the strips' bottom, each cut to a 25.4mm circle: 6.95mm wide mid-face, shorter to the corners; 6mm tall, where the reference's foot is 25.4mm round and 19mm |
 | Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back, and each side piece's lower back corner cut away along a 10mm quarter circle up to the collar, so there is no hard edge beside the thumb |
-| Collar | one plate the strips' top stands in, then two with the reference's 4.87mm bore; the cap rests on them |
-| Tenon | 9 plates with the reference's 5.57mm reed seat; the cap's socket slides over them |
+| Collar | one 25.4mm round plate the strips' top stands in, wide enough to cover the band's corners, then two 22.2mm round plates with the reference's 4.87mm bore; the cap rests on them, flush |
+| Tenon | 9 round plates 17mm across with the reference's 5.57mm reed seat; the cap slides over them |
+| Cap | the reference's: a plain tube 22.2mm round with a 17.6mm bore, 123mm long (the reference's 122), 40 rings and a closed top plate, glued, no pins; then the tapered mouthpiece, 24 plates |
 | Jig | a base and two rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
-| Sheet | one 600 × 140mm sheet, 77 parts with the jig |
+| Sheet | one 587 × 145mm sheet, 95 parts with the jig |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
@@ -233,7 +234,8 @@ back, so they slope up to the collar rather than ending square beside the thumb.
 Nothing stands proud of the back strip until the collar, 22.1mm above the hole's
 centre. On the reference chanter, its collar is 20.6mm above.
 
-Building it is as for the strip chanter, then:
+Cut the sheet, and glue the strips as in the strip chanter's first two steps, round a
+5.5mm rod or waxed drill bit. Then:
 
 1. Press the jig's base and two rings together on two 2mm pins, and line the cup with
    packing tape or wax so the glue cannot stick to it. Stand the chanter in it on its
@@ -248,7 +250,12 @@ Building it is as for the strip chanter, then:
 4. Press the collar's round plates and the tenon together on two 2mm pins. Cut the
    pins flush with the collar's bottom face. Their ends land on the strips' top
    corners, inside the socket plate.
-5. Wrap the tenon with hemp or tape until the cap slides on snugly and rests on the collar.
+5. Glue the cap's 40 rings and its top plate together, top plate last. Lay them in
+   the inside corner of two straight boards while the glue sets, which lines up their
+   outsides. Then glue the mouthpiece on as for the other chanters.
+6. Seal the bore with shellac on a pipe cleaner, and brush the inside of the cap.
+7. Push the reed's staple into the seat. Wrap the tenon with hemp or tape until the
+   cap slides on snugly and rests on the collar.
 
 ## How it is built
 

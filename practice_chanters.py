@@ -342,12 +342,18 @@ def cap(part, outer, n, front, n_socket=None):
     for k in range(N_TOP):
         part('cap top', cap_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + cap_pin_cut,
              -(N_CHAMBER + k + 1) * M.PLATE, 'top')
+    mouthpiece(part, -(N_CHAMBER + N_TOP) * M.PLATE)
+    return cap_o, cap_pins, sock
+
+
+def mouthpiece(part, x_top):
+    """The mouthpiece's plates, through part(), up from a cap whose topmost
+    plate is at x_top."""
     for k in range(n_stem()):
         d = stem_d((k + 0.5) * M.PLATE)
         part('mouthpiece', circle(0, 0, d / 2, 72), [('circle', 0.0, 0.0, MOUTH_D / 2)],
-             -(N_CHAMBER + N_TOP + k + 1) * M.PLATE, 'stem',
-             f'mouthpiece plate {k + 1}, {d:.2f}mm', rnd=d / 2)
-    return cap_o, cap_pins, sock
+             x_top - (k + 1) * M.PLATE, 'stem', f'mouthpiece plate {k + 1}, {d:.2f}mm',
+             rnd=d / 2)
 
 
 def mouthpiece_check(parts):
