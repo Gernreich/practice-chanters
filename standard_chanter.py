@@ -27,8 +27,8 @@ From the sole up:
     finger-jointed (--joint=finger, the default) or butt-jointed, glued;
   * the FOOT, N_FOOT layers of strips lying flat round the strips' bottom,
     four to a layer, each layer turned the other way to the one below so no
-    seam runs through; each strip's outer edge an arc of the reference's
-    round foot, so it is FOOT_W wide only mid-face and shorter to the corners;
+    seam runs through; each strip's outer edge an arc of a FOOT_D circle, so
+    it is widest mid-face and shorter to the corners;
   * the BAND, three 10mm strips glued round the strips' front and sides,
     under the collar, which thicken them where they meet it; none on the
     back, where the thumb reaches up past its hole, and the side pieces cut
@@ -78,10 +78,9 @@ N_SEAT = 9                         # the tenon: 27mm of seat, the reference's 25
 BAND = 10.0                        # the band's length, and the side pieces' quarter
                                    # circle above the thumb
 REF_FOOT_D, REF_FOOT_H = 25.4, 19.0
-FOOT_W = 7.0                       # the foot's strips: 11.5 + 2 x 7 = 25.5mm, and cut to
-                                   # the reference's 25.4mm round foot, 6.95mm mid-face
-N_FOOT = 2                         # layers: 6mm tall, as asked; the reference's is 19mm
-JIG = 35.0                         # the foot jig's square: a base plate, then N_FOOT
+FOOT_D = 50.0                      # the foot, round, as asked: wider and lower than the
+N_FOOT = 2                         # reference's, 6mm tall
+JIG = FOOT_D + 10.0                # the foot jig's square: a base plate, then N_FOOT
 JIG_CLEAR = 0.3                    # rings with the foot's circle this much over
 # the cap, the reference's: a plain round tube over a round tenon, glued, no
 # pins; its top plate closes it, and the mouthpiece goes on above that
@@ -244,8 +243,8 @@ def build():
         p.strip = name
     # the foot: a pinwheel of flat strips each layer, the other hand each
     # time, each cut to the round foot
-    R = REF_FOOT_D / 2
-    b = a + FOOT_W
+    R = FOOT_D / 2
+    b = R
     e = math.sqrt(R * R - a * a)                   # where the circle meets an inner edge
     t0, t1 = math.atan2(-a, -e), math.atan2(-e, a)
     arc = [(R * math.cos(t0 + (t1 - t0) * i / 60), R * math.sin(t0 + (t1 - t0) * i / 60))
@@ -352,7 +351,7 @@ def checks(parts, info, sheets):
     lowest = max(x + d / 2 for st, x, d in info['strip_holes'])
     clear = (Ls - N_FOOT * t) - lowest
     note(bad == 0 and len(feet) == 4 * N_FOOT and clear >= P.MIN_WEB,
-         'the foot is the reference\'s width, and clear of the low A hole',
+         'the foot is round, and clear of the low A hole',
          f'{2 * widest:.1f}mm round and {N_FOOT * t:g}mm tall, against the reference\'s '
          f'{REF_FOOT_D:g}mm and {REF_FOOT_H:g}mm; {N_FOOT} layers of 4 strips, {mid:.2f}mm wide '
          f'mid-face; {clear:.1f}mm under the low A hole')

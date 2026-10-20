@@ -183,13 +183,13 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 |---|---|
 | Bore | 5.5mm square, from the sole into the collar |
 | Strips | 236.3mm long, 11.5mm square outside, finger-jointed (`--joint=butt` for butt joints), glued |
-| Foot | two layers of four strips lying flat round the strips' bottom, each cut to a 25.4mm circle: 6.95mm wide mid-face, shorter to the corners; 6mm tall, where the reference's foot is 25.4mm round and 19mm |
+| Foot | two layers of four strips lying flat round the strips' bottom, each cut to a 50mm circle: 19.25mm wide mid-face, shorter to the corners; 6mm tall. The reference's foot is 25.4mm round and 19mm tall, so this one is wider and lower |
 | Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back, and each side piece's lower back corner cut away along a 10mm quarter circle up to the collar, so there is no hard edge beside the thumb |
 | Collar | one 25.4mm round plate the strips' top stands in, wide enough to cover the band's corners, then two 22.2mm round plates with the reference's 4.87mm bore; the cap rests on them, flush |
 | Tenon | 9 round plates 17mm across with the reference's 5.57mm reed seat; the cap slides over them |
 | Cap | the reference's: a plain tube 22.2mm round with a 17.6mm bore, 123mm long (the reference's 122), 40 rings and a closed top plate, glued, no pins; then the tapered mouthpiece, 24 plates |
-| Jig | a base and two rings with a 25.7mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
-| Sheet | one 587 × 145mm sheet, 95 parts with the jig |
+| Jig | a 60mm square base and two rings with a 50.3mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
+| Sheet | one 586 × 175mm sheet, 95 parts with the jig |
 
 | Hole | Under the seat | This chanter | The reference |
 |---|---|---|---|
