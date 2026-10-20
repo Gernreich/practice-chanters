@@ -697,7 +697,9 @@ def page(path_out):
     designs['standard'] = standard_chanter.design3d()
     designs['standard octagon'] = standard_octagon.design3d()
     t.write(path_out, 'Practice chanters in 3D', designs,
-            'Drag to turn, scroll or pinch to zoom; draw Explode to spread the plates along '
+            'Drag to turn; right-drag, shift-drag or move two fingers to slide the view; '
+            'scroll or pinch to zoom in on whatever is under the pointer; double-click a part '
+            'to turn round it, and Reset view to go back. Draw Explode to spread the plates along '
             'the chanter. Every plate is the cut files\u2019 own outline. The finger-hole plates '
             'are darker: a slot through the face, or a V where a hole too small to cut is '
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
