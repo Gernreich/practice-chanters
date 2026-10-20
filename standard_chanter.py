@@ -196,6 +196,40 @@ def solve():
     return ref, got, L, holes
 
 
+def head(part, x_collar, x0, sock_cuts, sock_d):
+    """The tenon, the collar's round plates, its socket plate (sock_d round,
+    sock_cuts through it, at x0), the cap and the mouthpiece, through
+    part(). Returns the tenon's outline, its pins, the collar's outline and
+    the cap's plate count."""
+    t = M.PLATE
+    # the tenon and the collar, round, pinned together midway between the
+    # seat and the tenon's edge
+    tenon = P.circle(0, 0, TENON_D / 2, 72)
+    r_pin = (REF_SEAT_D / 2 + TENON_D / 2) / 2
+    pins = [P.polar(45, r_pin), P.polar(225, r_pin)]
+    pin_cut = [('circle', x, y, (P.PIN - P.PIN_INTERF) / 2) for x, y in pins]
+    for k in range(N_SEAT):
+        part('tenon', tenon, [('circle', 0.0, 0.0, REF_SEAT_D / 2)] + pin_cut, k * t, 'seat',
+             rnd=TENON_D / 2)
+    collar = P.circle(0, 0, REF_CAP_D / 2, 72)
+    for k in range(N_COLLAR):
+        part('collar', collar, [('circle', 0.0, 0.0, REF_BORE / 2)] + pin_cut,
+             x_collar + k * t, 'collar', rnd=REF_CAP_D / 2)
+    part('collar socket', P.circle(0, 0, sock_d / 2, 72), sock_cuts, x0, 'sock',
+         rnd=sock_d / 2)
+    # the cap: rings from the collar up, the last one closed but for the
+    # blowing hole, then the mouthpiece
+    n_cap = int(round(REF_CAP_LEN / t))
+    ring = P.circle(0, 0, REF_CAP_D / 2, 72)
+    for k in range(n_cap - 1):
+        part('cap', ring, [('circle', 0.0, 0.0, REF_CAP_BORE / 2)], x_collar - (k + 1) * t,
+             'socket' if k < N_SEAT else 'chamber', rnd=REF_CAP_D / 2)
+    x_top = x_collar - n_cap * t
+    part('cap top', ring, [('circle', 0.0, 0.0, P.MOUTH_D / 2)], x_top, 'top', rnd=REF_CAP_D / 2)
+    P.mouthpiece(part, x_top)
+    return tenon, pins, collar, n_cap
+
+
 def build():
     ref, got, L, holes = solve()
     t = M.PLATE
@@ -271,32 +305,8 @@ def build():
     for k in range(N_FOOT):
         part('jig ring', jo, [('circle', 0.0, 0.0, R + JIG_CLEAR / 2)] + jig_pins, 0.0, 'jig',
              f'the foot jig, ring {k + 1}')
-    # the tenon and the collar, round, pinned together midway between the
-    # seat and the tenon's edge
-    tenon = P.circle(0, 0, TENON_D / 2, 72)
-    r_pin = (REF_SEAT_D / 2 + TENON_D / 2) / 2
-    pins = [P.polar(45, r_pin), P.polar(225, r_pin)]
-    pin_cut = [('circle', x, y, (P.PIN - P.PIN_INTERF) / 2) for x, y in pins]
-    for k in range(N_SEAT):
-        part('tenon', tenon, [('circle', 0.0, 0.0, REF_SEAT_D / 2)] + pin_cut, k * t, 'seat',
-             rnd=TENON_D / 2)
-    collar = P.circle(0, 0, REF_CAP_D / 2, 72)
-    for k in range(N_COLLAR):
-        part('collar', collar, [('circle', 0.0, 0.0, REF_BORE / 2)] + pin_cut,
-             x_collar + k * t, 'collar', rnd=REF_CAP_D / 2)
     tube = P.ngon(4, s / 2 + t)
-    part('collar socket', P.circle(0, 0, COLLAR_D / 2, 72), [('poly', tube)], x0, 'sock',
-         rnd=COLLAR_D / 2)
-    # the cap: rings from the collar up, the last one closed but for the
-    # blowing hole, then the mouthpiece
-    n_cap = int(round(REF_CAP_LEN / t))
-    ring = P.circle(0, 0, REF_CAP_D / 2, 72)
-    for k in range(n_cap - 1):
-        part('cap', ring, [('circle', 0.0, 0.0, REF_CAP_BORE / 2)], x_collar - (k + 1) * t,
-             'socket' if k < N_SEAT else 'chamber', rnd=REF_CAP_D / 2)
-    x_top = x_collar - n_cap * t
-    part('cap top', ring, [('circle', 0.0, 0.0, P.MOUTH_D / 2)], x_top, 'top', rnd=REF_CAP_D / 2)
-    P.mouthpiece(part, x_top)
+    tenon, pins, collar, n_cap = head(part, x_collar, x0, [('poly', tube)], COLLAR_D)
     info = dict(ref=ref, got=got, L=L, holes=holes, s=s, t=t, Ls=Ls, x0=x0, own=own,
                 strip_holes=strip_holes, seat_bottom=seat_bottom, tenon=tenon, pins=pins,
                 collar=collar, a=a, b=b, R=R, band_x=band_x, n_cap=n_cap)

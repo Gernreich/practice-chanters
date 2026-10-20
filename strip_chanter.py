@@ -149,18 +149,20 @@ def tidy(iv):
         iv = join(iv)
 
 
-def strip_outline(Ls, lo, hi, s, t):
+def strip_outline(Ls, lo, hi, s, t, cut=None):
     """A strip from its top, x = 0, to the sole, x = Ls; u across it, the
     bore's face from u = t to t + s, a finger out to 0 or s + 2t where the
-    strip owns that corner. lo, hi: its edges' runs, [(x0, x1, owns)]."""
+    strip owns that corner. lo, hi: its edges' runs, [(x0, x1, owns)].
+    cut: how far in from 0 or s + 2t it stops where it does not, t if None."""
     def edge(runs, out_u, in_u):
         pts = []
         for x0, x1, owns in runs:
             u = out_u if owns else in_u
             pts += [(x0, u), (x1, u)]
         return pts
-    left = edge(lo, 0.0, t)
-    right = edge(hi, s + 2 * t, s + t)
+    c = t if cut is None else cut
+    left = edge(lo, 0.0, c)
+    right = edge(hi, s + 2 * t, s + 2 * t - c)
     pts = left + right[::-1]
     out = []
     for p in pts:

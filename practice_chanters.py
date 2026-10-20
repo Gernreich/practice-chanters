@@ -692,16 +692,20 @@ def page(path_out):
         designs[f'{n} sides'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
     import strip_chanter
     import standard_chanter
+    import standard_octagon
     designs['strips'] = strip_chanter.design3d()
     designs['standard'] = standard_chanter.design3d()
+    designs['standard octagon'] = standard_octagon.design3d()
     t.write(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn, scroll or pinch to zoom; draw Explode to spread the plates along '
             'the chanter. Every plate is the cut files\u2019 own outline. The finger-hole plates '
             'are darker: a slot through the face, or a V where a hole too small to cut is '
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
-            'buttons switch between the bores, three sides to eight, and the two strip chanters, '
-            'square bores of four finger-jointed strips, darker, under stacked plates: strips '
-            'with holes to the model\u2019s hand layout, and standard with a measured chanter\u2019s.',
+            'buttons switch between the bores, three sides to eight, and the three strip chanters, '
+            'bores of finger-jointed strips, darker, under stacked plates: strips, square, '
+            'with holes to the model\u2019s hand layout; standard, square, with a measured '
+            'chanter\u2019s; and standard octagon, eight strips with that chanter\u2019s holes '
+            'as slots.',
             'practice_chanters.py')
 
 

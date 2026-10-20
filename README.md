@@ -8,10 +8,11 @@
 
 Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
 bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
-Two more are built differently, from four long strips round a square bore:
-[the strip chanter](#the-strip-chanter), whose holes come from the model, and
+Three more are built differently, from long strips glued round the bore:
+[the strip chanter](#the-strip-chanter), whose holes come from the model,
 [the standard strip chanter](#the-standard-strip-chanter), whose holes are a real
-practice chanter's.
+practice chanter's, and [the standard octagon](#the-standard-octagon), the same holes
+as slots in eight strips round an octagonal bore.
 Each is a stack of thin cross-section plates with the bore cut through every one, clamped
 on two threaded rods, under a stacked cap and mouthpiece. The only part you buy is a
 plastic practice-chanter reed.
@@ -257,6 +258,77 @@ Cut the sheet, and glue the strips as in the strip chanter's first two steps, ro
 7. Push the reed's staple into the seat. Wrap the tenon with hemp or tape until the
    cap slides on snugly and rests on the collar.
 
+## The standard octagon
+
+The standard strip chanter's holes on eight strips instead of four: the same measured
+chanter, its holes where that chanter's are, on an octagonal bore. An octagon's faces
+are narrow, so the holes are slots along the strips.
+
+| | |
+|---|---|
+| Bore | an octagon 8mm across its flats, from the sole into the collar: 56.1mm², three times the reference's 4.87mm round |
+| Strips | eight, 235.7mm long, 14mm across the flats outside, 5.8mm wide, finger-jointed, glued |
+| Holes | slots 2.8mm across and 6.9 to 10.5mm long; the thumb's in the back strip |
+| Foot | two 50mm round plates with the octagon through them, glued flush with the sole |
+| Collar, tenon, cap, mouthpiece | the standard strip chanter's, but the collar's socket plate is 22.2mm, flush with the cap, and there is no band |
+| Sheet | one 599 × 158mm sheet, 87 parts |
+
+| Hole | Under the seat | Slot | As a round hole | The reference |
+|---|---|---|---|---|
+| low A | 195.5mm | 7.2 × 2.8mm | 4.86mm | 4.15mm |
+| B | 163.5mm | 7.6 × 2.8mm | 4.98mm | 3.95mm |
+| C | 138.5mm | 8.5 × 2.8mm | 5.29mm | 3.95mm |
+| D | 113.5mm | 9.3 × 2.8mm | 5.56mm | 3.95mm |
+| E | 88.5mm | 10.5 × 2.8mm | 5.95mm | 3.95mm |
+| F | 63.5mm | 8.1 × 2.8mm | 5.18mm | 3.35mm |
+| high G | 43.1mm | 7.2 × 2.8mm | 4.84mm | 3.05mm |
+| high A, the thumb's | 31.1mm | 6.9 × 2.8mm | 4.74mm | 2.95mm |
+
+**Why slots.** Each strip is 5.8mm wide outside but only 3.3mm inside, and a hole needs
+1.5mm of ply each side, so nothing wider than 2.8mm fits. The notes want holes of 4.7 to
+6mm, so each is a slot of that hole's area, as long as it needs, up to 12mm, which a
+finger pad still covers. The model treats a slot as the round hole of its area, as it
+does the plate chanters' slots. A bigger octagon does not help: its holes grow faster
+than its faces. A 12mm octagon would need slots about 4.5mm across and up to 17mm long.
+
+**The joints.** The strips meet at 135°. Where a strip owns a corner it runs out to it;
+where its neighbour does, it stops 2.12mm short, square to its face. Each strip owns one
+of its two corners at a time, in turn, so most of its length is 3.7mm wide outside.
+Round each slot its own strip owns both corners, 1.5mm past the slot. Eight strips
+round eight corners can't all keep one each there, so the strip opposite owns neither,
+and is 1.56mm wide for the slot's length: the back strip opposite each finger hole, and
+the front opposite the thumb's, 97mm in all. Once glued, those stretches are held on both
+edges. Every corner also leaves a small groove along the bore, a 0.88mm right
+triangle, and the bore's area counts all eight.
+
+**The model's question is bigger here.** The bore is three times the reference's area,
+where the square's is 1.6 times, so the model is asked for a bigger difference. It also
+depends on how the reed is modelled. Like the square, the octagon takes the reed's 130mm
+allowance as more of its own bore. Taken instead as the reference's round bore above
+it, low G would want the octagon 328mm long, not 242mm, and the square 288mm. Neither is
+measured, so treat this chanter as the more experimental of the two and expect to
+[tune](#tuning) it.
+
+Building it:
+
+1. Cut the sheet. Dry-fit the eight strips round a waxed 7.5mm dowel or drill bit. Each
+   strip's two edges have different finger patterns, so it goes in only one way. The
+   front strip carries the seven finger slots and the back strip the thumb's.
+2. Glue the strips round the dowel. Hold them with tape or rubber bands while the glue
+   sets, and wipe off any that squeezes into the bore.
+3. Press the collar's two round plates and the tenon together on two 2mm pins, and cut
+   the pins flush with the collar's bottom face.
+4. Glue the strips' top 3mm into the collar's socket plate, and the collar's round
+   plates onto it. The pins' ends land on the strips' top.
+5. Slide the two foot plates on from the sole and glue them flush with it, on a flat
+   board.
+6. Glue the cap's 40 rings and its top plate together, top plate last, in the inside
+   corner of two straight boards. Then glue the mouthpiece on as for the other chanters.
+7. Seal the bore with shellac on a pipe cleaner, working it into the corner grooves,
+   and clear each slot. Brush the inside of the cap.
+8. Push the reed's staple into the seat. Wrap the tenon with hemp or tape until the cap
+   slides on snugly and rests on the collar.
+
 ## How it is built
 
 From the top down:
@@ -290,9 +362,9 @@ plates of the body and rests on the two top nuts.
 <!-- readme-only -->
 The chanters turn in 3D on the [published page](https://gernreich.github.io/practice-chanters/#turn-them-in-3d),
 which GitHub does not run: drag to turn them, pull them apart along their length,
-and switch between the six bores and the two strip chanters.
+and switch between the six bores and the three strip chanters.
 
-<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the two strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
+<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the three strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
 
 ## Before you cut
 
@@ -376,6 +448,7 @@ python3 strip_chanter.py --out=cut-files                   # the strip chanter, 
 python3 strip_chanter.py --joint=butt --out=cut-files      # the strip chanter, butt-jointed
 python3 standard_chanter.py --out=cut-files                # the standard strip chanter
 python3 standard_chanter.py --joint=butt --out=cut-files   # the same, butt-jointed
+python3 standard_octagon.py --out=cut-files                # the standard octagon
 python3 practice_chanters.py --page-to=turn.html           # the 3D view, every design
 python3 chanter_model.py --sides=5                         # the acoustic model alone
 ```
@@ -422,11 +495,13 @@ Every chanter is one sheet of 3mm ply.
 | `cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | the strip chanter, butt-jointed |
 | `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, foot, band, collar, tenon, cap, and the foot jig |
 | `cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | the standard strip chanter, butt-jointed |
-| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
+| `cut-files/practice-chanter-standard-octagon-sheet1-cut-files.svg` | the standard octagon: eight strips, foot, collar, tenon, cap |
+| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-octagon-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
 | `turn.html` | the 3D view, every design, on a page of its own |
 | `practice_chanters.py` | the generator, its checks, the cut files and the 3D view |
 | `strip_chanter.py` | the strip chanter's generator and its checks |
 | `standard_chanter.py` | the standard strip chanter's generator: the measured chanter, the hole sizes, its checks |
+| `standard_octagon.py` | the standard octagon's generator: the slots, the joints, its checks |
 | `chanter_model.py` | the acoustic model: where each hole goes and how wide |
 | `README.md` · `index.html` | this writeup and its published page; the markdown is the source |
 | `.repro` | the command that draws each generated file |
