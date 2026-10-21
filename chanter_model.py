@@ -35,7 +35,8 @@ the upper hand's E and F the same, G G_GAP below F and the thumb's hole THUMB
 above G. Their widths are solved, note by note. A hole under W_SLOT wide is
 too narrow to cut, so it is drilled after assembly instead, a round hole of
 the same area; one that would need more than W_MAX is held at W_MAX and
-moved up the chanter until that is enough.
+moved up the chanter until that is enough, to the plate above where it
+would sound, and narrowed there to the note.
 
 The model, from the reed down:
 
@@ -292,14 +293,20 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0, strip=None):
     def est(h):
         return 1000 * C / (4 * target(note_of[h])) - REED
 
-    def place(h, lo, hi):
+    def place(h, lo, hi, up=False):
         nt = note_of[h]
 
         def f_pos(x):
             p = dict(pos)
             p[h] = x
             return sounding(b, L, p, widths, nt, span=2.2)
-        return snap(bisect(f_pos, target(nt), lo, hi), b)
+        x = bisect(f_pos, target(nt), lo, hi)
+        s = snap(x, b)
+        # a hole at W_MAX snapped below where it sounds would be flat with no
+        # width left to tune it; up, it is sharp, and narrowed to the note
+        if up and s > x:
+            s -= b.grid
+        return s
 
     def size(h):
         nt = note_of[h]
@@ -346,8 +353,14 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0, strip=None):
                 continue
             moved.add(h)
             widths[h] = b.w_max
-            pos[h] = place(h, max(above + gap, 0.6 * est(h)), below - gap)
+            was = pos[h]
+            pos[h] = place(h, max(above + gap, 0.6 * est(h)), below - gap, up=True)
             widths[h] = min(size(h), b.w_max)
+            # an anchor takes its hand with it, so the hand's spacing holds
+            if h in anchors:
+                for f in (lower if h in lower else upper + ['hA']):
+                    if f not in moved:
+                        pos[f] += pos[h] - was
     return b, L, pos, widths
 
 

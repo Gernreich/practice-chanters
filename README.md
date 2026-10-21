@@ -81,7 +81,7 @@ then it is no longer a practice chanter. That is why these are stacks.
 | Scale | low G to high A, the [Highland scale](https://en.wikipedia.org/wiki/Great_Highland_bagpipe) in just intonation, G the harmonic seventh |
 | Fingering | the [standard Highland fingering](https://bagpipejourney.com/articles/finger_positions.shtml): seven finger holes on the front, the high A thumb hole on the back |
 | Bore | the area of a 4mm circle, 378mm long (381mm on the triangle), open at the sole |
-| Body | the area of a 20mm circle on the outside, 396mm long (399mm on the triangle): 132 or 133 plates |
+| Body | the area of a 20mm circle on the outside, 396mm long (399mm on the triangle and the pentagon): 132 or 133 plates |
 | Cap | 19 plates: a socket over the body and a chamber round the reed; then a 24-plate mouthpiece tapered as a real practice chanter's is |
 | Joints | clamped on two M2 threaded rods; the cap press-fit on 2mm pins; the mouthpiece glued; the seams sealed with shellac |
 | Sheets | one 600 × 305mm sheet of 3mm ply each |
@@ -90,27 +90,27 @@ then it is no longer a practice chanter. That is why these are stacks.
 |---|---|---|---|
 | 3, triangle | 3.11mm | in tune | 585 × 190mm |
 | 4, square | 3.54mm | in tune | 596 × 184mm |
-| 5, pentagon | 3.72mm | 1.6 cents | 598 × 225mm |
-| 6, hexagon | 3.81mm | 2.5 cents | 597 × 217mm |
-| 7, heptagon | 3.86mm | 3.6 cents | 594 × 220mm |
-| 8, octagon | 3.89mm | 4.0 cents | 596 × 212mm |
+| 5, pentagon | 3.72mm | in tune | 598 × 227mm |
+| 6, hexagon | 3.81mm | in tune | 597 × 217mm |
+| 7, heptagon | 3.86mm | in tune | 594 × 220mm |
+| 8, octagon | 3.89mm | in tune | 596 × 212mm |
 
 Low G is left out of the worst note: it sounds from the whole bore, and the bore is
-a whole number of plates, so it lands up to a few cents out. The generator prints
+a whole number of plates, so it lands up to 7 cents out. The generator prints
 how far for each shape.
 
 **The holes are not all the same size.** Each is the width that puts its note in
 tune, in a fixed hand layout: the lower hand's four holes 27mm apart, the upper
-hand's three 27mm and then 21mm apart, the thumb 9mm above G. A hole is a slot cut
-across one plate, 3mm tall and as wide as it needs. A slot under 1mm wide is too
+hand's three 27mm and then 21mm apart, the thumb 9mm above G
+(12mm on the pentagon to the octagon). A hole is a slot cut across one plate, 3mm tall and as wide as it needs. A slot under 1mm wide is too
 narrow to cut cleanly. Such a hole is drilled through instead, after assembly, at a
 small V cut into its plate's edge. The drill is the slot's area as a circle, so it
-tunes the same. On every shape that is G, about 1.3mm; on the square, pentagon and
-hexagon also D, about 1.9mm.
+tunes the same. On every shape that is G, 1.25 to 1.4mm; on every shape but the triangle
+also D, about 1.9mm.
 
-On the pentagon to the octagon the thumb's slot wants to be wider than 5mm. It is
-held at 5mm and moved up the chanter until 5mm is right, to the nearest plate, which
-is why those four are a few cents out. A slot wider than the bore runs in to the
+On the pentagon to the octagon, 9mm above G, the thumb's slot would need to be
+wider than 5mm. It moves up the chanter instead, to the first plate where less than
+5mm is enough, and its width is solved there, so it is in tune. A slot wider than the bore runs in to the
 bore's middle and ends square there.
 
 ## The strip chanter
@@ -122,11 +122,11 @@ hole. Above that the chanter is stacked plates, the cookies, up to the reed's se
 | | |
 |---|---|
 | Bore | 3.54mm square in the strips, 4mm round in the cookies: the same area, so no note moves |
-| Strips | 259mm long, 9.54mm square outside; finger-jointed (`--joint=finger`, the default) or butt-jointed (`--joint=butt`) |
+| Strips | 259.5mm long, 9.54mm square outside; finger-jointed (`--joint=finger`, the default) or butt-jointed (`--joint=butt`) |
 | Cookies | 54 plates, 20mm square: 5 glued over the strips' top, 43 with the round bore, 6 for the seat; clamped on two M2 rods 169mm long |
-| Where it changes | 244mm up the 406mm body, 0.60 of the way; high A's centre 10.5mm under the cookies |
-| Holes | round, laser-cut in the strips, 1.02 to 3.20mm across; the thumb's in the back strip |
-| Model | every note within 1.2 cents, low G too, since the strips can be any length |
+| Where it changes | 244mm up the 406.5mm body, 0.60 of the way; high A's centre 10.0mm under the cookies |
+| Holes | round, laser-cut in the strips, 1.02 to 3.09mm across; the thumb's in the back strip |
+| Model | every note within 1.0 cents, low G too, since the strips can be any length |
 | Sheet | one 599 × 157mm sheet, 101 parts |
 
 **Finger joints do work.** The strips are 3mm thick round a 3.54mm bore. At each corner
@@ -151,7 +151,7 @@ is the scale's smallest step, so G must sit 16mm above F instead of 21mm. Any fu
 and high G would be sharp even at a 1mm hole.
 
 **The thumb has room.** The cookies stand 5mm proud of the strips. The high A hole's
-centre is 10.5mm below that shoulder, so the thumb can seal it. Pass `--switch=0.8` to
+centre is 10.0mm below that shoulder, so the thumb can seal it. Pass `--switch=0.8` to
 put the change 4/5 of the way up instead.
 
 **The staple stops on its hemp.** The round bore under the seat is 4mm, the size of the
@@ -178,7 +178,7 @@ Building it:
 This one takes its holes from a real practice chanter: [aero1016's model of the
 practice chanter they own](https://www.thingiverse.com/thing:6658761), measured from
 its 3D file. That chanter has a 4.87mm round bore, 238.5mm from the sole to the reed's
-seat, its front holes 25mm apart, and a collar 10mm under the seat that the top rests on.
+seat, its front holes 25mm apart from B up to F and low A 32mm below B, and a collar 10mm under the seat that the top rests on.
 
 | | |
 |---|---|
@@ -415,7 +415,7 @@ of 2mm brass rod for the pins, high-cut shellac, and a plastic practice-chanter 
    8 bore, C, 8 bore, B, 8 bore, A, 22 bore. Here "seat" and "bore" are runs of the
    plain plates, and the letters are the hole plates.
 2. Cut the rods to the length the generator prints: 403mm, or 406mm for the
-   triangle. Put a nut and washer on one end of each.
+   triangle and the pentagon. Put a nut and washer on one end of each.
 3. Thread the plates on from the sole up, in the reverse of that order. Brush thin
    shellac on each face as it goes on. The slots all face the same way because the
    rods only let them.
