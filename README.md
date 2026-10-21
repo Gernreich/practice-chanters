@@ -187,7 +187,7 @@ seat, its front holes 25mm apart, and a collar 10mm under the seat that the top 
 | Foot | two layers of four strips lying flat round the strips' bottom, each cut to a 50mm circle: 19.25mm wide mid-face, shorter to the corners; 6mm tall. The reference's foot is 25.4mm round and 19mm tall, so this one is wider and lower |
 | Band | three 10mm strips glued round the strips' front and sides, under the collar; none on the back, and each side piece's lower back corner cut away along a 10mm quarter circle up to the collar, so there is no hard edge beside the thumb |
 | Collar | one 25.4mm round plate the strips' top stands in, wide enough to cover the band's corners, then two 22.2mm round plates with the reference's 4.87mm bore; the cap rests on them, flush |
-| Tenon | 9 round plates 17mm across with the reference's 5.57mm reed seat; the cap slides over them |
+| Tenon | 9 round plates 17mm across with the reference's 5.57mm reed seat; the cap slides over them. The 4.87mm bore under the seat is wider than any staple, as on the reference, so the staple is held by its hemp, not stopped by a step |
 | Cap | the reference's: a plain tube 22.2mm round with a 17.6mm bore, 123mm long (the reference's 122), 40 rings and a closed top plate, glued, no pins; then the tapered mouthpiece, 24 plates |
 | Jig | a 60mm square base and two rings with a 50.3mm hole, pinned into a cup, to glue the foot up in; not part of the chanter |
 | Sheet | one 586 × 175mm sheet, 95 parts with the jig |
@@ -215,10 +215,18 @@ to bring low G there too.
 **The model is used only for the difference,** not the pitch. It cannot reproduce the
 reference's own scale: at the reed allowance that fits best, 130mm, it is still about
 40 cents out across the scale, low A at about 255Hz. So it is asked only how far the
-square bore and the thin wall move each note from where the reference's is. That is a
-much smaller question, and it plays at whatever pitch the reference plays. The
-reference's maker had not yet printed it, so that pitch is the real chanter's they
-measured, not one anyone has checked on the print.
+square bore and the thin wall move each note from where the reference's is, and it
+plays at whatever pitch the reference plays. The reference's maker had not yet printed
+it, so that pitch is the real chanter's they measured, not one anyone has checked on
+the print.
+
+**That difference depends on how the reed is modelled.** The holes hardly move with
+the reed allowance's length: at 100mm or 160mm instead of 130mm, low A's hole changes
+by 0.1mm and the others by less. They do move with where it is put. Here the 130mm is
+taken as more of the square bore, as long as the reference's allowance. Taken instead
+as the reference's own 4.87mm round bore above the square, low G would want the bore
+288mm long, not 242mm. Neither is measured, so the first one built and played settles
+it; expect to [tune](#tuning) it.
 
 **Shellac barely moves the pitch.** Dipping the chanter four times in 3 to 5 lb cut
 leaves perhaps 50 to 100µm of shellac on each surface. That is an estimate, not a
@@ -246,15 +254,17 @@ Cut the sheet, and glue the strips as in the strip chanter's first two steps, ro
 2. Glue the band round the strips' top 10mm: the wide piece across the front, the two
    narrow ones on the sides, flush with the back, their curved corners at the back
    and down, away from the collar.
-3. Glue the strips' top 3mm into the collar's socket plate, and that plate to the
-   collar's round plates above it.
-4. Press the collar's round plates and the tenon together on two 2mm pins. Cut the
-   pins flush with the collar's bottom face. Their ends land on the strips' top
-   corners, inside the socket plate.
+3. Press the collar's two round plates and the tenon together on two 2mm pins, and
+   cut the pins flush with the collar's bottom face.
+4. Glue the strips' top 3mm into the collar's socket plate, and the collar's round
+   plates onto it. The pins' ends land on the strips' top corners, inside the socket
+   plate.
 5. Glue the cap's 40 rings and its top plate together, top plate last. Lay them in
    the inside corner of two straight boards while the glue sets, which lines up their
    outsides. Then glue the mouthpiece on as for the other chanters.
-6. Seal the bore with shellac on a pipe cleaner, and brush the inside of the cap.
+6. Seal the chanter by dipping it four times in 3 to 5 lb cut shellac, as above. After
+   each dip blow through the bore and clear each hole with a toothpick. Brush the
+   inside of the cap.
 7. Push the reed's staple into the seat. Wrap the tenon with hemp or tape until the
    cap slides on snugly and rests on the collar.
 
@@ -324,8 +334,9 @@ Building it:
    board.
 6. Glue the cap's 40 rings and its top plate together, top plate last, in the inside
    corner of two straight boards. Then glue the mouthpiece on as for the other chanters.
-7. Seal the bore with shellac on a pipe cleaner, working it into the corner grooves,
-   and clear each slot. Brush the inside of the cap.
+7. Seal the chanter by dipping it four times in 3 to 5 lb cut shellac, as for the
+   standard strip chanter. After each dip blow through the bore, so the shellac fills
+   the corner grooves without pooling, and clear each slot. Brush the inside of the cap.
 8. Push the reed's staple into the seat. Wrap the tenon with hemp or tape until the cap
    slides on snugly and rests on the collar.
 

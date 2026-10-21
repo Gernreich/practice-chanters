@@ -327,6 +327,7 @@ def checks(parts, info, sheets):
                 web = min(web, d - c[3])
     note(web >= P.MIN_WEB, 'every pin keeps ply between it and every cut',
          f'{web:.2f}mm at the least, against {P.MIN_WEB:g}')
+    note(*S.seat_check(t))
     caps = [p for p in parts if p.kind in ('socket', 'chamber', 'top')]
     sock_r = max(math.hypot(*v) for v in info['sock'])
     note(len(caps) == info['n_cap'] and SOCK_D / 2 >= sock_r + P.MIN_WEB,

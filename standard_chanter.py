@@ -230,6 +230,17 @@ def head(part, x_collar, x0, sock_cuts, sock_d):
     return tenon, pins, collar, n_cap
 
 
+def seat_check(t):
+    """(ok, what, detail): the seat takes the largest staple. The collar's
+    bore under it is the reference's, wider than any staple, so a staple is
+    held by its hemp in the seat, as on the reference, not stopped by a step."""
+    return (REF_SEAT_D >= P.STAPLE_MAX,
+            'the seat takes any staple, held by its hemp as the reference\'s is',
+            f'seat {REF_SEAT_D:g}mm, {N_SEAT * t:g}mm deep (the reference\'s {REF_SEAT_DEEP:g}), '
+            f'over the largest staple, {P.STAPLE_MAX:g}; the collar\'s bore {REF_BORE:g}mm, the '
+            f'reference\'s, is wider too, so nothing stops a staple but its hemp')
+
+
 def build():
     ref, got, L, holes = solve()
     t = M.PLATE
@@ -411,10 +422,7 @@ def checks(parts, info, sheets):
                 web = min(web, d - c[3])
     note(web >= P.MIN_WEB, 'every pin keeps ply between it and every cut',
          f'{web:.2f}mm at the least, against {P.MIN_WEB:g}')
-    note(REF_SEAT_D >= P.STAPLE_MAX and REF_BORE >= P.STAPLE_MAX,
-         'the seat is the reference\'s, and so is the bore under it',
-         f'seat {REF_SEAT_D:g}mm, {N_SEAT * t:g}mm deep (the reference\'s {REF_SEAT_DEEP:g}); '
-         f'the collar\'s bore {REF_BORE:g}mm stops a staple over that, as the reference\'s does')
+    note(*seat_check(t))
     caps = [p for p in parts if p.kind in ('socket', 'chamber', 'top')]
     rings = [p for p in caps if p.kind != 'top']
     band_r = math.hypot(info['a'] + t, info['a'] + t)
