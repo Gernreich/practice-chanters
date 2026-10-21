@@ -275,8 +275,12 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0, strip=None):
     Repeated until the closed holes' effect on each other settles. Raises
     when a note cannot be reached. top is mm of round bore under the reed,
     above every hole."""
-    spacing = spacing or SPACING
     b = Bore(n, top, strip)
+    # the hand's gaps in whole plates (or GRID steps), so every hole lands at
+    # a plate's centre whatever --plate= is
+    def whole(d):
+        return b.grid * round(d / b.grid)
+    spacing, g_gap, thumb = whole(spacing or SPACING), whole(G_GAP), whole(THUMB)
     gap = 2 * b.w_max if strip else PLATE
     lower, upper = ['A', 'B', 'C', 'D'], ['E', 'F', 'G']
     widths = {h: 3.0 for h in HOLES}
@@ -329,9 +333,9 @@ def design(n, spacing=None, anchors=ANCHORS, top=0.0, strip=None):
                     if h not in moved:
                         pos[h] = pos[a] + (hand.index(a) - hand.index(h)) * spacing
             if 'G' not in moved:
-                pos['G'] = pos['F'] - G_GAP
+                pos['G'] = pos['F'] - g_gap
             if 'hA' not in moved:
-                pos['hA'] = pos['G'] - THUMB
+                pos['hA'] = pos['G'] - thumb
         for h in HOLES:
             i = HOLES.index(h)
             below = pos[HOLES[i - 1]] if i else L

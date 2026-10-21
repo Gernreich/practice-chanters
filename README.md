@@ -8,14 +8,14 @@
 
 Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
 bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
+Each is a stack of thin cross-section plates with the bore cut through every one, clamped
+on two threaded rods, under a stacked cap and mouthpiece.
 Three more are built differently, from long strips glued round the bore:
 [the strip chanter](#the-strip-chanter), whose holes come from the model,
 [the standard strip chanter](#the-standard-strip-chanter), whose holes are a real
 practice chanter's, and [the standard octagon](#the-standard-octagon), the same holes
-as slots in eight strips round an octagonal bore.
-Each is a stack of thin cross-section plates with the bore cut through every one, clamped
-on two threaded rods, under a stacked cap and mouthpiece. The only part you buy is a
-plastic practice-chanter reed.
+as slots in eight strips round an octagonal bore. Besides threaded rod, nuts and
+pins, the only part you buy is a plastic practice-chanter reed.
 
 Output is millimetre-true — `1 user unit = 1mm` with a physical `width`/`height` — so
 it prints and cuts at real size.
