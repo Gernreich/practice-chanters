@@ -1,5 +1,7 @@
 # Practice chanters
 
+**[← All projects](https://gernreich.github.io/)**
+
 <!-- readme-only -->
 **[Read the writeup](https://gernreich.github.io/practice-chanters/)** ·
 **[Turn them in 3D](https://gernreich.github.io/practice-chanters/#turn-them-in-3d)**
@@ -36,7 +38,7 @@ take it up.
 
 Built for **[LaserMadeMusic](https://www.youtube.com/@LaserMadeMusic)**.
 
-**[The rest of the build files](https://gernreich.github.io/)** — every instrument,
+**[The rest of the build files](https://gernreich.github.io/lasermademusic.html)** — every instrument,
 generator and tool, indexed.
 
 **[Download everything as a ZIP](https://github.com/Gernreich/practice-chanters/archive/refs/heads/main.zip)**
