@@ -674,7 +674,10 @@ def page(path_out):
     to the front and the cap on the left; Explode spreads the plates along
     the chanter, the cap a little further."""
     import turn3d as t
-    designs = {}
+    import standard_chanter
+    import standard_octagon
+    designs = {'standard': standard_chanter.design3d(),
+               'standard octagon': standard_octagon.design3d()}
     for n in M.SIDES:
         parts, info = build(n)
         mid = (min(p.x for p in parts) + max(p.x for p in parts)) / 2
@@ -690,12 +693,6 @@ def page(path_out):
             wood = 'dark' if p.kind in ('slot', 'drill') else 'pale' if cap else 'ply'
             out.append(t.placed(prt, m, ex, wood))
         designs[f'{n} sides'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
-    import strip_chanter
-    import standard_chanter
-    import standard_octagon
-    designs['strips'] = strip_chanter.design3d()
-    designs['standard'] = standard_chanter.design3d()
-    designs['standard octagon'] = standard_octagon.design3d()
     t.write(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn; right-drag, shift-drag or move two fingers to slide the view; '
             'scroll or pinch to zoom in on whatever is under the pointer; double-click a part '
@@ -703,11 +700,10 @@ def page(path_out):
             'the chanter. Every plate is the cut files\u2019 own outline. The finger-hole plates '
             'are darker: a slot through the face, or a V where a hole too small to cut is '
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
-            'buttons switch between the bores, three sides to eight, and the three strip chanters, '
-            'bores of finger-jointed strips, darker, under stacked plates: strips, square, '
-            'with holes to the model\u2019s hand layout; standard, square, with a measured '
-            'chanter\u2019s; and standard octagon, eight strips with that chanter\u2019s holes '
-            'as slots.',
+            'buttons switch between two strip chanters, bores of finger-jointed strips, darker, '
+            'under stacked plates: standard, square, with a measured chanter\u2019s holes; and '
+            'standard octagon, eight strips with those holes as slots; then the plate bores, '
+            'three sides to eight.',
             'practice_chanters.py')
 
 

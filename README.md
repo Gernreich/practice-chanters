@@ -377,9 +377,9 @@ plates of the body and rests on the two top nuts.
 <!-- readme-only -->
 The chanters turn in 3D at the top of the [published page](https://gernreich.github.io/practice-chanters/),
 which GitHub does not run: drag to turn them, pull them apart along their length,
-and switch between the six bores and the three strip chanters.
+and switch between the standard, the standard octagon and the six plate bores.
 
-<!-- page-only The 3D view is at [the top of this page](#practice-chanters): drag to turn a chanter, pull it apart along its length, and switch between the six bores and the three strip chanters. It also opens [on a page of its own](turn.html). -->
+<!-- page-only The 3D view is at [the top of this page](#practice-chanters): drag to turn a chanter, pull it apart along its length, and switch between the standard, the standard octagon and the six plate bores. It also opens [on a page of its own](turn.html). -->
 
 ## Before you cut
 
