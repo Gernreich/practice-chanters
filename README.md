@@ -8,7 +8,7 @@
 
 <!-- page-only **[Read the README](https://github.com/Gernreich/practice-chanters)** · **[Turn them in 3D on a page of their own](turn.html)** -->
 
-<!-- page-only <iframe src="turn.html" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the three strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
+<!-- page-only <iframe src="turn.html?embed" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the three strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
 
 Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
 bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
