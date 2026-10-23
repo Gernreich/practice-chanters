@@ -8,13 +8,12 @@
 
 <!-- page-only **[Read the README](https://github.com/Gernreich/practice-chanters)** · **[Turn them in 3D on a page of their own](turn.html)** -->
 
-<!-- page-only <iframe src="turn.html?embed" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for each of the six bores and the three strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
+<!-- page-only <iframe src="turn.html?embed" title="A practice chanter as solid plates you can drag to turn and pull apart: a long stack of thin polygonal plates with darker finger-hole plates along the front, a wider cap at one end and a round mouthpiece beyond it, with a button for the stacked octagon and the two standard strip chanters" style="width:100%;height:560px;border:0"></iframe> -->
 
-Six Great Highland bagpipe practice chanters in 3mm plywood, alike except for their
-bores. One has a triangular bore, the others square, pentagonal, hexagonal, heptagonal and octagonal.
-Each is a stack of thin cross-section plates with the bore cut through every one, clamped
-on two threaded rods, under a stacked cap and mouthpiece.
-Three more are built differently, from long strips glued round the bore:
+A Great Highland bagpipe practice chanter in 3mm plywood with an octagonal bore:
+[the stacked octagon](#the-stacked-octagon), a stack of thin cross-section plates with
+the bore cut through every one, clamped on two threaded rods, under a stacked cap and
+mouthpiece. Three more are built differently, from long strips glued round the bore:
 [the strip chanter](#the-strip-chanter), whose holes come from the model,
 [the standard strip chanter](#the-standard-strip-chanter), whose holes are a real
 practice chanter's, and [the standard octagon](#the-standard-octagon), the same holes
@@ -31,10 +30,10 @@ take it up.
 
 <table>
 <tr>
-<td align="center"><a href="cut-files/practice-chanter-5-sided-sheet1-cut-files.svg"><img src="previews/practice-chanter-5-sided-sheet1-cut-files.svg" alt="A sheet of parts: rows of small pentagons, each with a little pentagonal hole in the middle and two pin holes, alternate ones turned upside down; a few have a slot from the hole out through one face, and two have a small V in one edge; at the top, larger pentagons with round holes for the cap and the reed's seat, and small discs for the mouthpiece" width="100%"></a></td>
+<td align="center"><a href="cut-files/practice-chanter-8-sided-sheet1-cut-files.svg"><img src="previews/practice-chanter-8-sided-sheet1-cut-files.svg" alt="A sheet of parts: rows of small octagons, each with a little octagonal hole in the middle and two pin holes; a few have a slot from the hole out through one face, and two have a small V in one edge; along the top, larger octagons with round holes for the cap and the reed's seat, and small discs for the mouthpiece" width="100%"></a></td>
 </tr>
 <tr>
-<td align="center"><sub>the pentagonal chanter: every plate on one sheet</sub></td>
+<td align="center"><sub>the stacked octagon: every plate on one sheet</sub></td>
 </tr>
 </table>
 
@@ -45,28 +44,26 @@ generator and tool, indexed.
 
 **[Download everything as a ZIP](https://github.com/Gernreich/practice-chanters/archive/refs/heads/main.zip)**
 
-## Where the cut-off is
+## Why an octagon
 
-**Built as stacked plates, there is no cut-off between three sides and eight.** Every
-shape builds, fits one sheet and tunes in the model. What a bore's cross-section
-needs is the right area. Its shape matters far less:
+**Stacked plates take any polygon.** What a bore's cross-section needs is the right
+area. Its shape matters far less:
 [a square-bored chanter](https://www.daye1.com/bagpage/makepipe/squint1.html)
 was built on exactly that principle, a square of the round bore's area at every point.
-Here every bore is the area of a 4mm circle, 12.57mm², the bore most practice-chanter makers drill.
-A plate is a slice across the chanter, so the polygon is simply cut out of it, and
-any polygon can be.
+Here the bore is the area of a 4mm circle, 12.57mm², the bore most practice-chanter makers drill.
+A plate is a slice across the chanter, so the polygon is simply cut out of it.
 
-Two things change with the number of sides, and neither stops the build:
+Until 2026-10-23 there were six stacked chanters, triangle to octagon, all of which
+built and tuned in the model. Only the octagon is kept:
 
-- **The faces shrink.** Each face of the bore is 5.39mm wide on the triangle, 3.54mm
-  on the square, 2.70mm on the pentagon, 2.20mm on the hexagon, 1.86mm on the
-  heptagon and 1.61mm on the octagon. By eight sides the laser's own kerf rounds the
-  corners and the bore is all but round, so **eight is where adding sides stops
-  meaning anything**, not where it stops working.
-- **The triangle has the most wall.** For the same area it has 29% more wall than a
-  round bore, against 13% for the square and 3% for the octagon. More wall means more
-  friction losses, so the triangle's notes should be a little less bright and
-  responsive. The model counts that loss.
+- **Its bore is all but round.** Each face is 1.61mm wide, where the triangle's was
+  5.39mm and the square's 3.54mm, and the laser's own kerf rounds its corners.
+- **It has the least wall.** For the same area it has 3% more wall than a round bore,
+  against 13% for the square and 29% for the triangle. More wall means more friction
+  losses, and so duller, less responsive notes.
+
+The model still takes any number of sides from three to eight:
+`python3 chanter_model.py --sides=5` solves the pentagon's holes.
 
 **There is a cut-off if the bore is built the other way**, from long strips jointed
 round it as the [octagonal flute](https://github.com/Gernreich/octagonal-flute) is.
@@ -75,46 +72,36 @@ Each strip is a face of the bore, and its finger joints need ply between them. I
 joints where 3mm is needed. The hexagon and up leave less, and the octagon none.
 The triangle cannot be finger-jointed at all, since its corners are too sharp for
 the joint. Thinner 1.5mm stock buys the pentagon. A wider bore would buy more shapes, but
-then it is no longer a practice chanter. That is why these are stacks.
+then it is no longer a practice chanter. That is why this one is a stack.
 
-## The chanters
+## The stacked octagon
 
 | | |
 |---|---|
 | Pitch | low A at 240Hz, an octave below a pipe chanter's 470–480Hz; `--low-a=` sets it |
 | Scale | low G to high A, the [Highland scale](https://en.wikipedia.org/wiki/Great_Highland_bagpipe) in just intonation, G the harmonic seventh |
 | Fingering | the [standard Highland fingering](https://bagpipejourney.com/articles/finger_positions.shtml): seven finger holes on the front, the high A thumb hole on the back |
-| Bore | the area of a 4mm circle, 378mm long (381mm on the triangle), open at the sole |
-| Body | the area of a 20mm circle on the outside, 396mm long (399mm on the triangle and the pentagon): 132 or 133 plates |
+| Bore | an octagon 3.89mm across its flats, the area of a 4mm circle, 378mm long, open at the sole |
+| Body | the area of a 20mm circle on the outside, 396mm long: 132 plates |
 | Cap | 19 plates: a socket over the body and a chamber round the reed; then a 24-plate mouthpiece tapered as a real practice chanter's is |
 | Joints | clamped on two M2 threaded rods; the cap press-fit on 2mm pins; the mouthpiece glued; the seams sealed with shellac |
-| Sheets | one 600 × 305mm sheet of 3mm ply each |
+| Model | every note in tune, low G 3.4 cents sharp |
+| Sheet | one 596 × 212mm sheet of 3mm ply, 175 parts |
 
-| Sides | Bore, across its flats | Model's worst note | Sheet |
-|---|---|---|---|
-| 3, triangle | 3.11mm | in tune | 585 × 190mm |
-| 4, square | 3.54mm | in tune | 596 × 184mm |
-| 5, pentagon | 3.72mm | in tune | 598 × 227mm |
-| 6, hexagon | 3.81mm | in tune | 597 × 217mm |
-| 7, heptagon | 3.86mm | in tune | 594 × 220mm |
-| 8, octagon | 3.89mm | in tune | 596 × 212mm |
-
-Low G is left out of the worst note: it sounds from the whole bore, and the bore is
-a whole number of plates, so it lands up to 7 cents out. The generator prints
-how far for each shape.
+Low G sounds from the whole bore, and the bore is a whole number of plates, so it
+lands 3.4 cents sharp: a plate less would be 17 cents sharp, a plate more 10 flat.
+The generator prints how far.
 
 **The holes are not all the same size.** Each is the width that puts its note in
 tune, in a fixed hand layout: the lower hand's four holes 27mm apart, the upper
-hand's three 27mm and then 21mm apart, the thumb 9mm above G
-(12mm on the pentagon to the octagon). A hole is a slot cut across one plate, 3mm tall and as wide as it needs. A slot under 1mm wide is too
+hand's three 27mm and then 21mm apart, the thumb 9mm above G. A hole is a slot cut across one plate, 3mm tall and as wide as it needs. A slot under 1mm wide is too
 narrow to cut cleanly. Such a hole is drilled through instead, after assembly, at a
 small V cut into its plate's edge. The drill is the slot's area as a circle, so it
-tunes the same. On every shape that is G, 1.25 to 1.4mm; on every shape but the triangle
-also D, about 1.9mm.
+tunes the same. That is G, 1.40mm, and D, 1.92mm.
 
-On the pentagon to the octagon, 9mm above G, the thumb's slot would need to be
-wider than 5mm. It moves up the chanter instead, to the first plate where less than
-5mm is enough, and its width is solved there, so it is in tune. A slot wider than the bore runs in to the
+9mm above G, the thumb's slot would need to be wider than 5mm. It moves up the
+chanter instead, to the first plate where less than 5mm is enough, 12mm above G, and
+its width is solved there, so it is in tune. A slot wider than the bore runs in to the
 bore's middle and ends square there.
 
 ## The strip chanter
@@ -162,7 +149,7 @@ put the change 4/5 of the way up instead.
 smallest staple, so a 4mm staple could slide on into it. A larger one stops on the bore.
 
 **What is glued.** The strips to each other, and the strips into the cookies' socket.
-The cookies are clamped on rods, and the cap press-fits as on the plate chanters.
+The cookies are clamped on rods, and the cap press-fits as on the stacked octagon.
 
 Building it:
 
@@ -175,7 +162,7 @@ Building it:
 4. Glue the strips' top 15mm into the socket. Put the bottom washers and nuts on and
    tighten them. Cut the rods flush with the top nuts.
 5. Seal the bore with shellac on a pipe cleaner, and fit the cap and reed as on the
-   plate chanters.
+   stacked octagon.
 
 ## The standard strip chanter
 
@@ -302,7 +289,7 @@ are narrow, so the holes are slots along the strips.
 1.5mm of ply each side, so nothing wider than 2.8mm fits. The notes want holes of 4.7 to
 6mm, so each is a slot of that hole's area, as long as it needs, up to 12mm, which a
 finger pad still covers. The model treats a slot as the round hole of its area, as it
-does the plate chanters' slots. A bigger octagon does not help: its holes grow faster
+does the stacked octagon's slots. A bigger octagon does not help: its holes grow faster
 than its faces. A 12mm octagon would need slots about 4.5mm across and up to 17mm long.
 
 **The joints.** The strips meet at 135°. Where a strip owns a corner it runs out to it;
@@ -346,7 +333,7 @@ Building it:
 
 ## How it is built
 
-From the top down:
+The stacked octagon, from the top down:
 
 - **The mouthpiece**, 24 round plates with a 4.5mm blowing hole, shaped as the
   measured practice chanter's top piece is: a 45° shoulder off the cap, a step to
@@ -356,13 +343,13 @@ From the top down:
   plates are too narrow for pins, so they are glued, lined up on a rod through the
   blowing hole.
 - **The cap**: two top plates, twelve plates round a 14mm chamber for the reed's
-  blades, and five plates whose hole is the body's own polygon, 0.3mm larger, to
+  blades, and five plates whose hole is the body's own octagon, 0.3mm larger, to
   slide over the top of the body. It is the body's shape grown 6.3mm outward, pressed
   together on two pins in its corners.
 - **The seat**: six plates with a 5.5mm round hole that takes the reed's staple.
   Practice-chanter staples run 4 to 4.8mm across. The bore below is narrower than
   any of them, so the staple stops on it.
-- **The bore**: one plate for every 3mm, the polygon through each, down to the open
+- **The bore**: one plate for every 3mm, the octagon through each, down to the open
   sole. Eight of them carry the finger holes.
 
 Every body plate has the same two rod holes, placed so that turning or flipping the
@@ -377,9 +364,9 @@ plates of the body and rests on the two top nuts.
 <!-- readme-only -->
 The chanters turn in 3D at the top of the [published page](https://gernreich.github.io/practice-chanters/),
 which GitHub does not run: drag to turn them, pull them apart along their length,
-and switch between the standard, the standard octagon and the six plate bores.
+and switch between the standard, the standard octagon and the stacked octagon.
 
-<!-- page-only The 3D view is at [the top of this page](#practice-chanters): drag to turn a chanter, pull it apart along its length, and switch between the standard, the standard octagon and the six plate bores. It also opens [on a page of its own](turn.html). -->
+<!-- page-only The 3D view is at [the top of this page](#practice-chanters): drag to turn a chanter, pull it apart along its length, and switch between the standard, the standard octagon and the stacked octagon. It also opens [on a page of its own](turn.html). -->
 
 ## Before you cut
 
@@ -399,7 +386,7 @@ another. `--reed=` sets the figure if you measure your own.
 tone-hole and end corrections. Given the measured chanter that the
 [standard strip chanter](#the-standard-strip-chanter) copies, it cannot reproduce that
 chanter's scale at any reed allowance. The closest, at 130mm, is still about 40 cents
-out, and at the 20mm the six plate chanters and the strip chanter were designed with,
+out, and at the 20mm the stacked octagon and the strip chanter were designed with,
 the reference's scale comes out stretched by hundreds of cents. So the model's own
 designs may play well out of tune, with the upper notes sharpest, until a real chanter
 has been played and the model fitted to it. The standard strip chanter avoids most of
@@ -414,12 +401,11 @@ changes every hole. Pass yours with `--kerf=`.
 You need two lengths of M2 threaded rod, four M2 nuts and washers, a few centimetres
 of 2mm brass rod for the pins, high-cut shellac, and a plastic practice-chanter reed.
 
-1. Cut the sheet. The generator prints the stacking order for its shape. For the
-   square it is: 6 seat, 51 bore, hA, 2 bore, G, 6 bore, F, 8 bore, E, 5 bore, D,
-   8 bore, C, 8 bore, B, 8 bore, A, 22 bore. Here "seat" and "bore" are runs of the
+1. Cut the sheet. The generator prints the stacking order: 6 seat, 50 bore, hA,
+   3 bore, G, 6 bore, F, 8 bore, E, 5 bore, D, 8 bore, C, 8 bore, B, 8 bore, A,
+   22 bore. Here "seat" and "bore" are runs of the
    plain plates, and the letters are the hole plates.
-2. Cut the rods to the length the generator prints: 403mm, or 406mm for the
-   triangle and the pentagon. Put a nut and washer on one end of each.
+2. Cut the rods to the length the generator prints: 403mm. Put a nut and washer on one end of each.
 3. Thread the plates on from the sole up, in the reverse of that order. Brush thin
    shellac on each face as it goes on. The slots all face the same way because the
    rods only let them.
@@ -453,19 +439,19 @@ then check every note again and touch up.
 ## Regenerating it
 
 ```sh
-python3 practice_chanters.py --sides=5 --no-write          # the checks, writing nothing
-python3 practice_chanters.py --sides=5 --out=cut-files     # its sheet
-python3 practice_chanters.py --sides=5 --plate=2.9 --no-write   # for ply as measured
-python3 practice_chanters.py --sides=5 --reed=24 --no-write     # a different reed allowance
-python3 practice_chanters.py --sides=5 --low-a=233 --no-write   # a different pitch
-python3 practice_chanters.py --sides=5 --kerf=0.18 --out=mine   # for a laser with a 0.18mm kerf
+python3 practice_chanters.py --no-write                   # the stacked octagon's checks, writing nothing
+python3 practice_chanters.py --out=cut-files              # its sheet
+python3 practice_chanters.py --plate=2.9 --no-write       # for ply as measured
+python3 practice_chanters.py --reed=24 --no-write         # a different reed allowance
+python3 practice_chanters.py --low-a=233 --no-write       # a different pitch
+python3 practice_chanters.py --kerf=0.18 --out=mine       # for a laser with a 0.18mm kerf
 python3 strip_chanter.py --out=cut-files                   # the strip chanter, finger-jointed
 python3 strip_chanter.py --joint=butt --out=cut-files      # the strip chanter, butt-jointed
 python3 standard_chanter.py --out=cut-files                # the standard strip chanter
 python3 standard_chanter.py --joint=butt --out=cut-files   # the same, butt-jointed
 python3 standard_octagon.py --out=cut-files                # the standard octagon
 python3 practice_chanters.py --page-to=turn.html           # the 3D view, every design
-python3 chanter_model.py --sides=5                         # the acoustic model alone
+python3 chanter_model.py --sides=8                         # the acoustic model alone, any of 3 to 8 sides
 ```
 
 `practice_chanters.py` draws nothing until every check passes:
@@ -500,20 +486,15 @@ Every chanter is one sheet of 3mm ply.
 
 | | |
 |---|---|
-| `cut-files/practice-chanter-3-sided-sheet1-cut-files.svg` | the triangular chanter, every plate |
-| `cut-files/practice-chanter-4-sided-sheet1-cut-files.svg` | the square chanter, every plate |
-| `cut-files/practice-chanter-5-sided-sheet1-cut-files.svg` | the pentagonal chanter, every plate |
-| `cut-files/practice-chanter-6-sided-sheet1-cut-files.svg` | the hexagonal chanter, every plate |
-| `cut-files/practice-chanter-7-sided-sheet1-cut-files.svg` | the heptagonal chanter, every plate |
-| `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the octagonal chanter, every plate |
+| `cut-files/practice-chanter-8-sided-sheet1-cut-files.svg` | the stacked octagon, every plate |
 | `cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` | the strip chanter, finger-jointed: strips, cookies, cap |
 | `cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` | the strip chanter, butt-jointed |
 | `cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` | the standard strip chanter, finger-jointed: strips, foot, band, collar, tenon, cap, and the foot jig |
 | `cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` | the standard strip chanter, butt-jointed |
 | `cut-files/practice-chanter-standard-octagon-sheet1-cut-files.svg` | the standard octagon: eight strips, foot, collar, tenon, cap |
-| `previews/practice-chanter-3-sided-sheet1-cut-files.svg` · `previews/practice-chanter-4-sided-sheet1-cut-files.svg` · `previews/practice-chanter-5-sided-sheet1-cut-files.svg` · `previews/practice-chanter-6-sided-sheet1-cut-files.svg` · `previews/practice-chanter-7-sided-sheet1-cut-files.svg` · `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-octagon-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
+| `previews/practice-chanter-8-sided-sheet1-cut-files.svg` · `previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg` · `previews/practice-chanter-standard-octagon-sheet1-cut-files.svg` | a display rendering of each sheet — **not** cut files |
 | `turn.html` | the 3D view, every design, on a page of its own |
-| `practice_chanters.py` | the generator, its checks, the cut files and the 3D view |
+| `practice_chanters.py` | the stacked octagon's generator, its checks, and the 3D view |
 | `strip_chanter.py` | the strip chanter's generator and its checks |
 | `standard_chanter.py` | the standard strip chanter's generator: the measured chanter, the hole sizes, its checks |
 | `standard_octagon.py` | the standard octagon's generator: the slots, the joints, its checks |

@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Cut files for a Great Highland bagpipe practice chanter whose bore is a
-regular polygon, three to eight sides, built as a stack of cross-section
-plates clamped on two threaded rods, with a stacked cap and mouthpiece.
+regular octagon, built as a stack of cross-section plates clamped on two
+threaded rods, with a stacked cap and mouthpiece.
 
-    python3 practice_chanters.py --sides=5 --no-write      # the checks
-    python3 practice_chanters.py --sides=5 --out=DIR       # the sheets
-    python3 practice_chanters.py --sides=5 --plate=2.9 ... # for ply as measured
+    python3 practice_chanters.py --no-write                # the checks
+    python3 practice_chanters.py --out=DIR                 # the sheet
+    python3 practice_chanters.py --plate=2.9 ...           # for ply as measured
     python3 practice_chanters.py --kerf=0.18 ...           # for that kerf
-    python3 practice_chanters.py --page-to=turn.html       # the 3D view, every shape
+    python3 practice_chanters.py --page-to=turn.html       # the 3D view, every design
+
+Everything below takes any polygon, as chanter_model.py does, but only the
+octagon is built: the triangle to the heptagon were dropped on 2026-10-23
+(BUILT). ghb-chanter imports these functions for its own 4, 6 and 8 sides.
 
 The acoustics are chanter_model.py's: where each hole goes and how wide it is
 cut. This file turns them into plates, from the top down:
@@ -667,10 +671,11 @@ def svg_sheet(k, nsh, s, n):
 
 
 NAMES = {3: 'triangle', 4: 'square', 5: 'pentagon', 6: 'hexagon', 7: 'heptagon', 8: 'octagon'}
+BUILT = (8,)    # the plate chanters this repository ships: the octagon alone
 
 
 def page(path_out):
-    """The 3D view: every shape, lying along the page with its finger holes
+    """The 3D view: every design, lying along the page with its finger holes
     to the front and the cap on the left; Explode spreads the plates along
     the chanter, the cap a little further."""
     import turn3d as t
@@ -678,7 +683,7 @@ def page(path_out):
     import standard_octagon
     designs = {'standard': standard_chanter.design3d(),
                'standard octagon': standard_octagon.design3d()}
-    for n in M.SIDES:
+    for n in BUILT:
         parts, info = build(n)
         mid = (min(p.x for p in parts) + max(p.x for p in parts)) / 2
         out = []
@@ -692,7 +697,7 @@ def page(path_out):
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
             wood = 'dark' if p.kind in ('slot', 'drill') else 'pale' if cap else 'ply'
             out.append(t.placed(prt, m, ex, wood))
-        designs[f'{n} sides'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
+        designs[f'stacked {NAMES[n]}'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
     t.write(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn; right-drag, shift-drag or move two fingers to slide the view; '
             'scroll or pinch to zoom in on whatever is under the pointer; double-click a part '
@@ -702,14 +707,14 @@ def page(path_out):
             'drilled. The cap, paler, is on, its socket over the body\u2019s top plates. The '
             'buttons switch between two strip chanters, bores of finger-jointed strips, darker, '
             'under stacked plates: standard, square, with a measured chanter\u2019s holes; and '
-            'standard octagon, eight strips with those holes as slots; then the plate bores, '
-            'three sides to eight.',
+            'standard octagon, eight strips with those holes as slots; then the stacked '
+            'octagon, every plate a slice across the chanter.',
             'practice_chanters.py')
 
 
 def main():
     global KERF
-    out, write, sides, page_to = None, True, None, None
+    out, write, sides, page_to = None, True, BUILT[0], None
     for x in sys.argv[1:]:
         if x == '--no-write':
             write = False
@@ -717,8 +722,10 @@ def main():
             out = x.split('=', 1)[1]
         elif x.startswith('--sides='):
             sides = int(x.split('=', 1)[1])
-            if sides not in M.SIDES:
-                raise SystemExit(f'error: --sides={sides}: the chanters have 3 to 8 sides.')
+            if sides not in BUILT:
+                raise SystemExit(f'error: --sides={sides}: the stacked chanter is built with '
+                                 f'{" or ".join(map(str, BUILT))} sides only. chanter_model.py '
+                                 f'--sides={sides} still models it.')
         elif x.startswith('--plate='):
             M.PLATE = float(x.split('=', 1)[1])
         elif x.startswith('--reed='):
@@ -737,8 +744,6 @@ def main():
         page(page_to)
         print(f'  wrote {os.path.basename(page_to)}')
         return 0
-    if sides is None:
-        raise SystemExit('error: --sides=3 to 8, the bore\'s polygon.')
     if write and not out:
         raise SystemExit('error: --out=DIR, or --no-write to run the checks only.')
     parts, info = build(sides)
