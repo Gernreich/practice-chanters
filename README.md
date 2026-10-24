@@ -13,7 +13,7 @@
 A Great Highland bagpipe practice chanter in 3mm plywood with an octagonal bore:
 [the stacked octagon](#the-stacked-octagon), a stack of thin cross-section plates with
 the bore cut through every one, clamped on two threaded rods, under a stacked cap and
-mouthpiece. Three more are built differently, from long strips glued round the bore:
+mouthpiece; its holes are a real practice chanter's, where that chanter's are. Three more are built differently, from long strips glued round the bore:
 [the strip chanter](#the-strip-chanter), whose holes come from the model,
 [the standard strip chanter](#the-standard-strip-chanter), whose holes are a real
 practice chanter's, and [the standard octagon](#the-standard-octagon), the same holes
@@ -23,14 +23,15 @@ pins, the only part you buy is a plastic practice-chanter reed.
 Output is millimetre-true — `1 user unit = 1mm` with a physical `width`/`height` — so
 it prints and cuts at real size.
 
-**None has been cut or played yet.** The holes come from an acoustic model that has
-not been checked against a real chanter, and the reed's length inside the cap is a guess.
+**None has been cut or played yet.** Three of the four copy a measured chanter's holes and
+use an acoustic model, not yet checked against a real chanter, for the difference; the strip
+chanter's holes come from the model alone. The reed's length inside the cap is a guess.
 [Before you cut](#before-you-cut) says what that costs, and [Tuning](#tuning) how to
 take it up.
 
 <table>
 <tr>
-<td align="center"><a href="cut-files/practice-chanter-8-sided-sheet1-cut-files.svg"><img src="previews/practice-chanter-8-sided-sheet1-cut-files.svg" alt="A sheet of parts: rows of small octagons, each with a little octagonal hole in the middle and two pin holes; a few have a slot from the hole out through one face, and two have a small V in one edge; along the top, larger octagons with round holes for the cap and the reed's seat, and small discs for the mouthpiece" width="100%"></a></td>
+<td align="center"><a href="cut-files/practice-chanter-8-sided-sheet1-cut-files.svg"><img src="previews/practice-chanter-8-sided-sheet1-cut-files.svg" alt="A sheet of parts: rows of small octagons, each with a little octagonal hole in the middle and two pin holes; eight have a slot from the hole out through one face; along the top, larger octagons with round holes for the cap and the reed's seat, and small discs for the mouthpiece" width="100%"></a></td>
 </tr>
 <tr>
 <td align="center"><sub>the stacked octagon: every plate on one sheet</sub></td>
@@ -50,14 +51,15 @@ generator and tool, indexed.
 area. Its shape matters far less:
 [a square-bored chanter](https://www.daye1.com/bagpage/makepipe/squint1.html)
 was built on exactly that principle, a square of the round bore's area at every point.
-Here the bore is the area of a 4mm circle, 12.57mm², the bore most practice-chanter makers drill.
+Here the bore is the area of [the measured practice chanter's](#the-standard-strip-chanter)
+4.87mm round bore, 18.63mm².
 A plate is a slice across the chanter, so the polygon is simply cut out of it.
 
 Until 2026-10-23 there were six stacked chanters, triangle to octagon, all of which
 built and tuned in the model. Only the octagon is kept:
 
-- **Its bore is all but round.** Each face is 1.61mm wide, where the triangle's was
-  5.39mm and the square's 3.54mm, and the laser's own kerf rounds its corners.
+- **Its bore is all but round.** Each face is 1.96mm wide, where a triangle's of the same
+  area would be 6.56mm and a square's 4.32mm, and the laser's own kerf rounds its corners.
 - **It has the least wall.** For the same area it has 3% more wall than a round bore,
   against 13% for the square and 29% for the triangle. More wall means more friction
   losses, and so duller, less responsive notes.
@@ -76,33 +78,56 @@ then it is no longer a practice chanter. That is why this one is a stack.
 
 ## The stacked octagon
 
+Its holes are [the measured practice chanter's](#the-standard-strip-chanter), as the two
+standard chanters' are: each where the reference's is, measured from the reed's seat, and
+sized in the model to sound the reference's note there. Until 2026-10-23 the model placed
+and sized them on its own, round a 4mm bore inside a 20mm outside, and gave a body 396mm
+long, half as long again as the real chanter's. Its bore was a third smaller than the
+reference's and its wall thicker.
+
 | | |
 |---|---|
-| Pitch | low A at 240Hz, an octave below a pipe chanter's 470–480Hz; `--low-a=` sets it |
-| Scale | low G to high A, the [Highland scale](https://en.wikipedia.org/wiki/Great_Highland_bagpipe) in just intonation, G the harmonic seventh |
+| Pitch | the reference's, every note sounding where the reference's does in the model |
+| Scale | low G to high A, the [Highland scale](https://en.wikipedia.org/wiki/Great_Highland_bagpipe) |
 | Fingering | the [standard Highland fingering](https://bagpipejourney.com/articles/finger_positions.shtml): seven finger holes on the front, the high A thumb hole on the back |
-| Bore | an octagon 3.89mm across its flats, the area of a 4mm circle, 378mm long, open at the sole |
-| Body | the area of a 20mm circle on the outside, 396mm long: 132 plates |
-| Cap | 19 plates: a socket over the body and a chamber round the reed; then a 24-plate mouthpiece tapered as a real practice chanter's is |
+| Bore | an octagon 4.74mm across its flats, the area of the reference's 4.87mm round bore, 237mm long, open at the sole |
+| Body | 16mm across the flats outside, a 5.6mm wall where the reference's tapers from 7.4 to 5.1mm; 264mm long, 88 plates |
+| Seat | nine plates with the reference's 5.57mm seat, 27mm deep (the reference's 25.5) |
+| Cap | 19 plates: a socket over the body and a 13mm chamber round the reed; then a 24-plate mouthpiece tapered as the reference's is |
 | Joints | clamped on two M2 threaded rods; the cap press-fit on 2mm pins; the mouthpiece glued; the seams sealed with shellac |
-| Model | every note in tune, low G 3.4 cents sharp |
-| Sheet | one 596 × 212mm sheet of 3mm ply, 175 parts |
+| Model | every note the reference's, low G 6.7 cents sharp |
+| Sheet | one 595 × 132mm sheet of 3mm ply, 131 parts |
 
-Low G sounds from the whole bore, and the bore is a whole number of plates, so it
-lands 3.4 cents sharp: a plate less would be 17 cents sharp, a plate more 10 flat.
-The generator prints how far.
+| Hole | Under the seat | Slot | As a round hole | The reference |
+|---|---|---|---|---|
+| low A | 196.5mm | 4.31mm | 4.06mm | 4.15mm |
+| B | 163.5mm | 3.60mm | 3.71mm | 3.95mm |
+| C | 139.5mm | 4.37mm | 4.09mm | 3.95mm |
+| D | 112.5mm | 3.37mm | 3.59mm | 3.95mm |
+| E | 88.5mm | 3.98mm | 3.90mm | 3.95mm |
+| F | 64.5mm | 3.42mm | 3.61mm | 3.35mm |
+| high G | 43.5mm | 2.73mm | 3.23mm | 3.05mm |
+| high A, the thumb's | 31.5mm | 2.62mm | 3.16mm | 2.95mm |
 
-**The holes are not all the same size.** Each is the width that puts its note in
-tune, in a fixed hand layout: the lower hand's four holes 27mm apart, the upper
-hand's three 27mm and then 21mm apart, the thumb 9mm above G. A hole is a slot cut across one plate, 3mm tall and as wide as it needs. A slot under 1mm wide is too
-narrow to cut cleanly. Such a hole is drilled through instead, after assembly, at a
-small V cut into its plate's edge. The drill is the slot's area as a circle, so it
-tunes the same. That is G, 1.40mm, and D, 1.92mm.
+**A hole is a slot across one plate,** 3mm tall and as wide as its note needs, from the
+bore out through the face. The model takes it as the round hole of its area. Each sits
+in the plate the reference's hole centre falls in, so it is up to 1.5mm from the
+reference's, 1.0mm at the most here. A slot under 1mm wide would be too narrow to cut
+cleanly and would be drilled instead, at a V cut in its plate's edge; at 3mm ply none is.
 
-9mm above G, the thumb's slot would need to be wider than 5mm. It moves up the
-chanter instead, to the first plate where less than 5mm is enough, 12mm above G, and
-its width is solved there, so it is in tune. A slot wider than the bore runs in to the
-bore's middle and ends square there.
+**The outside is as thin as the rods allow.** Each plate carries two M2 rods, which need
+1.5mm of ply round them, clear of the bore, the seat and any slot, and room for a washer
+on the end plates. At 15.5mm across the flats they would have less. A thicker wall wants
+bigger holes: at 17mm low A would need a slot wider than 5mm, more than a finger pad
+closes. 16mm is between the two, and the reference's own outside, about 20mm at low A and
+15mm at high A, spans it.
+
+**The staple is held by its hemp,** as on the reference. The bore under the seat is wider
+than the smallest staple, so nothing stops one but the hemp wrapped round it.
+
+Low G sounds from the whole bore, and the bore is a whole number of plates, so it lands
+6.7 cents sharp: a plate less would be 21 cents sharp, a plate more 8 flat. The generator
+prints how far.
 
 ## The strip chanter
 
@@ -291,6 +316,9 @@ are narrow, so the holes are slots along the strips.
 finger pad still covers. The model treats a slot as the round hole of its area, as it
 does the stacked octagon's slots. A bigger octagon does not help: its holes grow faster
 than its faces. A 12mm octagon would need slots about 4.5mm across and up to 17mm long.
+Nor can it be smaller, nearer the reference's bore: below 8mm the strip opposite each slot,
+which owns neither corner there, is under 1.5mm wide (1.35mm at 7.5mm, 0.31mm at 5mm), and
+the collar's pins no longer land on the strips' top.
 
 **The joints.** The strips meet at 135°. Where a strip owns a corner it runs out to it;
 where its neighbour does, it stops 2.12mm short, square to its face. Each strip owns one
@@ -342,20 +370,20 @@ The stacked octagon, from the top down:
   diameter at its own mid-height, so the long taper goes down in steps of under 0.1mm. The
   plates are too narrow for pins, so they are glued, lined up on a rod through the
   blowing hole.
-- **The cap**: two top plates, twelve plates round a 14mm chamber for the reed's
+- **The cap**: two top plates, twelve plates round a 13mm chamber for the reed's
   blades, and five plates whose hole is the body's own octagon, 0.3mm larger, to
   slide over the top of the body. It is the body's shape grown 6.3mm outward, pressed
   together on two pins in its corners.
-- **The seat**: six plates with a 5.5mm round hole that takes the reed's staple.
-  Practice-chanter staples run 4 to 4.8mm across. The bore below is narrower than
-  any of them, so the staple stops on it.
+- **The seat**: nine plates with the reference's 5.57mm round seat for the reed's
+  staple. Practice-chanter staples run 4 to 4.8mm across, and the 4.74mm bore below
+  stops only the largest, so the staple is held by its hemp, as on the reference.
 - **The bore**: one plate for every 3mm, the octagon through each, down to the open
   sole. Eight of them carry the finger holes.
 
 Every body plate has the same two rod holes, placed so that turning or flipping the
 plate puts them somewhere else: a plate threads on only one way, so no slot can end
 up facing the wrong way. The rods are clamped by a nut and washer at each end. A
-pin pressed through 130 plates would never go in, and nothing is glued. The cap is
+pin pressed through 88 plates would never go in, and nothing is glued. The cap is
 not on the rods, since it comes off to set the reed. It slides over the top five
 plates of the body and rests on the two top nuts.
 
@@ -371,27 +399,28 @@ and switch between the standard, the standard octagon and the stacked octagon.
 ## Before you cut
 
 **Measure the ply.** The stack multiplies the stock's error by every plate in it. 2.9mm ply
-makes the bore 13mm short, and every note 50 to 57 cents sharp in the model, which
-is a quarter-tone. Measure a few places on the sheet with calipers, then pass the
+makes the stacked octagon's bore 8mm short, and every note 12 to 44 cents sharp in the
+model, low G most. Measure a few places on the sheet with calipers, then pass the
 average as `--plate=`. The generator re-solves every hole on that grid, and the plate
 count follows.
 
-**The reed's length is a guess.** The model treats the reed and staple as 20mm of
-extra closed bore, which is not a measured figure. A reed pushed deeper into its seat
+**The reed's length is a guess.** The model treats the reed and staple as extra closed
+bore: 130mm on the stacked octagon and the two standard chanters, the figure that best fits
+the measured chanter, and 20mm on the strip chanter. Neither is a measured figure. A reed pushed deeper into its seat
 plays sharper, and one pulled out plays flatter. That is how every practice chanter is
 pitched, and it shifts the whole scale together, but it cannot fix one note against
-another. `--reed=` sets the figure if you measure your own.
+another. `strip_chanter.py --reed=` sets the strip chanter's figure if you measure your own.
 
 **The model does not match a real chanter.** It is a transfer-matrix model with textbook
 tone-hole and end corrections. Given the measured chanter that the
 [standard strip chanter](#the-standard-strip-chanter) copies, it cannot reproduce that
 chanter's scale at any reed allowance. The closest, at 130mm, is still about 40 cents
-out, and at the 20mm the stacked octagon and the strip chanter were designed with,
-the reference's scale comes out stretched by hundreds of cents. So the model's own
-designs may play well out of tune, with the upper notes sharpest, until a real chanter
-has been played and the model fitted to it. The standard strip chanter avoids most of
-this by copying a real chanter and using the model only for the difference. For the
-others, expect to do the [Tuning](#tuning) in earnest.
+out, and at the 20mm the strip chanter was designed with, the reference's scale comes
+out stretched by hundreds of cents. So the strip chanter may play well out of tune, with
+the upper notes sharpest, until a real chanter has been played and the model fitted to
+it. The stacked octagon and the two standard chanters avoid most of this by copying a
+real chanter and using the model only for the difference. For the strip chanter, expect
+to do the [Tuning](#tuning) in earnest.
 
 **The slots are cut exactly to width,** so a kerf other than the default 0.13mm
 changes every hole. Pass yours with `--kerf=`.
@@ -401,19 +430,19 @@ changes every hole. Pass yours with `--kerf=`.
 You need two lengths of M2 threaded rod, four M2 nuts and washers, a few centimetres
 of 2mm brass rod for the pins, high-cut shellac, and a plastic practice-chanter reed.
 
-1. Cut the sheet. The generator prints the stacking order: 6 seat, 50 bore, hA,
-   3 bore, G, 6 bore, F, 8 bore, E, 5 bore, D, 8 bore, C, 8 bore, B, 8 bore, A,
-   22 bore. Here "seat" and "bore" are runs of the
+1. Cut the sheet. The generator prints the stacking order: 9 seat, 10 bore, hA,
+   3 bore, G, 6 bore, F, 7 bore, E, 7 bore, D, 8 bore, C, 7 bore, B, 10 bore, A,
+   13 bore. Here "seat" and "bore" are runs of the
    plain plates, and the letters are the hole plates.
-2. Cut the rods to the length the generator prints: 403mm. Put a nut and washer on one end of each.
+2. Cut the rods to the length the generator prints: 271mm. Put a nut and washer on one end of each.
 3. Thread the plates on from the sole up, in the reverse of that order. Brush thin
    shellac on each face as it goes on. The slots all face the same way because the
    rods only let them.
 4. Put the top washers and nuts on and tighten them evenly, just enough to close every
    seam. Cut the rods off flush with the top nuts, or the cap will rest on the rods
    instead of the nuts. Let the shellac dry.
-5. Drill the small holes at their V marks, starting a size under the printed figure.
-   Then seal the bore: draw a pipe cleaner wet with shellac through it a few
+5. If the generator printed a hole to drill (at 3mm ply there is none), drill it at its
+   V mark, starting a size under the printed figure. Then seal the bore: draw a pipe cleaner wet with shellac through it a few
    times, and let it dry. Brush the inside of the cap the same way.
 6. Press the cap's plates together on two pins through its corners. Stack the
    mouthpiece's plates, widest first, on a 4.5mm drill shank pushed down through the
@@ -442,8 +471,6 @@ then check every note again and touch up.
 python3 practice_chanters.py --no-write                   # the stacked octagon's checks, writing nothing
 python3 practice_chanters.py --out=cut-files              # its sheet
 python3 practice_chanters.py --plate=2.9 --no-write       # for ply as measured
-python3 practice_chanters.py --reed=24 --no-write         # a different reed allowance
-python3 practice_chanters.py --low-a=233 --no-write       # a different pitch
 python3 practice_chanters.py --kerf=0.18 --out=mine       # for a laser with a 0.18mm kerf
 python3 strip_chanter.py --out=cut-files                   # the strip chanter, finger-jointed
 python3 strip_chanter.py --joint=butt --out=cut-files      # the strip chanter, butt-jointed
@@ -456,8 +483,9 @@ python3 chanter_model.py --sides=8                         # the acoustic model 
 
 `practice_chanters.py` draws nothing until every check passes:
 
-- every note is in tune in the model, and low G is as near as whole plates allow;
-- the bore is a 4mm round bore's area;
+- every note is the reference's in the model, and low G is as near as whole plates allow;
+- the bore is the reference's area;
+- every hole is where the reference's is, to the plate;
 - the bore is whole plates, down to the sole;
 - every finger hole is in its own plate, at its centre;
 - every hole is cuttable or drillable;
@@ -465,7 +493,7 @@ python3 chanter_model.py --sides=8                         # the acoustic model 
 - every rod and pin keeps ply between it and every cut;
 - the nuts sit on the end plates, inside the body;
 - every body plate goes on only one way;
-- the seat holds a staple, and the bore stops it;
+- the seat takes any staple, held by its hemp as the reference's is;
 - the cap slides over the body and stops on its nuts;
 - every sheet fits the bed;
 - no two parts on a sheet come closer than the gap;

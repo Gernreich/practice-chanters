@@ -55,6 +55,12 @@ THUMB_ROOM = 9.0                   # high A's centre to the cookies: the block s
                                    # must seal the hole below that shoulder
 G_GAP = 16.0                       # F to G: a thin wall wants G nearer F
 JOINT = 'finger'
+# the seat and the reed's chamber the stacked chanter had until 2026-10-23, when
+# it took the reference's seat and a narrower chamber: here the 4mm cookie bore
+# still stops the staple under a 5.5mm seat, and the cookies leave room for 14mm
+SEAT_D = 5.5
+N_SEAT = 6
+CHAMBER_D = 14.0
 
 # the corners, each owned by one strip at a time: front-left, front-right,
 # back-left, back-right; and each strip's two edges, its u = 0 edge first,
@@ -75,13 +81,13 @@ def solve():
             b, L, pos, widths = M.design(4, top=top, strip=t)
         finally:
             M.G_GAP = g
-        body = P.N_SEAT * t + L
+        body = N_SEAT * t + L
         if SWITCH is None:
             # as many round plates as leave the socket THUMB_ROOM above the
             # thumb's hole
             n_round = int((pos['hA'] - THUMB_ROOM) // t) - N_SOCK
         else:
-            n_round = int(round((1 - SWITCH) * body / t)) - P.N_SEAT - N_SOCK
+            n_round = int(round((1 - SWITCH) * body / t)) - N_SEAT - N_SOCK
         if n_round < 1:
             raise SystemExit(f'error: --switch={SWITCH:g} leaves no room for round bore '
                              f'under the seat.')
@@ -186,7 +192,7 @@ def build():
     s = 2 * M.inradius(M.BORE_AREA, 4)
     top = n_round * t
     Ls = L - top
-    x0 = (P.N_SEAT + n_round) * t          # the strips' top, down the body
+    x0 = (N_SEAT + n_round) * t          # the strips' top, down the body
     holes = [('back' if h == 'hA' else 'front', pos[h] - top, widths[h]) for h in M.HOLES]
     own = owners(Ls, holes)
     num = iter(range(1, 9999))
@@ -210,15 +216,15 @@ def build():
     pins = [P.polar(45, r_rod), P.polar(225, r_rod)]
     pin_cut = [('circle', x, y, P.ROD_HOLE / 2) for x, y in pins]
     round_d = 2 * math.sqrt(M.BORE_AREA / math.pi)
-    for k in range(P.N_SEAT):
-        part('seat', outer, [('circle', 0.0, 0.0, P.SEAT_D / 2)] + pin_cut, k * t, 'seat')
+    for k in range(N_SEAT):
+        part('seat', outer, [('circle', 0.0, 0.0, SEAT_D / 2)] + pin_cut, k * t, 'seat')
     for k in range(n_round):
         part('round bore', outer, [('circle', 0.0, 0.0, round_d / 2)] + pin_cut,
-             (P.N_SEAT + k) * t, 'round')
+             (N_SEAT + k) * t, 'round')
     sock = P.ngon(4, (s + 2 * t) / 2)
     for k in range(N_SOCK):
         part('strip socket', outer, [('poly', sock)] + pin_cut, x0 + k * t, 'sock')
-    cap_o, cap_pins, csock = P.cap(part, outer, 4, 0.0)
+    cap_o, cap_pins, csock = P.cap(part, outer, 4, 0.0, chamber=CHAMBER_D)
     info = dict(b=b, L=L, pos=pos, widths=widths, n_round=n_round, s=s, t=t, Ls=Ls, x0=x0,
                 holes=holes, own=own, outer=outer, pins=pins, round_d=round_d, sock=sock,
                 cap_o=cap_o)
@@ -250,10 +256,10 @@ def checks(parts, info, sheets):
          'the bore is a 4mm round bore\'s area, square and round',
          f'{s * s:.2f}mm^2: the strips\' square {s:.2f}mm, the cookies\' circle '
          f'{info["round_d"]:.2f}mm')
-    body = P.N_SEAT * t + L
+    body = N_SEAT * t + L
     start = info['x0'] + N_SOCK * t                # the cookies' bottom, down the body
     up = (body - start) / body
-    ha = P.N_SEAT * t + pos['hA']
+    ha = N_SEAT * t + pos['hA']
     if SWITCH is None:
         ok = THUMB_ROOM <= ha - start < THUMB_ROOM + t
         asked = f'just above high A: its centre {ha - start:.1f}mm under them'
@@ -326,15 +332,15 @@ def checks(parts, info, sheets):
     note(min(face, tube) >= P.WASHER_D / 2, 'the nuts sit on the cookies\' ends, clear of the strips',
          f'{P.WASHER_D:g}mm washers: {face:.2f}mm to the outline, {tube:.2f}mm to the strips\' '
          f'corner, against {P.WASHER_D / 2:g}')
-    note(P.SEAT_D >= P.STAPLE_MAX and info['round_d'] <= P.STAPLE_MIN + 1e-9,
+    note(SEAT_D >= P.STAPLE_MAX and info['round_d'] <= P.STAPLE_MIN + 1e-9,
          'the seat holds a staple, the round bore under it',
-         f'seat {P.SEAT_D:g}mm over the largest staple, {P.STAPLE_MAX:g}; the round bore '
+         f'seat {SEAT_D:g}mm over the largest staple, {P.STAPLE_MAX:g}; the round bore '
          f'{info["round_d"]:.2f}mm stops staples over that only: a {P.STAPLE_MIN:g}mm staple '
          f'is set by its hemp')
-    under = r + P.NUT_AF / 2 - P.CHAMBER_D / 2
-    note(P.CHAMBER_D < COOKIE and under >= 1.0, 'the cap slides over the cookies and stops on its nuts',
+    under = r + P.NUT_AF / 2 - CHAMBER_D / 2
+    note(CHAMBER_D < COOKIE and under >= 1.0, 'the cap slides over the cookies and stops on its nuts',
          f'socket {P.CAP_CLEAR:g}mm clear all round; each top nut {under:.1f}mm under the '
-         f'chamber\'s bottom plate, the chamber {P.CHAMBER_D:g}mm')
+         f'chamber\'s bottom plate, the chamber {CHAMBER_D:g}mm')
     note(*P.mouthpiece_check(parts)[:1], 'the mouthpiece tapers as a real practice chanter\'s does',
          P.mouthpiece_check(parts)[1])
     note(all(sh['w'] <= P.BED[0] and sh['h'] <= P.BED[1] for sh in sheets), 'every sheet fits the bed',
@@ -446,18 +452,18 @@ def main():
     sheets = P.pack(parts)
     res = checks(parts, info, sheets)
     t = info['t']
-    block = P.N_SEAT + info['n_round'] + N_SOCK
+    block = N_SEAT + info['n_round'] + N_SOCK
     print(f'practice chanter, square bore of four {JOINT}-jointed strips, low A {M.LOW_A:g}Hz: '
           f'strips {info["Ls"]:.1f}mm long, {info["s"]:.2f}mm bore, {info["s"] + 2 * t:.2f}mm '
           f'outside; {block} cookies ({block * t:g}mm, {COOKIE:g}mm square), body '
-          f'{P.N_SEAT * t + info["L"]:.1f}mm; {P.N_SOCKET + P.N_CHAMBER + P.N_TOP} cap and '
+          f'{N_SEAT * t + info["L"]:.1f}mm; {P.N_SOCKET + P.N_CHAMBER + P.N_TOP} cap and '
           f'{P.n_stem()} mouthpiece plates; two M{P.ROD:g} rods cut {block * t + 2 * (0.5 + P.NUT_T) + P.ROD_SPARE:.0f}mm '
           f'long through the cookies')
     for st, x, d in info['holes']:
         h = next(h for h in M.HOLES if abs(info['pos'][h] - info['n_round'] * t - x) < 1e-9)
         print(f'  {h:3} {st:5} strip, {x:6.1f}mm from its top ({info["pos"][h]:5.1f}mm down '
               f'the bore)  {d:.2f}mm round')
-    print(f'  cookies, top down: {P.N_SEAT} seat, {info["n_round"]} round, {N_SOCK} socket '
+    print(f'  cookies, top down: {N_SEAT} seat, {info["n_round"]} round, {N_SOCK} socket '
           f'over the strips')
     bad = 0
     for ok, what, detail in res:

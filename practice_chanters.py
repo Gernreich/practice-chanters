@@ -13,15 +13,30 @@ Everything below takes any polygon, as chanter_model.py does, but only the
 octagon is built: the triangle to the heptagon were dropped on 2026-10-23
 (BUILT). ghb-chanter imports these functions for its own 4, 6 and 8 sides.
 
-The acoustics are chanter_model.py's: where each hole goes and how wide it is
-cut. This file turns them into plates, from the top down:
+THE REFERENCE is standard_chanter.py's measured practice chanter, as the two
+standard chanters' is (since 2026-10-23; until then chanter_model.py placed
+the holes on its own, and gave a 4mm bore 378mm long). The bore is an
+octagon of the reference's bore's area, 4.74mm across its flats; the outside
+OUTER_FLATS across, a 5.6mm wall where the reference tapers from 7.4 to 5.1.
+Each hole sits in the plate where the reference's centre falls, and its slot
+is solved, in standard_chanter.py's model, to sound the reference's note
+there; the bore is the whole number of plates nearest the reference's low G.
+The model is used for the difference between the two chanters, not the pitch.
+
+OUTER_FLATS is the narrowest the rods allow, and the widest the holes do: a
+thicker wall wants bigger holes, and at 17mm the low A hole would need a slot
+wider than W_MAX, the 5mm a finger pad closes. At 15.5mm the rods would keep
+under MIN_WEB of ply round them.
+
+From the top down:
 
   * the CAP: a mouthpiece tapered as a real practice chanter's is, two top
     plates, a chamber round the reed's blades, and a socket that slides
     over the body's top plates;
-  * the SEAT: N_SEAT plates with a round hole for the reed's staple, which
-    stops on the bore below, since the bore is narrower than any staple;
-  * the BORE: one plate per PLATE of bore, the polygon through each, down to
+  * the SEAT: N_SEAT plates with the reference's seat through them. Its bore
+    is wider than the smallest staple, so a staple is held by its hemp, as
+    on the reference, not stopped by a step;
+  * the BORE: one plate per PLATE of bore, the octagon through each, down to
     the open sole. A finger hole is a slot cut in its plate from the bore out
     through the face, which leaves the plate C-shaped; one too small to cut
     is drilled after assembly instead, at a V cut in its plate's edge.
@@ -30,7 +45,7 @@ Every body plate carries the same two rod holes, placed so that no turn or
 flip of the polygon brings them back into line: a plate goes on only one
 way, so no slot can face the wrong way. The rods are M2 threaded rod with a
 nut and washer at each end, which clamp the stack: a press-fit pin cannot be
-driven through 130 plates, and nothing is glued. Shellac seals the seams.
+driven through 88 plates, and nothing is glued. Shellac seals the seams.
 The cap comes off to set the reed, so it is not on the rods: it slides over
 the body's top plates and rests on the two top nuts. The cap, 19 plates,
 is short enough to press together on its own pins. The mouthpiece's plates
@@ -38,8 +53,8 @@ are too narrow for pins: they are glued, lined up on a rod through the
 blowing hole.
 
 A PLATE IS NOT ALWAYS 3MM. A stack multiplies the stock's error by every
-plate in it: 2.9mm ply makes the bore 13mm short and every note 50 to 57
-cents sharp, in the model.
+plate in it: a thinner ply shortens the bore and moves every hole up it, and
+every note goes sharp.
 Measure the ply and pass --plate=; the model then places every hole on that
 grid, and the plate count follows.
 """
@@ -65,10 +80,13 @@ ORANGE, BLACK = SF.ORANGE, SF.BLACK
 # --- the reed and its seat (mm) ---------------------------------------------
 # A practice-chanter reed's staple is 4 to 4.8mm across, by the reed makers'
 # figures; pipers wrap it in hemp to fit the seat, so the seat is cut over the
-# largest, and the bore's narrowness stops the smallest.
+# largest, and the hemp holds it there.
 STAPLE_MIN, STAPLE_MAX = 4.0, 4.8
-SEAT_D = 5.5
-N_SEAT = 6                         # 18mm of seat: a staple is 22 to 24mm long
+SEAT_D = 5.57                      # the reference's
+N_SEAT = 9                         # 27mm of seat, the reference's 25.5
+# --- the body ----------------------------------------------------------------
+REF_BORE = 4.87                    # standard_chanter.REF_BORE: the bore is its area
+OUTER_FLATS = 16.0                 # the outside across its flats
 # --- the rods and pins --------------------------------------------------------
 ROD = 2.0                          # M2 threaded rod, through the body
 ROD_HOLE = 2.2                     # a sliding fit: the nuts clamp, not the holes
@@ -82,7 +100,7 @@ PIN_INTERF = 0.1                   # the hole this much under the rod, a press-f
 CAP_CLEAR = 0.3                    # each side of the body, for hemp or tape
 CAP_WEB = 2.0                      # ply each side of the cap's pins
 N_SOCKET = 5                       # plates of socket over the body's top
-CHAMBER_D = 14.0                   # round the reed's blades
+CHAMBER_D = 13.0                   # round the reed's blades: under the top nuts
 N_CHAMBER = 12                     # 36mm: the reed stands about 30mm proud
 MOUTH_D = 4.5                      # the blowing hole, the reference chanter's
 N_TOP = 2
@@ -326,7 +344,7 @@ def pins_for(n, outer, bore):
     return [p, q]
 
 
-def cap(part, outer, n, front, n_socket=None):
+def cap(part, outer, n, front, n_socket=None, chamber=None):
     """The cap's and mouthpiece's plates, through part(), for a body whose
     top plates are outer: socket, chamber, top, stem; its own pins in its wall."""
     sock = offset(outer, CAP_CLEAR)
@@ -337,11 +355,12 @@ def cap(part, outer, n, front, n_socket=None):
     cap_o = offset(sock, 2 * CAP_WEB + PIN)
     cap_pin_cut = [('circle', x, y, (PIN - PIN_INTERF) / 2) for x, y in cap_pins]
     n_socket = n_socket or N_SOCKET
+    chamber = chamber or CHAMBER_D
     for k in range(n_socket):
         part('cap socket', cap_o, [('poly', sock)] + cap_pin_cut,
              (n_socket - 1 - k) * M.PLATE, 'socket')
     for k in range(N_CHAMBER):
-        part('cap chamber', cap_o, [('circle', 0.0, 0.0, CHAMBER_D / 2)] + cap_pin_cut,
+        part('cap chamber', cap_o, [('circle', 0.0, 0.0, chamber / 2)] + cap_pin_cut,
              -(k + 1) * M.PLATE, 'chamber')
     for k in range(N_TOP):
         part('cap top', cap_o, [('circle', 0.0, 0.0, MOUTH_D / 2)] + cap_pin_cut,
@@ -386,11 +405,50 @@ def stem_d(z):
     return MOUTHPIECE[-1][1]
 
 
+def bore_area():
+    return math.pi * (REF_BORE / 2) ** 2
+
+
+def solve(n):
+    """The bore's length, whole plates, and each hole's slot that sound the
+    reference's notes, each hole in the plate the reference's centre falls
+    in: (bore, L, pos, widths, ref, got, holes), pos down the bore from the
+    seat, widths across the slot, ref and got the notes in Hz."""
+    import standard_chanter as S
+    r_b, t = M.inradius(bore_area(), n), M.PLATE
+    b = S.Bore(2 * r_b)                     # its loss on the inradius
+    b.A = bore_area() / 1e6
+    b.a = math.sqrt(b.A / math.pi)
+    wall = OUTER_FLATS / 2 - r_b
+    ref = S.reference()
+    note_of = dict(zip(M.HOLES, M.SETS))
+    holes = {h: [h, M.snap(S.REF_TOP - z), d, wall] for h, (z, d, w) in S.REF_HOLES.items()}
+    d_max = M.drill(M.W_MAX)
+    for _ in range(4):
+        L = S.bisect(lambda x: S.sounding(b, x, list(holes.values()), 'low G', ref['low G']),
+                     ref['low G'], S.REF_TOP - 30, S.REF_TOP + 60, rising=False)
+        L = t * round(L / t)
+        for h in M.HOLES:
+            nt = note_of[h]
+
+            def f(d):
+                holes[h][2] = d
+                return S.sounding(b, L, list(holes.values()), nt, ref[nt])
+            if f(d_max) < ref[nt]:
+                raise SystemExit(f'error: {h} is flat even as a {M.W_MAX:g}mm slot; '
+                                 f'a {OUTER_FLATS:g}mm outside is too thick a wall.')
+            holes[h][2] = S.bisect(f, ref[nt], M.D_MIN, d_max, rising=True)
+    got = {nt: S.sounding(b, L, list(holes.values()), nt, ref[nt]) for nt in M.NOTES}
+    pos = {h: v[1] for h, v in holes.items()}
+    widths = {h: math.pi * v[2] ** 2 / 4 / t for h, v in holes.items()}
+    return b, L, pos, widths, ref, got, holes
+
+
 def build(n):
     """The parts, and what the checks need, for an n-sided chanter."""
-    b, L, pos, widths = M.design(n)
-    bore = ngon(n, M.inradius(M.BORE_AREA, n))
-    outer = ngon(n, M.inradius(M.OUTER_AREA, n))
+    b, L, pos, widths, ref, got, holes = solve(n)
+    bore = ngon(n, M.inradius(bore_area(), n))
+    outer = ngon(n, OUTER_FLATS / 2)
     front, thumb = faces(n)
     pins = pins_for(n, outer, bore)
     pin_cut = [('circle', x, y, ROD_HOLE / 2) for x, y in pins]
@@ -425,7 +483,8 @@ def build(n):
             p.drill = d
         p.finger, p.width, p.theta = h, w, th
     cap_o, cap_pins, sock = cap(part, outer, n, front)
-    info = dict(b=b, L=L, pos=pos, widths=widths, bore=bore, outer=outer, pins=pins,
+    info = dict(b=b, L=L, pos=pos, widths=widths, ref=ref, got=got, holes=holes,
+                bore=bore, outer=outer, pins=pins,
                 n_bore=n_bore, cap_o=cap_o, cap_pins=cap_pins,
                 sock=sock, front=front, thumb=thumb)
     return parts, info
@@ -540,21 +599,27 @@ def checks(n, parts, info, sheets):
 
     def note(ok, what, detail):
         out.append((ok, what, detail))
+    import standard_chanter as S
     b, L, pos, widths = info['b'], info['L'], info['pos'], info['widths']
-    rep = M.report(b, L, pos, widths)
-    worst = max(abs(c) for nt, f, c in rep if nt != 'low G')
-    low_g = next(c for nt, f, c in rep if nt == 'low G')
+    ref, got = info['ref'], info['got']
+    worst = max(abs(M.cents(got[nt], ref[nt])) for nt in M.NOTES if nt != 'low G')
+    low_g = M.cents(got['low G'], ref['low G'])
     # low G is the bore rounded to whole plates: one plate more or fewer
     # would put it further out
-    near = [M.cents(M.sounding(b, L + d, pos, widths, 'low G', span=1.8), M.target('low G'))
-            for d in (-M.PLATE, M.PLATE)]
-    note(worst <= 5.0 and all(abs(low_g) < abs(c) for c in near), 'every note is in tune, in the model',
+    near = [M.cents(S.sounding(b, L + d, list(info['holes'].values()), 'low G', ref['low G']),
+                    ref['low G']) for d in (-M.PLATE, M.PLATE)]
+    note(worst <= 5.0 and all(abs(low_g) < abs(c) for c in near),
+         'every note is the reference\'s, in the model',
          f'within {worst:.1f} cents; low G {low_g:+.1f}, the bore the nearest whole plates '
          f'(a plate less {near[0]:+.1f}, more {near[1]:+.1f})')
     area = poly_area(info['bore'])
-    note(abs(area - M.BORE_AREA) < 1e-6, 'the bore is a 4mm round bore\'s area',
-         f'{area:.2f}mm^2, a {n}-gon {2 * M.inradius(M.BORE_AREA, n):.2f}mm across its '
-         f'inscribed circle')
+    note(abs(area - bore_area()) < 1e-6, 'the bore is the reference\'s area',
+         f'{area:.2f}mm^2, the {REF_BORE:g}mm round bore\'s; a {n}-gon '
+         f'{2 * M.inradius(bore_area(), n):.2f}mm across its flats, {OUTER_FLATS:g} outside, '
+         f'a {OUTER_FLATS / 2 - M.inradius(bore_area(), n):.2f}mm wall')
+    off = max(abs(pos[h] - (S.REF_TOP - z)) for h, (z, d, w) in S.REF_HOLES.items())
+    note(off <= M.PLATE / 2 + 1e-9, 'every hole is where the reference\'s is, to the plate',
+         f'{off:.2f}mm out at the most, against half a plate')
     bores = [p for p in parts if p.kind in ('bore', 'slot', 'drill')]
     note(len(bores) * M.PLATE == L, 'the bore is whole plates, down to the sole',
          f'{len(bores)} plates of {M.PLATE:g}mm, {L:g}mm')
@@ -610,11 +675,12 @@ def checks(n, parts, info, sheets):
                 == {(round(x, 3), round(y, 3)) for x, y in info['pins']})
     note(fixed == 1, 'every body plate goes on only one way',
          f'of the {2 * n} turns and flips of a {n}-gon, only leaving it be keeps both rods in place')
-    inscribed = 2 * M.inradius(M.BORE_AREA, n)
-    note(inscribed < STAPLE_MIN and SEAT_D >= STAPLE_MAX, 'the seat holds a staple, the bore stops it',
-         f'seat {SEAT_D:g}mm over the largest staple, {STAPLE_MAX:g}; bore {inscribed:.2f}mm '
-         f'inside, under the smallest, {STAPLE_MIN:g}')
-    r_in = M.inradius(M.OUTER_AREA, n)
+    note(SEAT_D >= STAPLE_MAX, 'the seat takes any staple, held by its hemp as the reference\'s is',
+         f'seat {SEAT_D:g}mm, {N_SEAT * M.PLATE:g}mm deep (the reference\'s '
+         f'{S.REF_SEAT_DEEP:g}), over the largest staple, {STAPLE_MAX:g}; the bore under it '
+         f'{2 * M.inradius(bore_area(), n):.2f}mm across its flats, as the reference\'s '
+         f'{REF_BORE:g} is, wider than the smallest, {STAPLE_MIN:g}')
+    r_in = OUTER_FLATS / 2
     under = min(math.hypot(*q) for q in info['pins']) + NUT_AF / 2 - CHAMBER_D / 2
     note(CHAMBER_D < 2 * r_in and under >= 1.0, 'the cap slides over the body and stops on its nuts',
          f'socket {CAP_CLEAR:g}mm clear all round; each top nut {under:.1f}mm under the '
@@ -728,18 +794,13 @@ def main():
                                  f'--sides={sides} still models it.')
         elif x.startswith('--plate='):
             M.PLATE = float(x.split('=', 1)[1])
-        elif x.startswith('--reed='):
-            M.REED = float(x.split('=', 1)[1])
-        elif x.startswith('--low-a='):
-            M.LOW_A = float(x.split('=', 1)[1])
         elif x.startswith('--kerf='):
             KERF = SF.set_kerf(x)
         elif x.startswith('--page-to='):
             page_to = x.split('=', 1)[1]
         else:
             raise SystemExit(f'error: {x} is not a flag this generator reads. It takes --sides=, '
-                             f'--out=, --plate=, --reed=, --low-a=, --kerf=, --page-to= and '
-                             f'--no-write.')
+                             f'--out=, --plate=, --kerf=, --page-to= and --no-write.')
     if page_to:
         page(page_to)
         print(f'  wrote {os.path.basename(page_to)}')
@@ -750,16 +811,19 @@ def main():
     sheets = pack(parts)
     res = checks(sides, parts, info, sheets)
     body = N_SEAT + info['n_bore']
-    print(f'practice chanter, {sides} sides ({NAMES[sides]}), low A {M.LOW_A:g}Hz: '
+    print(f'practice chanter, {sides} sides ({NAMES[sides]}), the reference\'s holes: '
           f'{body} body plates of {M.PLATE:g}mm ({body * M.PLATE:g}mm), '
           f'{N_SOCKET + N_CHAMBER + N_TOP} cap and {n_stem()} mouthpiece plates; two M{ROD:g} '
           f'rods cut {body * M.PLATE + 2 * (0.5 + NUT_T) + ROD_SPARE:.0f}mm long; {PIN:g}mm pins '
           f'{(N_SOCKET + N_CHAMBER + N_TOP) * M.PLATE:g}mm through the cap')
+    import standard_chanter as S
     for h in M.HOLES:
         w = info['widths'][h]
         k = int(info['pos'][h] // M.PLATE) + 1
         how = f'slot {w:.2f}mm wide' if w >= M.W_SLOT else f'drill {M.drill(w):.2f}mm at the V'
-        print(f'  {h:3} bore plate {k:3} ({info["pos"][h]:5.1f}mm down the bore)  {how}')
+        print(f'  {h:3} bore plate {k:3} ({info["pos"][h]:5.1f}mm down the bore)  {how}'
+              f'  ({info["holes"][h][2]:.2f}mm round\'s area; the reference\'s '
+              f'{S.REF_HOLES[h][1]:g})')
     print('  stack, top down: ' + stack_order(parts))
     bad = 0
     for ok, what, detail in res:
