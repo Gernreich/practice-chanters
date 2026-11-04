@@ -532,3 +532,7 @@ Every chanter is one sheet of 3mm ply.
 | `.doc-audit-links` | the one link the link check may find refusing scripts: Thingiverse answers them all 403 |
 
 Released under [CC0 1.0](LICENSE).
+
+## Credits
+
+Made by Michael Gernreich with [Claude](https://www.anthropic.com/claude) (Anthropic), working in Claude Code, which co-wrote the code and the documentation. Commits Claude made carry a `Co-Authored-By: Claude` line.
