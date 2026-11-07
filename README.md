@@ -534,7 +534,7 @@ Every chanter is one sheet of 3 mm ply.
 | `standard_chanter.rs` | the standard strip chanter's generator: the measured chanter, the hole sizes, its checks |
 | `standard_octagon.rs` | the standard octagon's generator: the slots, the joints, its checks |
 | `chanter_model.rs` | the acoustic model: where each hole goes and how wide |
-| `bores.rs` | every chanter's bore as bore-tmm reads it, for its tuning gate |
+| `bores.rs` · `bin/chanter_bores.rs` | every chanter's bore as bore-tmm reads it, for its tuning gate |
 | `chanters.rs` · `bin/` · `Cargo.toml` · `Cargo.lock` | the crate: the library, one small file per program, and the pinned build |
 | `README.md` · `index.html` | this writeup and its published page; the markdown is the source |
 | `.repro` | the command that draws each generated file |

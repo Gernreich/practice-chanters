@@ -1,8 +1,0 @@
-# Names doc-audit reads as filenames that are not files here.
-#
-# square_flute.rs is in square-flute, four_hole_ocarinas.rs in
-# four-hole-ocarinas and ribbon_bore.rs in swept-curve. The crate builds on
-# them, and the README links each repository.
-square_flute.rs
-four_hole_ocarinas.rs
-ribbon_bore.rs
