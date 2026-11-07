@@ -128,7 +128,7 @@ pre,.tw{break-inside:avoid}h1{break-after:avoid}}
 <li><strong>Its bore is all but round.</strong> Each face is 1.96 mm wide, where a triangle's of the same area would be 6.56 mm and a square's 4.32 mm, and the laser's own kerf rounds its corners.</li>
 <li><strong>It has the least wall.</strong> For the same area it has 3% more wall than a round bore, against 13% for the square and 29% for the triangle. More wall means more friction losses, and so duller, less responsive notes.</li>
 </ul>
-<p>The model still takes any number of sides from three to eight: <code>python3 chanter_model.py --sides=5</code> solves the pentagon's holes.</p>
+<p>The model still takes any number of sides from three to eight: <code>target/release/chanter_model --sides=5</code> solves the pentagon's holes.</p>
 <p><strong>There is a cut-off if the bore is built the other way</strong>, from long strips jointed round it as the <a href="https://github.com/Gernreich/octagonal-flute" target="_blank" rel="noopener">octagonal flute</a> is. Each strip is a face of the bore, and its finger joints need ply between them. In 3 mm ply at a 4 mm bore, <strong>only the square works.</strong> The pentagon leaves 1.36 mm between joints where 3 mm is needed. The hexagon and up leave less, and the octagon none. The triangle cannot be finger-jointed at all, since its corners are too sharp for the joint. Thinner 1.5 mm stock buys the pentagon. A wider bore would buy more shapes, but then it is no longer a practice chanter. That is why this one is a stack.</p>
 <h2 id="the-stacked-octagon">The stacked octagon</h2>
 <p>Its holes are <a href="#the-standard-strip-chanter">the measured practice chanter's</a>, as the two standard chanters' are: each where the reference's is, measured from the reed's seat, and sized in the model to sound the reference's note there. Until 2026-10-23 the model placed and sized them on its own, round a 4 mm bore inside a 20 mm outside, and gave a body 396 mm long, half as long again as the real chanter's. Its bore was a third smaller than the reference's and its wall thicker.</p>
@@ -553,7 +553,7 @@ pre,.tw{break-inside:avoid}h1{break-after:avoid}}
 <p>The 3D view is at <a href="#practice-chanters">the top of this page</a>: drag to turn a chanter, pull it apart along its length, and switch between the standard, the standard octagon and the stacked octagon. It also opens <a href="turn.html" target="_blank" rel="noopener">on a page of its own</a>.</p>
 <h2 id="before-you-cut">Before you cut</h2>
 <p><strong>Measure the ply.</strong> The stack multiplies the stock's error by every plate in it. 2.9 mm ply makes the stacked octagon's bore 8 mm short, and every note 12 to 44 cents sharp in the model, low G most. Measure a few places on the sheet with calipers, then pass the average as <code>--plate=</code>. The generator re-solves every hole on that grid, and the plate count follows.</p>
-<p><strong>The reed's length is a guess.</strong> The model treats the reed and staple as extra closed bore: 130 mm on the stacked octagon and the two standard chanters, the figure that best fits the measured chanter, and 20 mm on the strip chanter. Neither is a measured figure. A reed pushed deeper into its seat plays sharper, and one pulled out plays flatter. That is how every practice chanter is pitched, and it shifts the whole scale together, but it cannot fix one note against another. <code>strip_chanter.py --reed=</code> sets the strip chanter's figure if you measure your own.</p>
+<p><strong>The reed's length is a guess.</strong> The model treats the reed and staple as extra closed bore: 130 mm on the stacked octagon and the two standard chanters, the figure that best fits the measured chanter, and 20 mm on the strip chanter. Neither is a measured figure. A reed pushed deeper into its seat plays sharper, and one pulled out plays flatter. That is how every practice chanter is pitched, and it shifts the whole scale together, but it cannot fix one note against another. <code>strip_chanter --reed=</code> sets the strip chanter's figure if you measure your own.</p>
 <p><strong>The model does not match a real chanter.</strong> It is a transfer-matrix model with textbook tone-hole and end corrections. Given the measured chanter that the <a href="#the-standard-strip-chanter">standard strip chanter</a> copies, it cannot reproduce that chanter's scale at any reed allowance. The closest, at 130 mm, is still about 40 cents out, and at the 20 mm the strip chanter was designed with, the reference's scale comes out stretched by hundreds of cents. So the strip chanter may play well out of tune, with the upper notes sharpest, until a real chanter has been played and the model fitted to it. The stacked octagon and the two standard chanters avoid most of this by copying a real chanter and using the model only for the difference. For the strip chanter, expect to do the <a href="#tuning">Tuning</a> in earnest.</p>
 <p><strong>The slots are cut exactly to width,</strong> so a kerf other than the default 0.13 mm changes every hole. Pass yours with <code>--kerf=</code>.</p>
 <h2 id="building-it">Building it</h2>
@@ -576,18 +576,21 @@ pre,.tw{break-inside:avoid}h1{break-after:avoid}}
 </ul>
 <p>Widening a hole moves its own note most, about 10 cents for a fifth wider in the model. The notes either side of it move a cent or two, so go up the scale once, then check every note again and touch up.</p>
 <h2 id="regenerating-it">Regenerating it</h2>
-<pre class="sh"><code>python3 practice_chanters.py --no-write                   # the stacked octagon&#39;s checks, writing nothing
-python3 practice_chanters.py --out=cut-files              # its sheet
-python3 practice_chanters.py --plate=2.9 --no-write       # for ply as measured
-python3 practice_chanters.py --kerf=0.18 --out=mine       # for a laser with a 0.18mm kerf
-python3 strip_chanter.py --out=cut-files                   # the strip chanter, finger-jointed
-python3 strip_chanter.py --joint=butt --out=cut-files      # the strip chanter, butt-jointed
-python3 standard_chanter.py --out=cut-files                # the standard strip chanter
-python3 standard_chanter.py --joint=butt --out=cut-files   # the same, butt-jointed
-python3 standard_octagon.py --out=cut-files                # the standard octagon
-python3 practice_chanters.py --page-to=turn.html           # the 3D view, every design
-python3 chanter_model.py --sides=8                         # the acoustic model alone, any of 3 to 8 sides</code></pre>
-<p><code>practice_chanters.py</code> draws nothing until every check passes:</p>
+<pre class="sh"><code>cargo build --release                                              # once, and after any change
+target/release/practice_chanters --no-write                        # the stacked octagon&#39;s checks, writing nothing
+target/release/practice_chanters --out=cut-files                   # its sheet
+target/release/practice_chanters --plate=2.9 --no-write            # for ply as measured
+target/release/practice_chanters --kerf=0.18 --out=mine            # for a laser with a 0.18mm kerf
+target/release/strip_chanter --out=cut-files                       # the strip chanter, finger-jointed
+target/release/strip_chanter --joint=butt --out=cut-files          # the strip chanter, butt-jointed
+target/release/standard_chanter --out=cut-files                    # the standard strip chanter
+target/release/standard_chanter --joint=butt --out=cut-files       # the same, butt-jointed
+target/release/standard_octagon --out=cut-files                    # the standard octagon
+target/release/practice_chanters --page-to=turn.html               # the 3D view, every design
+target/release/chanter_model --sides=8                             # the acoustic model alone, any of 3 to 8 sides
+target/release/chanter_bores                                       # every chanter&#39;s bore, as bore-tmm reads it</code></pre>
+<p>The generators are Rust since 2026-11-07, and Python before that: the move changed no byte of any cut file or page.</p>
+<p><code>practice_chanters</code> draws nothing until every check passes:</p>
 <ul>
 <li>every note is the reference's in the model, and low G is as near as whole plates allow;</li>
 <li>the bore is the reference's area;</li>
@@ -605,8 +608,7 @@ python3 chanter_model.py --sides=8                         # the acoustic model 
 <li>no two parts on a sheet come closer than the gap;</li>
 <li>every part is on a sheet.</li>
 </ul>
-<p><code>practice_chanters.py</code> imports the kerf and the <code>Part</code> class from the square flute's <code>square_flute.py</code>, the mitred offset from the four-hole ocarinas' <code>four_hole_ocarinas.py</code>, the path writer from swept-curve and the 3D page from lasermade-tools. So <a href="https://github.com/Gernreich/square-flute" target="_blank" rel="noopener">square-flute</a>, <a href="https://github.com/Gernreich/four-hole-ocarinas" target="_blank" rel="noopener">four-hole-ocarinas</a>, <a href="https://github.com/Gernreich/swept-curve" target="_blank" rel="noopener">swept-curve</a> and <a href="https://github.com/Gernreich/lasermade-tools" target="_blank" rel="noopener">lasermade-tools</a> must be checked out beside this repository.</p>
-<p>One more is optional: with <a href="https://github.com/Gernreich/bore-tmm" target="_blank" rel="noopener">bore-tmm</a> checked out beside it too and built (<code>cargo build --release</code>), each model (<code>chanter_model.py</code>, <code>standard_chanter.py</code>) searches for each note in bore-tmm's Rust port of it, which gives the same results bit for bit, much sooner. Without it the Python runs, as it always did.</p>
+<p>The crate borrows the kerf, the <code>Part</code> type and the packing from the square flute's <code>square_flute.rs</code>, the mitred offset from the four-hole ocarinas' <code>four_hole_ocarinas.rs</code>, the path writer from swept-curve's <code>ribbon_bore.rs</code>, each note's search from bore-tmm's <code>src/models.rs</code> and the 3D page from lasermade-tools. So <a href="https://github.com/Gernreich/square-flute" target="_blank" rel="noopener">square-flute</a>, <a href="https://github.com/Gernreich/four-hole-ocarinas" target="_blank" rel="noopener">four-hole-ocarinas</a>, <a href="https://github.com/Gernreich/swept-curve" target="_blank" rel="noopener">swept-curve</a>, <a href="https://github.com/Gernreich/bore-tmm" target="_blank" rel="noopener">bore-tmm</a> and <a href="https://github.com/Gernreich/lasermade-tools" target="_blank" rel="noopener">lasermade-tools</a> must be checked out beside this repository.</p>
 <h2 id="files">Files</h2>
 <p>Every chanter is one sheet of 3 mm ply.</p>
 <div class="tw">
@@ -645,24 +647,32 @@ python3 chanter_model.py --sides=8                         # the acoustic model 
 <td>the 3D view, every design, on a page of its own</td>
 </tr>
 <tr>
-<td><code>practice_chanters.py</code></td>
-<td>the stacked octagon's generator, its checks, and the 3D view</td>
+<td><code>practice_chanters.rs</code></td>
+<td>the stacked octagon's generator, its checks, and the 3D view; the geometry, packing and sheet writer the others share</td>
 </tr>
 <tr>
-<td><code>strip_chanter.py</code></td>
+<td><code>strip_chanter.rs</code></td>
 <td>the strip chanter's generator and its checks</td>
 </tr>
 <tr>
-<td><code>standard_chanter.py</code></td>
+<td><code>standard_chanter.rs</code></td>
 <td>the standard strip chanter's generator: the measured chanter, the hole sizes, its checks</td>
 </tr>
 <tr>
-<td><code>standard_octagon.py</code></td>
+<td><code>standard_octagon.rs</code></td>
 <td>the standard octagon's generator: the slots, the joints, its checks</td>
 </tr>
 <tr>
-<td><code>chanter_model.py</code></td>
+<td><code>chanter_model.rs</code></td>
 <td>the acoustic model: where each hole goes and how wide</td>
+</tr>
+<tr>
+<td><code>bores.rs</code></td>
+<td>every chanter's bore as bore-tmm reads it, for its tuning gate</td>
+</tr>
+<tr>
+<td><code>chanters.rs</code> · <code>bin/</code> · <code>Cargo.toml</code> · <code>Cargo.lock</code></td>
+<td>the crate: the library, one small file per program, and the pinned build</td>
 </tr>
 <tr>
 <td><code>README.md</code> · <code>index.html</code></td>

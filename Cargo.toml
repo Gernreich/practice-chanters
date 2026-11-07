@@ -1,0 +1,51 @@
+[package]
+name = "practice-chanters"
+version = "0.1.0"
+edition = "2021"
+authors = ["Michael Gernreich", "Claude (Anthropic) <noreply@anthropic.com>"]
+description = "Cut files for Great Highland bagpipe practice chanters: stacked plates and strip bores"
+license-file = "LICENSE"
+publish = false
+autobins = false
+
+# The model and four generators. They borrow from the checkouts beside this
+# one: the square flute's part, kerf and packing, the four-hole ocarinas'
+# offset, swept-curve's path writer, bore-tmm's reed kernel, and
+# lasermade-tools for the 3D page.
+[lib]
+name = "chanters"
+path = "chanters.rs"
+
+[[bin]]
+name = "chanter_bores"
+path = "bin/chanter_bores.rs"
+
+[[bin]]
+name = "chanter_model"
+path = "bin/chanter_model.rs"
+
+[[bin]]
+name = "practice_chanters"
+path = "bin/practice_chanters.rs"
+
+[[bin]]
+name = "strip_chanter"
+path = "bin/strip_chanter.rs"
+
+[[bin]]
+name = "standard_chanter"
+path = "bin/standard_chanter.rs"
+
+[[bin]]
+name = "standard_octagon"
+path = "bin/standard_octagon.rs"
+
+[dependencies]
+lasermade-tools = { path = "../lasermade-tools" }
+square-flute = { path = "../square-flute" }
+four-hole-ocarinas = { path = "../four-hole-ocarinas" }
+swept-curve = { path = "../swept-curve" }
+bore-tmm = { path = "../bore-tmm" }
+
+[profile.release]
+opt-level = 3
