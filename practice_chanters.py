@@ -512,6 +512,34 @@ def apart(a, ax, ay, b, bx, by):
     return min(min(poly_dist(v, pb) for v in pa), min(poly_dist(v, pa) for v in pb))
 
 
+def clear_of(a, ax, ay, b, bx, by, clear):
+    """apart(a, ax, ay, b, bx, by) >= clear, without computing the whole
+    minimum: pack() asks it some 20,000 times a sheet and needs only the
+    yes or no. It stops at the first vertex nearer an edge than clear, and
+    skips an edge whose bounding box is already further than clear (plus a
+    hair, so rounding cannot make a skipped edge the deciding one). Same
+    distances, same test, so the same answer as apart() every time."""
+    pa = [(x - a.x0 + ax, y - a.y0 + ay) for x, y in a.outline]
+    pb = [(x - b.x0 + bx, y - b.y0 + by) for x, y in b.outline]
+    far = clear + 1e-6
+    for P, Q in ((pa, pb), (pb, pa)):
+        qx0 = min(x for x, _ in Q); qx1 = max(x for x, _ in Q)
+        qy0 = min(y for _, y in Q); qy1 = max(y for _, y in Q)
+        edges = [(e, f, min(e[0], f[0]), max(e[0], f[0]), min(e[1], f[1]), max(e[1], f[1]))
+                 for e, f in zip(Q, Q[1:] + Q[:1])]
+        for v in P:
+            dx = max(qx0 - v[0], 0.0, v[0] - qx1)
+            dy = max(qy0 - v[1], 0.0, v[1] - qy1)
+            if dx >= far or dy >= far:
+                continue
+            for e, f, x0, x1, y0, y1 in edges:
+                if max(x0 - v[0], v[0] - x1) >= far or max(y0 - v[1], v[1] - y1) >= far:
+                    continue
+                if seg_dist(v, e, f) < clear:
+                    return False
+    return not (any(inside(v, pb) for v in pa) or any(inside(v, pa) for v in pb))
+
+
 def pack(parts):
     """Rows across the bed, tallest parts first. Each part goes in the row
     both ways up and slides left until it comes GAP from the one before;
@@ -531,7 +559,7 @@ def pack(parts):
                 lo = lx
                 for _ in range(30):
                     mid = (lo + hi) / 2
-                    if all(apart(o, ox, oy, q, mid, y) >= clear for o, ox, oy in row[-3:]):
+                    if all(clear_of(o, ox, oy, q, mid, y, clear) for o, ox, oy in row[-3:]):
                         hi = mid
                     else:
                         lo = mid
