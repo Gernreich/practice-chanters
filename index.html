@@ -606,6 +606,7 @@ python3 chanter_model.py --sides=8                         # the acoustic model 
 <li>every part is on a sheet.</li>
 </ul>
 <p><code>practice_chanters.py</code> imports the kerf and the <code>Part</code> class from the square flute's <code>square_flute.py</code>, the mitred offset from the four-hole ocarinas' <code>four_hole_ocarinas.py</code>, the path writer from swept-curve and the 3D page from lasermade-tools. So <a href="https://github.com/Gernreich/square-flute" target="_blank" rel="noopener">square-flute</a>, <a href="https://github.com/Gernreich/four-hole-ocarinas" target="_blank" rel="noopener">four-hole-ocarinas</a>, <a href="https://github.com/Gernreich/swept-curve" target="_blank" rel="noopener">swept-curve</a> and <a href="https://github.com/Gernreich/lasermade-tools" target="_blank" rel="noopener">lasermade-tools</a> must be checked out beside this repository.</p>
+<p>One more is optional: with <a href="https://github.com/Gernreich/bore-tmm" target="_blank" rel="noopener">bore-tmm</a> checked out beside it too and built (<code>cargo build --release</code>), each model (<code>chanter_model.py</code>, <code>standard_chanter.py</code>) searches for each note in bore-tmm's Rust port of it, which gives the same results bit for bit, much sooner. Without it the Python runs, as it always did.</p>
 <h2 id="files">Files</h2>
 <p>Every chanter is one sheet of 3 mm ply.</p>
 <div class="tw">

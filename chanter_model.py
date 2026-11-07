@@ -57,7 +57,18 @@ imaginary part passes through zero, rising.
 """
 import cmath
 import math
+import os
 import sys
+
+# bore-tmm's Rust port of sounding(), when bore-tmm is checked out beside this
+# repository and built: the same bits, much sooner. Without it, this file's
+# own Python runs. bore-tmm/python/tmm_fast.py says how.
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'bore-tmm',
+                             'python'))
+try:
+    import tmm_fast
+except ImportError:
+    tmm_fast = None
 
 # --- air, warm from the breath ----------------------------------------------
 T_C = 25.0
@@ -188,6 +199,30 @@ def sounding(b, L, pos, widths, note, near=None, span=1.3):
     """The note a fingering plays nearest `near`: a rising zero of Im(Y),
     scanned then bisected."""
     near = near or target(note)
+    if tmm_fast is None:
+        return _sounding(b, L, pos, widths, note, near, span)
+    return tmm_fast.run('chanter_model', lambda: _sounding_rust(b, L, pos, widths, note, near, span),
+                        lambda: _sounding(b, L, pos, widths, note, near, span))
+
+
+def _sounding_rust(b, L, pos, widths, note, near, span):
+    """_sounding in bore-tmm's Rust, given what does not change with f."""
+    opened = FINGERING[note]
+    x, seg, r, t, op = b.top, [], [], [], []
+    for h in sorted(HOLES, key=lambda h: pos[h]):
+        seg.append((pos[h] - x) / 1000)
+        r.append(b.hole_r(widths[h]))
+        t.append(b.wall)
+        op.append(h in opened)
+        x = pos[h]
+    root = tmm_fast.reed(C, RHO, b.round.rh, b.round.A, (REED + b.top) / 1000, b.rh, b.A, b.a,
+                         seg, r, t, op, (L - x) / 1000, 0.5, 0.8216, near, span, SCAN, 32)
+    if math.isnan(root):
+        raise ValueError(f'{note}: no resonance within {span:g}x of {near:.1f}Hz')
+    return root
+
+
+def _sounding(b, L, pos, widths, note, near, span):
     opened = FINGERING[note]
     lo, hi = near / span, near * span
     Y = lambda f: admittance(b, f, L, pos, widths, opened)

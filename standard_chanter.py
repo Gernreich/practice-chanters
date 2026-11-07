@@ -127,7 +127,32 @@ def admittance(f, b, L, holes, opened):
 
 
 def sounding(b, L, holes, note, near):
-    """The fingering's resonance nearest `near`."""
+    """The fingering's resonance nearest `near`. In bore-tmm's Rust when it
+    is built (chanter_model says how), else _sounding, the same bits."""
+    T = M.tmm_fast
+    if T is None:
+        return _sounding(b, L, holes, note, near)
+    return T.run('standard_chanter', lambda: _sounding_rust(b, L, holes, note, near),
+                 lambda: _sounding(b, L, holes, note, near))
+
+
+def _sounding_rust(b, L, holes, note, near):
+    fing = M.FINGERING[note]
+    x, seg, r, t, op = 0.0, [], [], [], []
+    for name, z, d, wall in sorted(holes, key=lambda h: h[1]):
+        seg.append((z - x) / 1000)
+        r.append(b.hole_r(d))
+        t.append(wall)
+        op.append(name in fing)
+        x = z
+    root = M.tmm_fast.reed(M.C, M.RHO, b.rh, b.A, REF_REED / 1000, b.rh, b.A, b.a, seg, r, t, op,
+                           (L - x) / 1000, 0.25, 0.6133, near, 1.3, 120, 40)
+    if math.isnan(root):
+        raise ValueError(f'{note}: no resonance near {near:.0f}Hz')
+    return root
+
+
+def _sounding(b, L, holes, note, near):
     fing = M.FINGERING[note]
     lo, hi = near / 1.3, near * 1.3
     Y = lambda f: admittance(f, b, L, holes, fing)

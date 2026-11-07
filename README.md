@@ -508,6 +508,8 @@ the path writer from swept-curve and the 3D page from lasermade-tools. So
 [lasermade-tools](https://github.com/Gernreich/lasermade-tools) must be checked out
 beside this repository.
 
+One more is optional: with [bore-tmm](https://github.com/Gernreich/bore-tmm) checked out beside it too and built (`cargo build --release`), each model (`chanter_model.py`, `standard_chanter.py`) searches for each note in bore-tmm's Rust port of it, which gives the same results bit for bit, much sooner. Without it the Python runs, as it always did.
+
 ## Files
 
 Every chanter is one sheet of 3 mm ply.
