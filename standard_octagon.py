@@ -386,7 +386,6 @@ def placed(p, info):
 def design3d():
     """The chanter for practice_chanters.py's 3D page."""
     parts, info = build()
-    import turn3d as t3
     xs = [p.x for p in parts] + [info['x0'] + info['Ls']]
     mid = (min(xs) + max(xs)) / 2
     out = []
@@ -399,7 +398,7 @@ def design3d():
         else:
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
         wood = 'dark' if p.kind == 'strip' else 'pale' if cap else 'ply'
-        out.append(t3.placed({'o': p.outline, 'h': holes, 'e': []}, placed(p, info), ex, wood))
+        out.append({'o': p.outline, 'h': holes, 'e': [], 'm': placed(p, info), 'x': ex, 'w': wood})
     return {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
 
 

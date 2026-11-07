@@ -515,7 +515,6 @@ def design3d():
     j, JOINT = JOINT, 'finger'
     parts, info = build()
     JOINT = j
-    import turn3d as t3
     xs = [p.x for p in parts] + [info['x0'] + info['Ls']]
     mid = (min(xs) + max(xs)) / 2
     out = []
@@ -533,7 +532,7 @@ def design3d():
         wood = 'dark' if p.kind == 'strip' else 'pale' if cap else 'ply'
         if p.kind == 'foot':
             ex = ((p.x - mid) / 60, 0, 0)
-        out.append(t3.placed({'o': p.outline, 'h': holes, 'e': []}, placed(p, info), ex, wood))
+        out.append({'o': p.outline, 'h': holes, 'e': [], 'm': placed(p, info), 'x': ex, 'w': wood})
     return {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
 
 

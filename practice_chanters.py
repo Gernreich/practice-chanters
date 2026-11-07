@@ -64,7 +64,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-for sib in ('square-flute', 'swept-curve', 'four-hole-ocarinas', 'lasermade-tools'):
+for sib in ('square-flute', 'swept-curve', 'four-hole-ocarinas'):
     sys.path.insert(0, os.path.join(HERE, '..', sib))
 import chanter_model as M                                      # noqa: E402
 import square_flute as SF                                      # noqa: E402
@@ -768,11 +768,22 @@ NAMES = {3: 'triangle', 4: 'square', 5: 'pentagon', 6: 'hexagon', 7: 'heptagon',
 BUILT = (8,)    # the plate chanters this repository ships: the octagon alone
 
 
+
+def turn3d(path, title, designs, note, by, spin=False):
+    """Write the 3D page with lasermade-tools' turn3d program (Rust), which
+    expects that checkout beside this one, built. Each part is {'o', 'h',
+    'e'} with its placing matrix 'm' (or a list of matrices, chained), its
+    explode direction 'x' and its wood 'w'."""
+    import json
+    import subprocess
+    spec = {'title': title, 'note': note, 'by': by, 'spin': spin, 'designs': designs}
+    exe = os.path.join(HERE, '..', 'lasermade-tools', 'target', 'release', 'turn3d')
+    subprocess.run([exe, '--out=' + path], input=json.dumps(spec).encode(), check=True)
+
 def page(path_out):
     """The 3D view: every design, lying along the page with its finger holes
     to the front and the cap on the left; Explode spreads the plates along
     the chanter, the cap a little further."""
-    import turn3d as t
     import standard_chanter
     import standard_octagon
     designs = {'standard': standard_chanter.design3d(),
@@ -790,9 +801,9 @@ def page(path_out):
             cap = p.kind in ('socket', 'chamber', 'top', 'stem')
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
             wood = 'dark' if p.kind in ('slot', 'drill') else 'pale' if cap else 'ply'
-            out.append(t.placed(prt, m, ex, wood))
+            out.append(dict(prt, m=m, x=ex, w=wood))
         designs[f'stacked {NAMES[n]}'] = {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
-    t.write(path_out, 'Practice chanters in 3D', designs,
+    turn3d(path_out, 'Practice chanters in 3D', designs,
             'Drag to turn; right-drag, shift-drag or move two fingers to slide the view; '
             'scroll or pinch to zoom in on whatever is under the pointer; double-click a part '
             'to turn round it, and Reset view to go back. Draw Explode to spread the plates along '

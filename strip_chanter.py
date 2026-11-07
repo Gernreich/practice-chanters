@@ -405,7 +405,6 @@ def design3d():
     mid = (min(p.x for p in parts) + max(p.x + (info['Ls'] if p.kind == 'strip' else 0)
                                         for p in parts)) / 2
     out = []
-    import turn3d as t3
     for p in parts:
         holes = [c[1] if c[0] == 'poly' else circle(c[1], c[2], c[3], 20) for c in p.cuts]
         cap = p.kind in ('socket', 'chamber', 'top', 'stem')
@@ -416,7 +415,7 @@ def design3d():
         else:
             ex = ((p.x - mid) / 60 - (1.0 if cap else 0.0), 0, 0)
         wood = 'dark' if p.kind == 'strip' else 'pale' if cap else 'ply'
-        out.append(t3.placed({'o': p.outline, 'h': holes, 'e': []}, placed(p, info), ex, wood))
+        out.append({'o': p.outline, 'h': holes, 'e': [], 'm': placed(p, info), 'x': ex, 'w': wood})
     return {'parts': out, 'ex': 60, 'view': [-0.12, 0.32, 3.0]}
 
 
