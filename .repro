@@ -1,5 +1,5 @@
 # How every shipped SVG and page in this repository is drawn. Checked by
-# lasermade-tools/repro-svg.py; $OUT is where the file must be written.
+# lasermade-tools' repro-svg; $OUT is where the file must be written.
 #
 # practice_chanters.py names its own sheets, so it writes into $OUT's
 # directory and the tool compares the file it asked for. It imports
@@ -16,13 +16,13 @@ cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg :: py
 cut-files/practice-chanter-standard-octagon-sheet1-cut-files.svg :: python3 standard_octagon.py --out=$(dirname $OUT)
 
 # --- the previews, from the cut files ---
-previews/practice-chanter-8-sided-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-8-sided-sheet1-cut-files.svg $OUT
-previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg $OUT
-previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg $OUT
-previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg $OUT
-previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg $OUT
-previews/practice-chanter-standard-octagon-sheet1-cut-files.svg :: python3 ../lasermade-tools/make-preview.py cut-files/practice-chanter-standard-octagon-sheet1-cut-files.svg $OUT
+previews/practice-chanter-8-sided-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-8-sided-sheet1-cut-files.svg $OUT
+previews/practice-chanter-strips-finger-joint-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-strips-finger-joint-sheet1-cut-files.svg $OUT
+previews/practice-chanter-strips-butt-joint-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-strips-butt-joint-sheet1-cut-files.svg $OUT
+previews/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-standard-strips-finger-joint-sheet1-cut-files.svg $OUT
+previews/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-standard-strips-butt-joint-sheet1-cut-files.svg $OUT
+previews/practice-chanter-standard-octagon-sheet1-cut-files.svg :: ../lasermade-tools/target/release/make-preview cut-files/practice-chanter-standard-octagon-sheet1-cut-files.svg $OUT
 
 # --- the pages ---
 turn.html :: python3 practice_chanters.py --page-to=$OUT
-index.html :: python3 ../lasermade-tools/md2html.py README.md $OUT
+index.html :: ../lasermade-tools/target/release/md2html README.md $OUT
