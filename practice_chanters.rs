@@ -1288,6 +1288,7 @@ pub fn num_arg(x: &str) -> f64 {
 
 pub fn main() {
     let (mut out, mut write, mut sides, mut page_to) = (None::<String>, true, BUILT[0], None::<String>);
+    let mut scdir: Option<String> = None;
     for x in std::env::args().skip(1) {
         let val = || x.split_once('=').unwrap().1.to_string();
         if x == "--no-write" {
@@ -1308,11 +1309,23 @@ pub fn main() {
             sf::set_kerf(&x);
         } else if x.starts_with("--page-to=") {
             page_to = Some(val());
+        } else if x.starts_with("--solidcraft=") {
+            scdir = Some(val());
         } else {
             die(format!(
-                "error: {x} is not a flag this generator reads. It takes --sides=, --out=, --plate=, --kerf=, --page-to= and --no-write."
+                "error: {x} is not a flag this generator reads. It takes --sides=, --out=, --plate=, --kerf=, --page-to=, --solidcraft= and --no-write."
             ));
         }
+    }
+    if let Some(dir) = &scdir {
+        // every design as a parametric SolidCraft design, as the 3D page has them
+        std::fs::create_dir_all(dir).unwrap_or_else(|e| die(format!("{dir}: {e}")));
+        for (name, text) in [("standard", crate::chanters_solidcraft::standard()), ("standard-octagon", crate::chanters_solidcraft::standard_octagon()), ("stacked-octagon", crate::chanters_solidcraft::stacked())] {
+            let f = join(dir, &format!("practice-chanters-{name}.solidcraft.json"));
+            std::fs::write(&f, text).unwrap_or_else(|e| die(format!("{f}: {e}")));
+            println!("  wrote {}", basename(&f));
+        }
+        return;
     }
     if let Some(pt) = page_to {
         page(&pt);

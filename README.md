@@ -479,6 +479,7 @@ target/release/standard_chanter --out=cut-files                    # the standar
 target/release/standard_chanter --joint=butt --out=cut-files       # the same, butt-jointed
 target/release/standard_octagon --out=cut-files                    # the standard octagon
 target/release/practice_chanters --page-to=turn.html               # the 3D view, every design
+target/release/practice_chanters --solidcraft=solidcraft           # the SolidCraft designs
 target/release/chanter_model --sides=8                             # the acoustic model alone, any of 3 to 8 sides
 target/release/chanter_bores                                       # every chanter's bore, as bore-tmm reads it
 ```
@@ -533,6 +534,7 @@ Every chanter is one sheet of 3 mm ply.
 | `strip_chanter.rs` | the strip chanter's generator and its checks |
 | `standard_chanter.rs` | the standard strip chanter's generator: the measured chanter, the hole sizes, its checks |
 | `standard_octagon.rs` | the standard octagon's generator: the slots, the joints, its checks |
+| `chanters_solidcraft.rs` · `solidcraft/` | the three 3D designs as parametric SolidCraft designs, and the designs it writes |
 | `chanter_model.rs` | the acoustic model: where each hole goes and how wide |
 | `bores.rs` · `bin/chanter_bores.rs` | every chanter's bore as bore-tmm reads it, for its tuning gate |
 | `chanters.rs` · `bin/` · `Cargo.toml` · `Cargo.lock` | the crate: the library, one small file per program, and the pinned build |
@@ -542,16 +544,83 @@ Every chanter is one sheet of 3 mm ply.
 
 Released under [CC0 1.0](LICENSE).
 
+## SolidCraft designs
+
+`practice_chanters` also writes the three chanters with a 3D view as parametric
+SolidCraft designs: the rules they follow are expressions there, so changing one number
+rebuilds the rest. Open a `.sc` from `solidcraft/` in SolidCraft. The parameters are
+under the **SOLID** tab, **MODIFY** panel, **Change Parameters**; the Browser lists the
+parts and the timeline every step. Each `.solidcraft.json` beside it is the script it
+was built from (`solidcraft-cli run FILE --save NAME.sc`). The `.sc` holds the design
+without SolidCraft's build cache, which it rebuilds on opening, so it is the same file
+every time.
+
+- `solidcraft/practice-chanters-stacked-octagon.sc` · `solidcraft/practice-chanters-stacked-octagon.solidcraft.json`
+- `solidcraft/practice-chanters-standard.sc` · `solidcraft/practice-chanters-standard.solidcraft.json`
+- `solidcraft/practice-chanters-standard-octagon.sc` · `solidcraft/practice-chanters-standard-octagon.solidcraft.json`
+
+Shared by all three:
+
+| Parameter | Default | What it is |
+|---|---|---|
+| `ply` | 3 mm | plate thickness, as the generators' `--plate=` |
+| `seat_d` · `n_seat` | 5.57 mm · 9 | the reed's seat, the reference's, and the plates it goes through |
+| `pin` · `pin_interf` | 2 · 0.1 mm | the brass pins, and their holes' press-fit |
+| `mouth_d` | 4.5 mm | the blowing hole |
+
+The stacked octagon:
+
+| Parameter | Default | What it is |
+|---|---|---|
+| `ref_bore` | 4.87 mm | the reference's bore, whose area the octagon keeps |
+| `outer_flats` | 16 mm | the body's outside across its flats |
+| `n_bore` | 79 | bore plates, down to the sole: the solver's, for the reference's low G |
+| `rod_hole` · `rod1_y` · `rod1_z` · `rod2_y` · `rod2_z` | 2.2 mm · a search's | the two M2 rods' holes and their places |
+| `pos_1` … `pos_8` · `w_1` … `w_8` | the solver's | each hole's centre down from the seat, and its slot's width through one plate |
+| `w_slot` · `v_w` · `v_d` | 1 · 1.2 · 0.6 mm | narrower than `w_slot` is drilled at a V this wide and deep instead |
+| `cap_clear` · `cap_web` | 0.3 · 2 mm | the socket's clearance round the body, and ply each side of the cap's pins |
+| `n_socket` · `n_chamber` · `n_top` · `chamber_d` | 5 · 12 · 2 · 13 mm | the cap: socket plates, chamber plates round the reed, top plates |
+| `stem_len` | 71.5 mm | the mouthpiece, the reference's, up from the cap |
+
+The standard chanter and the standard octagon:
+
+| Parameter | Default | What it is |
+|---|---|---|
+| `side` (standard) · `flats` (octagon) | 5.5 · 8 mm | the bore across, inside the strips |
+| `bore_l` | the solver's | the bore from the seat to the sole, for the reference's low G |
+| `z_1` … `z_8` · `d_1` … `d_8` | the reference's · the solver's | each hole down from the seat, and its diameter (on the octagon, the round hole its slot stands for) |
+| `finger` · `min_finger` · `min_web` | 10 · 4 · 1.5 mm | a joint cell, about; no finger shorter; the guard round each hole where its strip owns both edges |
+| `n_collar` · `ref_bore` | 2 · 4.87 mm | the collar's round plates and their bore |
+| `cap_d` · `cap_bore` · `cap_clear` · `n_cap` | 22.2 · 17.6 · 0.3 mm · 41 | the cap, the reference's, and the tenon's clearance inside it |
+| `band` · `foot_d` · `collar_d` (standard) | 10 · 50 · 25.4 mm | the band round the strips' top, the round foot, the collar's socket plate |
+| `foot_d` · `n_foot` · `slot_max` (octagon) | 50 mm · 2 · 12 mm | the foot's round plates, and the longest slot |
+
+The tuning cannot follow: the bore length and the holes are what the model's solver
+found, and no expression redoes it. They are parameters so a chanter tuned by hand can
+be written back into its design; change the bore or the ply and the notes move until
+the generator is run again. The joints do follow: `ncell` and `cell`, each hole's guard
+(`g0_` and `g1_`), and the octagon's slots (`across_` and `along_`, round up to
+`slot_w`, then a stadium of the same area) are read-only parameters worked out from the
+rest, as the generators work them out. `slot_room` is the octagon's check, room left
+under `slot_max`, where below 0 fails. The mouthpiece's plates are a fixed 24, its
+profile scaled to the ply; the generator rounds 71.5 mm to whole plates.
+
+**Checked** part by part against the generators' own: all 131 stacked parts, 92
+standard ones and 87 on the octagon match to within 0.11 mm, the sag of the earlier
+STEP files' straight runs round a circle. Built by the generators at 2.9 mm ply and
+given the same numbers, every strip of the octagon matches exactly, and every other
+part differs only by the 0.1 mm the earlier files drew each plate thick past 2.9.
+
 ## STEP files
 
-`step/` holds the 3D view as STEP files, one per design, to open or import in a
-CAD program such as SolidCraft, Fusion or FreeCAD: one solid body per part, in
-millimetres, assembled as the view shows it. Every face is flat, so a curve comes
-in as short straight runs; engraving has no depth and is left out. They are written
-from `turn.html` by lasermade-tools' `step-export`, and `.repro` checks them:
+`step/` holds each SolidCraft design, built by SolidCraft, as a STEP file to open or
+import in a CAD program such as Fusion or FreeCAD: one solid body per part, in
+millimetres, assembled, with no parameters. Holes and plates are true circles.
+`.repro` checks them:
 
 ```
-../lasermade-tools/target/release/step-export turn.html --name=practice-chanters
+target/release/practice_chanters --solidcraft=solidcraft
+solidcraft-cli run solidcraft/practice-chanters-standard.solidcraft.json --out step/practice-chanters-standard.step
 ```
 
 The files:
