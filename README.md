@@ -554,6 +554,12 @@ from `turn.html` by lasermade-tools' `step-export`, and `.repro` checks them:
 ../lasermade-tools/target/release/step-export turn.html --name=practice-chanters
 ```
 
+The files:
+
+- `step/practice-chanters-stacked-octagon.step`
+- `step/practice-chanters-standard-octagon.step`
+- `step/practice-chanters-standard.step`
+
 ## Credits
 
 Made by Michael Gernreich with [Claude](https://www.anthropic.com/claude) (Anthropic), working in Claude Code, which co-wrote the code and the documentation. Commits Claude made carry a `Co-Authored-By: Claude` line.
