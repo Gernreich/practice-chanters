@@ -26,3 +26,9 @@ previews/practice-chanter-standard-octagon-sheet1-cut-files.svg :: ../lasermade-
 # --- the pages ---
 turn.html :: target/release/practice_chanters --page-to=$OUT
 index.html :: ../lasermade-tools/target/release/md2html README.md $OUT
+
+# --- the STEP files: the 3D view's parts as solids for a CAD program, one
+# file per design, written from the page by lasermade-tools' step-export ---
+step/practice-chanters-standard.step :: ../lasermade-tools/target/release/step-export turn.html --name=practice-chanters --out=$(dirname $OUT)
+step/practice-chanters-standard-octagon.step :: ../lasermade-tools/target/release/step-export turn.html --name=practice-chanters --out=$(dirname $OUT)
+step/practice-chanters-stacked-octagon.step :: ../lasermade-tools/target/release/step-export turn.html --name=practice-chanters --out=$(dirname $OUT)
