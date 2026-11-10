@@ -444,8 +444,18 @@ pub fn main() {
             m::PLATE.set(pc::num_arg(&x));
         } else if x.starts_with("--kerf=") {
             sf::set_kerf(&x);
+        } else if let Some(dir) = x.strip_prefix("--solidcraft=") {
+            // this chanter as its parametric SolidCraft design (practice_chanters
+            // --solidcraft= writes it too, with the others): the program that
+            // writes a design is the one that draws its sheets, so sc-replay
+            // finds this one
+            std::fs::create_dir_all(dir).unwrap_or_else(|e| die(format!("{dir}: {e}")));
+            let f = format!("{}/practice-chanters-standard-octagon.solidcraft.json", dir.trim_end_matches('/'));
+            std::fs::write(&f, crate::chanters_solidcraft::standard_octagon()).unwrap_or_else(|e| die(format!("{f}: {e}")));
+            println!("  wrote {}", f.rsplit('/').next().unwrap());
+            return;
         } else {
-            die(format!("error: {x} is not a flag this generator reads. It takes --out=, --plate=, --kerf= and --no-write."));
+            die(format!("error: {x} is not a flag this generator reads. It takes --out=, --plate=, --kerf=, --solidcraft= and --no-write."));
         }
     }
     if write && out.is_none() {

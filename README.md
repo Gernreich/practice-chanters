@@ -480,6 +480,8 @@ target/release/standard_chanter --joint=butt --out=cut-files       # the same, b
 target/release/standard_octagon --out=cut-files                    # the standard octagon
 target/release/practice_chanters --page-to=turn.html               # the 3D view, every design
 target/release/practice_chanters --solidcraft=solidcraft           # the SolidCraft designs
+target/release/standard_chanter --solidcraft=solidcraft            # the standard's alone, as .repro writes it
+target/release/standard_octagon --solidcraft=solidcraft            # the standard octagon's alone
 target/release/chanter_model --sides=8                             # the acoustic model alone, any of 3 to 8 sides
 target/release/chanter_bores                                       # every chanter's bore, as bore-tmm reads it
 ```

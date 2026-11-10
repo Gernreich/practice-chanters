@@ -29,12 +29,12 @@ index.html :: ../lasermade-tools/target/release/md2html README.md $OUT
 
 # --- the SolidCraft designs: each script, its design (slimmed by sc-slim so it
 # is the same every run), and the STEP file SolidCraft builds from it ---
-solidcraft/practice-chanters-standard.solidcraft.json :: target/release/practice_chanters --solidcraft=$(dirname $OUT)
-solidcraft/practice-chanters-standard.sc :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard.solidcraft.json --save $OUT --quiet && ../lasermade-tools/target/release/sc-slim $OUT
-step/practice-chanters-standard.step :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard.solidcraft.json --out $OUT --quiet
-solidcraft/practice-chanters-standard-octagon.solidcraft.json :: target/release/practice_chanters --solidcraft=$(dirname $OUT)
-solidcraft/practice-chanters-standard-octagon.sc :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard-octagon.solidcraft.json --save $OUT --quiet && ../lasermade-tools/target/release/sc-slim $OUT
-step/practice-chanters-standard-octagon.step :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard-octagon.solidcraft.json --out $OUT --quiet
+solidcraft/practice-chanters-standard.solidcraft.json :: target/release/standard_chanter --solidcraft=$(dirname $OUT)
+solidcraft/practice-chanters-standard.sc :: target/release/standard_chanter --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard.solidcraft.json --save $OUT --quiet && ../lasermade-tools/target/release/sc-slim $OUT
+step/practice-chanters-standard.step :: target/release/standard_chanter --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard.solidcraft.json --out $OUT --quiet
+solidcraft/practice-chanters-standard-octagon.solidcraft.json :: target/release/standard_octagon --solidcraft=$(dirname $OUT)
+solidcraft/practice-chanters-standard-octagon.sc :: target/release/standard_octagon --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard-octagon.solidcraft.json --save $OUT --quiet && ../lasermade-tools/target/release/sc-slim $OUT
+step/practice-chanters-standard-octagon.step :: target/release/standard_octagon --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-standard-octagon.solidcraft.json --out $OUT --quiet
 solidcraft/practice-chanters-stacked-octagon.solidcraft.json :: target/release/practice_chanters --solidcraft=$(dirname $OUT)
 solidcraft/practice-chanters-stacked-octagon.sc :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-stacked-octagon.solidcraft.json --save $OUT --quiet && ../lasermade-tools/target/release/sc-slim $OUT
 step/practice-chanters-stacked-octagon.step :: target/release/practice_chanters --solidcraft=$(dirname $OUT) && solidcraft-cli run $(dirname $OUT)/practice-chanters-stacked-octagon.solidcraft.json --out $OUT --quiet
