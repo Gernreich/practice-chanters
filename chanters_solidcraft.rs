@@ -23,12 +23,82 @@
 //! What does not follow: the tuning (the bore plates' count and each hole's
 //! place and width are the solver's, which no expression redoes; they are
 //! parameters so a chanter tuned by hand can be written back), and the two
-//! rods' places, which a search over the plate found.
+//! rods' places, which a search over the plate found. Nor can the tuning
+//! follow the ply as the standard chanters' does (below): the solver's plate
+//! counts and slot widths jump every 0.025 mm or so of ply, and at 2.525,
+//! 2.575, 2.6, 2.675 and 2.7 mm it finds no tuning at all (2026-11-11).
+//!
+//! THE STANDARD CHANTERS (square and octagon). The tuning follows the ply:
+//! the bore's length and each hole's diameter are cubics in the ply fitted
+//! to the solver (ply_fits), and the cap's plates are round(cap_len/ply), as
+//! the generator counts them. The mouthpiece's plates are a body each, 24 of
+//! them at any ply, where the generator has round(71.5 mm/ply).
 
 use crate::chanter_model::{self as m, HOLES};
 use crate::practice_chanters as pc;
 use lasermade_tools::solidcraft::{n, Script};
 use std::f64::consts::PI;
+
+/// What the tuning solver gives at each ply, as cubics in (ply - shipped
+/// ply) through the shipped ply's own values: the solver bisects the
+/// model's pitch, which no expression can, so it is run from 2.5 to 3.5 mm
+/// of ply and each value (the bore's length, each hole's diameter) fitted.
+/// Refused unless every fit is within FIT_TOL of the solver at every
+/// 0.05 mm of ply and halfway between. (2026-11-11; the shipped ply's
+/// numbers, fixed, until then.)
+const FIT_TOL: f64 = 0.002;
+pub fn ply_fits(what: &str, solve: &dyn Fn() -> Vec<f64>) -> Vec<String> {
+    let t0 = m::plate();
+    let v0 = solve();
+    let at = |t: f64| {
+        m::PLATE.set(t);
+        let v = solve();
+        m::PLATE.set(t0);
+        v
+    };
+    let xs: Vec<f64> = (0..=20).map(|i| 2.5 + 0.05 * i as f64 - t0).collect();
+    let vs: Vec<Vec<f64>> = xs.iter().map(|&x| at(t0 + x)).collect();
+    let mids: Vec<f64> = (0..20).map(|i| 2.525 + 0.05 * i as f64 - t0).collect();
+    let ms: Vec<Vec<f64>> = mids.iter().map(|&x| at(t0 + x)).collect();
+    (0..v0.len())
+        .map(|j| {
+            // least squares for c1 x + c2 x^2 + c3 x^3 = v - v0
+            let mut a = [[0.0f64; 3]; 3];
+            let mut b = [0.0f64; 3];
+            for (x, v) in xs.iter().zip(&vs) {
+                let p = [*x, x * x, x * x * x];
+                for r in 0..3 {
+                    for c in 0..3 {
+                        a[r][c] += p[r] * p[c];
+                    }
+                    b[r] += p[r] * (v[j] - v0[j]);
+                }
+            }
+            let c = solve3(a, b);
+            let f = |x: f64| v0[j] + c[0] * x + c[1] * x * x + c[2] * x * x * x;
+            let worst = xs.iter().zip(&vs).chain(mids.iter().zip(&ms)).map(|(x, v)| (f(*x) - v[j]).abs()).fold(0.0, f64::max);
+            if worst > FIT_TOL {
+                eprintln!("error: {what} value {}: a cubic in the ply is {worst:.4}mm off the solver", j + 1);
+                std::process::exit(1);
+            }
+            let x = format!("(ply - {} mm)", n(t0));
+            format!("({} mm + {}*{x} + {}*{x}^2/(1 mm) + {}*{x}^3/(1 mm)^2)", n(v0[j]), n(c[0]), n(c[1]), n(c[2]))
+        })
+        .collect()
+}
+
+/// a x = b, three by three, by Cramer's rule.
+fn solve3(a: [[f64; 3]; 3], b: [f64; 3]) -> [f64; 3] {
+    let det = |m: [[f64; 3]; 3]| m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+    let d = det(a);
+    std::array::from_fn(|k| {
+        let mut m = a;
+        for r in 0..3 {
+            m[r][k] = b[r];
+        }
+        det(m) / d
+    })
+}
 
 /// sum of coef * (expr), the zero terms dropped.
 fn lin(terms: &[(f64, &str)]) -> String {
@@ -309,7 +379,9 @@ fn head_params(s: &mut Script, n_cap: usize) {
     s.len("cap_bore", format!("{} mm", n(sd::REF_CAP_BORE)), "the cap's bore, the reference's");
     s.len("cap_clear", format!("{} mm", n(pc::CAP_CLEAR)), "the tenon's clearance each side, inside the cap");
     s.len("tenon_d", "cap_bore - 2*cap_clear", "read only: the tenon the cap slides over");
-    s.num("n_cap", n(n_cap as f64), "the cap's plates, the reference's 122 mm of cap");
+    s.len("cap_len", format!("{} mm", n(sd::REF_CAP_LEN)), "the cap's length, the reference's");
+    s.num("n_cap", "round(cap_len/ply)", "read only: the cap's plates, its length in whole plates");
+    assert_eq!(n_cap, lasermade_tools::py::round(sd::REF_CAP_LEN / m::plate()) as usize, "the cap plates are not round(cap_len/ply)");
     s.len("pin", format!("{} mm", n(pc::PIN)), "the tenon's and collar's brass pins");
     s.len("pin_interf", format!("{} mm", n(pc::PIN_INTERF)), "their holes this much under the pin, a press-fit");
     s.len("r_pin", "(seat_d/2 + tenon_d/2)/2", "read only: the pins' distance from the axis");
@@ -365,12 +437,16 @@ pub fn standard() -> String {
     use crate::standard_chanter as sd;
     use crate::strip_chanter as sc;
     let (_, info) = sd::build("finger");
+    let fits = ply_fits("standard chanter", &|| {
+        let (_, _, l, holes) = sd::solve();
+        std::iter::once(l).chain(holes.iter().map(|h| h.d)).collect()
+    });
     let mut s = Script::new();
     s.len("ply", format!("{} mm", n(m::plate())), "plate thickness: measure the ply, as the generator's --plate=");
     s.len("side", format!("{} mm", n(sd::SIDE)), "the square bore across, inside the four strips");
     s.len("a", "side/2 + ply", "read only: the strips' outside, half across");
     head_params(&mut s, info.n_cap);
-    s.len("bore_l", format!("{} mm", n(info.l)), "the bore from the seat to the sole: the solver's, for the reference's low G");
+    s.len("bore_l", &fits[0], "the bore from the seat to the sole: the solver's for the reference's low G, as a cubic in the ply");
     s.len("x0", "(n_seat + n_collar)*ply", "read only: the strips' top, in the collar's socket plate");
     s.len("ls", "bore_l - n_collar*ply", "read only: the strips' length");
     s.len("finger", format!("{} mm", n(sc::FINGER)), "a joint cell's length, about");
@@ -381,7 +457,7 @@ pub fn standard() -> String {
     for (i, h) in info.holes.iter().enumerate() {
         let k = i + 1;
         s.len(&format!("z_{k}"), format!("{} mm", n(h.z)), &format!("the {} hole, down from the seat: the reference's", h.name));
-        s.len(&format!("d_{k}"), format!("{} mm", n(h.d)), &format!("its diameter: the solver's, for the reference's note"));
+        s.len(&format!("d_{k}"), &fits[k], "its diameter: the solver's for the reference's note, as a cubic in the ply");
         s.len(&format!("xh_{k}"), format!("z_{k} - n_collar*ply"), &format!("read only: its centre down the strip"));
     }
     let pairs = guards(&mut s, &info.holes, "d");
@@ -512,6 +588,10 @@ pub fn standard_octagon() -> String {
     use crate::standard_octagon as so;
     use crate::strip_chanter as sc;
     let (_, info) = so::build();
+    let fits = ply_fits("standard octagon", &|| {
+        let (_, _, l, holes, _, _) = so::solve();
+        std::iter::once(l).chain(holes.iter().map(|h| h.d)).collect()
+    });
     let mut s = Script::new();
     s.len("ply", format!("{} mm", n(m::plate())), "plate thickness: measure the ply, as the generator's --plate=");
     s.len("flats", format!("{} mm", n(so::FLATS)), "the octagonal bore across its flats, inside the eight strips");
@@ -522,7 +602,7 @@ pub fn standard_octagon() -> String {
     s.len("slot_w", "face_out - 2*min_web", "read only: the widest slot across");
     s.len("slot_max", format!("{} mm", n(so::SLOT_MAX)), "the longest slot, under a finger's pad");
     head_params(&mut s, info.n_cap);
-    s.len("bore_l", format!("{} mm", n(info.l)), "the bore from the seat to the sole: the solver's, for the reference's low G");
+    s.len("bore_l", &fits[0], "the bore from the seat to the sole: the solver's for the reference's low G, as a cubic in the ply");
     s.len("x0", "(n_seat + n_collar)*ply", "read only: the strips' top, in the collar's socket plate");
     s.len("ls", "bore_l - n_collar*ply", "read only: the strips' length");
     s.len("finger", format!("{} mm", n(sc::FINGER)), "a joint cell's length, about");
@@ -533,7 +613,7 @@ pub fn standard_octagon() -> String {
     for (i, h) in info.holes.iter().enumerate() {
         let k = i + 1;
         s.len(&format!("z_{k}"), format!("{} mm", n(h.z)), &format!("the {} hole, down from the seat: the reference's", h.name));
-        s.len(&format!("d_{k}"), format!("{} mm", n(h.d)), "the round hole it stands for: the solver's diameter, for the reference's note");
+        s.len(&format!("d_{k}"), &fits[k], "the round hole it stands for: the solver's diameter for the reference's note, as a cubic in the ply");
         s.len(&format!("across_{k}"), format!("min(d_{k}, slot_w)"), "read only: its slot across");
         s.len(&format!("along_{k}"), format!("across_{k} + max(0, pi*(d_{k}^2 - slot_w^2)/4/slot_w)"), "read only: its slot along, for the round hole's area");
         s.len(&format!("xh_{k}"), format!("z_{k} - n_collar*ply"), "read only: its centre down the strip");

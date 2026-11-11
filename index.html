@@ -834,9 +834,9 @@ target/release/chanter_bores                                       # every chant
 <td>the collar's round plates and their bore</td>
 </tr>
 <tr>
-<td><code>cap_d</code> · <code>cap_bore</code> · <code>cap_clear</code> · <code>n_cap</code></td>
-<td>22.2 · 17.6 · 0.3 mm · 41</td>
-<td>the cap, the reference's, and the tenon's clearance inside it</td>
+<td><code>cap_d</code> · <code>cap_bore</code> · <code>cap_clear</code> · <code>cap_len</code></td>
+<td>22.2 · 17.6 · 0.3 · 122 mm</td>
+<td>the cap, the reference's, and the tenon's clearance inside it; <code>n_cap</code>, its plates, is <code>round(cap_len/ply)</code></td>
 </tr>
 <tr>
 <td><code>band</code> · <code>foot_d</code> · <code>collar_d</code> (standard)</td>
@@ -851,7 +851,7 @@ target/release/chanter_bores                                       # every chant
 </tbody>
 </table>
 </div>
-<p>The tuning cannot follow: the bore length and the holes are what the model's solver found, and no expression redoes it. They are parameters so a chanter tuned by hand can be written back into its design; change the bore or the ply and the notes move until the generator is run again. The joints do follow: <code>ncell</code> and <code>cell</code>, each hole's guard (<code>g0_</code> and <code>g1_</code>), and the octagon's slots (<code>across_</code> and <code>along_</code>, round up to <code>slot_w</code>, then a stadium of the same area) are read-only parameters worked out from the rest, as the generators work them out. <code>slot_room</code> is the octagon's check, room left under <code>slot_max</code>, where below 0 fails. The mouthpiece's plates are a fixed 24, its profile scaled to the ply; the generator rounds 71.5 mm to whole plates.</p>
+<p>The tuning follows the ply but nothing else: the bore length and the holes are what the model's solver found, and no expression redoes it. On the standard chanter and the octagon the solver was run at every 0.05 mm of ply from 2.5 to 3.5 mm, and <code>bore_l</code> and each <code>d_</code> are cubics in the ply through the 3 mm values, within 0.002 mm of the solver everywhere. The stacked chanter's cannot be: its solver's plate counts and slot widths jump every 0.025 mm or so of ply, and at some plies (2.6 and 2.7 mm among them) it finds no tuning, so for another ply run its generator with <code>--plate=</code>. They are parameters so a chanter tuned by hand can be written back into its design; change the bore and the notes move until the generator is run again. The joints do follow: <code>ncell</code> and <code>cell</code>, each hole's guard (<code>g0_</code> and <code>g1_</code>), and the octagon's slots (<code>across_</code> and <code>along_</code>, round up to <code>slot_w</code>, then a stadium of the same area) are read-only parameters worked out from the rest, as the generators work them out. <code>slot_room</code> is the octagon's check, room left under <code>slot_max</code>, where below 0 fails. The cap's plates are <code>round(cap_len/ply)</code>, as the generator counts them. The mouthpiece's plates are a fixed 24, its profile scaled to the ply; the generator rounds 71.5 mm to whole plates, so at another ply its sheet has one plate more or fewer.</p>
 <p><strong>Checked</strong> part by part against the generators' own: all 131 stacked parts, 92 standard ones and 87 on the octagon match to within 0.11 mm, the sag of the earlier STEP files' straight runs round a circle. Built by the generators at 2.9 mm ply and given the same numbers, every strip of the octagon matches exactly, and every other part differs only by the 0.1 mm the earlier files drew each plate thick past 2.9.</p>
 <h2 id="step-files">STEP files</h2>
 <p><code>step/</code> holds each SolidCraft design, built by SolidCraft, as a STEP file to open or import in a CAD program such as Fusion or FreeCAD: one solid body per part, in millimetres, assembled, with no parameters. Holes and plates are true circles. <code>.repro</code> checks them:</p>

@@ -593,19 +593,26 @@ The standard chanter and the standard octagon:
 | `z_1` … `z_8` · `d_1` … `d_8` | the reference's · the solver's | each hole down from the seat, and its diameter (on the octagon, the round hole its slot stands for) |
 | `finger` · `min_finger` · `min_web` | 10 · 4 · 1.5 mm | a joint cell, about; no finger shorter; the guard round each hole where its strip owns both edges |
 | `n_collar` · `ref_bore` | 2 · 4.87 mm | the collar's round plates and their bore |
-| `cap_d` · `cap_bore` · `cap_clear` · `n_cap` | 22.2 · 17.6 · 0.3 mm · 41 | the cap, the reference's, and the tenon's clearance inside it |
+| `cap_d` · `cap_bore` · `cap_clear` · `cap_len` | 22.2 · 17.6 · 0.3 · 122 mm | the cap, the reference's, and the tenon's clearance inside it; `n_cap`, its plates, is `round(cap_len/ply)` |
 | `band` · `foot_d` · `collar_d` (standard) | 10 · 50 · 25.4 mm | the band round the strips' top, the round foot, the collar's socket plate |
 | `foot_d` · `n_foot` · `slot_max` (octagon) | 50 mm · 2 · 12 mm | the foot's round plates, and the longest slot |
 
-The tuning cannot follow: the bore length and the holes are what the model's solver
-found, and no expression redoes it. They are parameters so a chanter tuned by hand can
-be written back into its design; change the bore or the ply and the notes move until
-the generator is run again. The joints do follow: `ncell` and `cell`, each hole's guard
+The tuning follows the ply but nothing else: the bore length and the holes are what the
+model's solver found, and no expression redoes it. On the standard chanter and the
+octagon the solver was run at every 0.05 mm of ply from 2.5 to 3.5 mm, and `bore_l` and
+each `d_` are cubics in the ply through the 3 mm values, within 0.002 mm of the solver
+everywhere. The stacked chanter's cannot be: its solver's plate counts and slot widths
+jump every 0.025 mm or so of ply, and at some plies (2.6 and 2.7 mm among them) it finds
+no tuning, so for another ply run its generator with `--plate=`. They are parameters so
+a chanter tuned by hand can be written back into its design; change the bore and the
+notes move until the generator is run again. The joints do follow: `ncell` and `cell`, each hole's guard
 (`g0_` and `g1_`), and the octagon's slots (`across_` and `along_`, round up to
 `slot_w`, then a stadium of the same area) are read-only parameters worked out from the
 rest, as the generators work them out. `slot_room` is the octagon's check, room left
-under `slot_max`, where below 0 fails. The mouthpiece's plates are a fixed 24, its
-profile scaled to the ply; the generator rounds 71.5 mm to whole plates.
+under `slot_max`, where below 0 fails. The cap's plates are `round(cap_len/ply)`, as
+the generator counts them. The mouthpiece's plates are a fixed 24, its profile scaled to
+the ply; the generator rounds 71.5 mm to whole plates, so at another ply its sheet has
+one plate more or fewer.
 
 **Checked** part by part against the generators' own: all 131 stacked parts, 92
 standard ones and 87 on the octagon match to within 0.11 mm, the sag of the earlier
